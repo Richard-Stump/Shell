@@ -46,7 +46,7 @@ int yylex();
 %%
 
 goal:
-  commands
+  command_list
   ;
 
 command_list:
