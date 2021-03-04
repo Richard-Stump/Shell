@@ -65,7 +65,8 @@ extern int yydebug;
     LESS = 265,
     AMPGREAT = 266,
     AMPGREATGREAT = 267,
-    TWOGREAT = 268
+    TWOGREAT = 268,
+    TWOGREATGREAT = 269
   };
 #endif
 /* Tokens.  */
@@ -80,6 +81,7 @@ extern int yydebug;
 #define AMPGREAT 266
 #define AMPGREATGREAT 267
 #define TWOGREAT 268
+#define TWOGREATGREAT 269
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -92,7 +94,7 @@ union YYSTYPE
   // Example of using a c++ type in yacc
   std::string *cpp_string;
 
-#line 96 "y.tab.hh" /* yacc.c:1909  */
+#line 98 "y.tab.hh" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
