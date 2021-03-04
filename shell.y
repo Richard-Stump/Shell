@@ -93,9 +93,10 @@ command_word:
   ;
 
 pipe_list:
-  pipe_list PIPE command_and_args
+  pipe_list PIPE command_and_args {
+    printf("   Yacc: insert Pipe list\n");
+  }
   | command_and_args
-  | /* can be empty */
   ;
 
 iomodifier_opt:
