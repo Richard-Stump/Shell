@@ -464,7 +464,7 @@ static const yytype_uint8 yytranslate[] =
 static const yytype_uint8 yyrline[] =
 {
        0,    48,    48,    52,    53,    56,    60,    64,    65,    69,
-      76,    77,    81,    88,    96,    99,   103,   107
+      76,    77,    81,    88,    96,    97,   101,   105
 };
 #endif
 
@@ -1288,25 +1288,17 @@ yyreduce:
 #line 1289 "y.tab.cc" /* yacc.c:1646  */
     break;
 
-  case 14:
-#line 96 "shell.y" /* yacc.c:1646  */
-    {
-    printf("   Yacc: insert Pipe list\n");
-  }
-#line 1297 "y.tab.cc" /* yacc.c:1646  */
-    break;
-
   case 16:
-#line 103 "shell.y" /* yacc.c:1646  */
+#line 101 "shell.y" /* yacc.c:1646  */
     {
     printf("   Yacc: insert output \"%s\"\n", (yyvsp[0].cpp_string)->c_str());
     Shell::_currentCommand._outFile = (yyvsp[0].cpp_string);
   }
-#line 1306 "y.tab.cc" /* yacc.c:1646  */
+#line 1298 "y.tab.cc" /* yacc.c:1646  */
     break;
 
 
-#line 1310 "y.tab.cc" /* yacc.c:1646  */
+#line 1302 "y.tab.cc" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1534,7 +1526,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 110 "shell.y" /* yacc.c:1906  */
+#line 108 "shell.y" /* yacc.c:1906  */
 
 
 void

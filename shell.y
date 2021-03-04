@@ -93,7 +93,7 @@ command_word:
   ;
 
 pipe_list:
-  pipe_list PIPE command_and_args
+  PIPE
   | command_and_args
   ;
 
