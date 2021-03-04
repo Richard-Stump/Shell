@@ -40,7 +40,7 @@ void myunputc(int c) {
   return GREATGREAT;
 }
 
-"|" {
+"pipe" {
   return PIPE;
 }
 
