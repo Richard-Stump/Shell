@@ -95,6 +95,7 @@ command_word:
 pipe_list:
   pipe_list PIPE command_and_args
   | command_and_args
+  | /* can be empty */
   ;
 
 iomodifier_opt:
