@@ -48,6 +48,10 @@ void myunputc(int c) {
   return TWOGREAT;
 }
 
+"2>>" {
+  return TWOGREATGREAT;
+}
+
 ">>&" {
   return AMPGREATGREAT;
 }

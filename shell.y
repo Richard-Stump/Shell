@@ -29,7 +29,7 @@
 
 %token <cpp_string> WORD
 %token NOTOKEN  NEWLINE PIPE AMPERSAND
-%token GREAT GREATGREAT LESS AMPGREAT AMPGREATGREAT TWOGREAT
+%token GREAT GREATGREAT LESS AMPGREAT AMPGREATGREAT TWOGREAT TWOGREATGREAT
 
 %{
 //#define yylex yylex
@@ -105,7 +105,81 @@ iomodifier_opt:
     printf("   Yacc: insert output \"%s\"\n", $2->c_str());
     Shell::_currentCommand._outFile = $2;
   }
+  | GREATGREAT WORD {
+    printf("   Yacc: insert output, appended \"%s\"\n", $2->c_str());
+    Shell:_currentCommand._outFile = %2;
+    Shell:_currentCommand._appendOut = true;
+  }
+  |
   | /* can be empty */ 
+  ;
+
+/* out_and_err_modifier should not apear with either out_modifier or 
+ * err_modifer 
+ */
+iomodifier_opt:
+  out_and_err_modifier in_modifier
+  | in_modifier out_and_err_modifier
+  | out_modifier err_modifer in_modifier
+  | out_modifier in_modifier err_modifer
+  | in_modifier out_modifier err_modifer
+  | in_modifier err_modifer out_modifier
+  | err_modifer in_modifier out_modifier
+  | err_modifer out_modifier in_modifier
+  ;
+
+out_modifier:
+  GREAT WORD {
+    printf("   Yacc: insert output \"%s\"\n", $2->c_str());
+    Shell::_currentCommand._outFile = $2;
+    Shell::_currentCommand._appendOut = false;
+  }
+  | GREATGREAT WORD {
+    printf("   Yacc: insert output with \"%s\" with append\n", $2->c_str());
+    Shell::_currentCommand._outFile = $2;
+    Shell::_currentCommand._appendOut = true;
+  }
+  | /* can be empty */
+  ;
+
+in_modifier:
+  LESS WORD {
+    printf("   Yacc: insert input \"%s\"\n", $2->c_str());
+    Shell::_currentCommand._inFile = $2;
+  }
+  | /* can be empty */
+  ;
+
+err_modifer:
+  TWOGREAT WORD {
+    printf("   Yacc: insert error \"%s\"\n", $2->c_str());
+    Shell::_currentCommand._errFile = $2;
+    Shell::_currentCommand._appendErr = false;
+  }
+  | TWOGREATGREAT WORD {
+    printf("   Yacc: insert error \"%s\" with append\n", $2->c_str());
+    Shell::_currentCommand._errFile = $2;
+    Shell::_currentCommand._appendErr = true;
+  }
+  | /* Can be empty */
+  ;
+
+out_and_err_modifier:
+  AMPGREAT WORD {
+    printf("   Yacc: insert out and error \"%s\"\n", $2->c_str());
+    Shell::_currentCommand._outFile = $2;
+    Shell::_currentCommand._appendOut = false;
+    Shell::_currentCommand._errFile = $2;
+    Shell::_currentCommand._appendErr = false;
+  }
+  | AMPGREATGREAT WORD {
+    printf("   Yacc: insert out and error \"%s\" with append\n", $2->c_str());
+    Shell::_currentCommand._outFile = $2;
+    Shell::_currentCommand._appendOut = true;
+    Shell::_currentCommand._errFile = $2;
+    Shell::_currentCommand._appendErr = true;
+  }
+  | /* can be empty */
   ;
 
 %%
