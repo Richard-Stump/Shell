@@ -28,7 +28,7 @@
 }
 
 %token <cpp_string> WORD
-%token NOTOKEN GREAT NEWLINE
+%token NOTOKEN GREAT NEWLINE GREATGREAT PIPE AMPERSAND
 
 %{
 //#define yylex yylex
