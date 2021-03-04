@@ -28,7 +28,8 @@
 }
 
 %token <cpp_string> WORD
-%token NOTOKEN GREAT NEWLINE GREATGREAT PIPE AMPERSAND
+%token NOTOKEN GREAT NEWLINE
+%token AMPERSAND GREATGREAT PIPE GREAT GREATGREAT
 %token AMPGREAT
 
 %{
@@ -49,7 +50,7 @@ goal:
 
 commands:
   command
-  | commands PIPE command
+  | commands command
   ;
 
 command: simple_command
