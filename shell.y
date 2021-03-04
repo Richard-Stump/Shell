@@ -173,7 +173,6 @@ out_and_err_modifier:
     Shell::_currentCommand._errFile = $2;
     Shell::_currentCommand._appendErr = true;
   }
-  | /* can be empty */
   ;
 
 %%
