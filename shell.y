@@ -93,9 +93,7 @@ command_word:
   ;
 
 pipe_list:
-  pipe_list PIPE command_and_args {
-    printf("   Yacc: insert Pipe list\n");
-  }
+  pipe_list PIPE command_and_args
   | command_and_args
   ;
 
