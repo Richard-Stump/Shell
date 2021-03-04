@@ -99,21 +99,15 @@ pipe_list:
     printf("   Yacc: insert pipelist with 1 command\n");
   }
   ;
-
+/*
 iomodifier_opt:
   GREAT WORD {
     printf("   Yacc: insert output \"%s\"\n", $2->c_str());
     Shell::_currentCommand._outFile = $2;
   }
-  | GREATGREAT WORD {
-    printf("   Yacc: insert output, appended \"%s\"\n", $2->c_str());
-    Shell:_currentCommand._outFile = %2;
-    Shell:_currentCommand._appendOut = true;
-  }
-  |
-  | /* can be empty */ 
+  | 
   ;
-
+*/
 /* out_and_err_modifier should not apear with either out_modifier or 
  * err_modifer 
  */
