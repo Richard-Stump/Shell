@@ -53,7 +53,7 @@ commands:
   | commands command
   ;
 
-command: simple_command
+command: pipe_list
        ;
 
 simple_command:	
@@ -90,6 +90,11 @@ command_word:
     Command::_currentSimpleCommand = new SimpleCommand();
     Command::_currentSimpleCommand->insertArgument( $1 );
   }
+  ;
+
+pipe_list:
+  command_and_args PIPE command_and_args
+  | command_and_args
   ;
 
 iomodifier_opt:

@@ -59,9 +59,9 @@ extern int yydebug;
     NOTOKEN = 259,
     GREAT = 260,
     NEWLINE = 261,
-    GREATGREAT = 262,
-    PIPE = 263,
-    AMPERSAND = 264,
+    AMPERSAND = 262,
+    GREATGREAT = 263,
+    PIPE = 264,
     AMPGREAT = 265
   };
 #endif
@@ -70,9 +70,9 @@ extern int yydebug;
 #define NOTOKEN 259
 #define GREAT 260
 #define NEWLINE 261
-#define GREATGREAT 262
-#define PIPE 263
-#define AMPERSAND 264
+#define AMPERSAND 262
+#define GREATGREAT 263
+#define PIPE 264
 #define AMPGREAT 265
 
 /* Value type.  */
