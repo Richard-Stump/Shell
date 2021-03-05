@@ -168,7 +168,7 @@ out_and_err_modifier:
   }
   | AMPGREATGREAT WORD {
     printf("   Yacc: insert out and error \"%s\" with append\n", $2->c_str());
-    Shell::_currentCommand._outFile = &$2;
+    Shell::_currentCommand._outFile = $2->c_str();
     Shell::_currentCommand._appendOut = true;
     //Shell::_currentCommand._errFile = &$2;
     Shell::_currentCommand._appendErr = true;
