@@ -163,7 +163,7 @@ out_and_err_modifier:
     printf("   Yacc: insert out and error \"%s\"\n", $2->c_str());
     Shell::_currentCommand._outFile = $2;
     Shell::_currentCommand._appendOut = false;
-    Shell::_currentCommand._errFile = $2;
+    //Shell::_currentCommand._errFile = $2;
     Shell::_currentCommand._appendErr = false;
   }
   | AMPGREATGREAT WORD {
