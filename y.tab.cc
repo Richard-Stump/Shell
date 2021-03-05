@@ -422,7 +422,7 @@ union yyalloc
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  15
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  34
+#define YYNRULES  33
 /* YYNSTATES -- Number of states.  */
 #define YYNSTATES  53
 
@@ -474,7 +474,7 @@ static const yytype_uint8 yyrline[] =
        0,    47,    47,    51,    52,    55,    59,    63,    64,    68,
       75,    76,    80,    87,    95,    98,   115,   116,   117,   118,
      119,   120,   121,   122,   126,   131,   136,   140,   144,   148,
-     153,   158,   162,   169,   176
+     153,   158,   162,   169
 };
 #endif
 
@@ -594,7 +594,7 @@ static const yytype_uint8 yyr1[] =
        0,    15,    16,    17,    17,    18,    19,    19,    19,    20,
       21,    21,    22,    23,    24,    24,    25,    25,    25,    25,
       25,    25,    25,    25,    26,    26,    26,    27,    27,    28,
-      28,    28,    29,    29,    29
+      28,    28,    29,    29
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
@@ -603,7 +603,7 @@ static const yytype_uint8 yyr2[] =
        0,     2,     1,     1,     2,     1,     3,     1,     2,     2,
        2,     0,     1,     1,     3,     1,     2,     2,     3,     3,
        3,     3,     3,     3,     2,     2,     0,     2,     0,     2,
-       2,     0,     2,     2,     0
+       2,     0,     2,     2
 };
 
 
@@ -1640,7 +1640,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 179 "shell.y" /* yacc.c:1906  */
+#line 178 "shell.y" /* yacc.c:1906  */
 
 
 void
