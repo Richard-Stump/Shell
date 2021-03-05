@@ -52,7 +52,7 @@ void Command::clear() {
         //_outFile and _inFile could point to the same string. If they do,
         //set both to null
         if( _outFile == _inFile ) {
-            _in_file = NULL;
+            _inFile = NULL;
         }
         
         delete _outFile;
