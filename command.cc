@@ -48,7 +48,13 @@ void Command::clear() {
     // (basically just sets the size to 0)
     _simpleCommands.clear();
 
-    if ( _outFile ) {
+    if ( _outFile ) {        
+        //_outFile and _inFile could point to the same string. If they do,
+        //set both to null
+        if( _outFile == _inFile ) {
+            _in_file = NULL;
+        }
+        
         delete _outFile;
     }
     _outFile = NULL;

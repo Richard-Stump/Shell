@@ -113,6 +113,13 @@ iomodifier_opt:
  */
 iomodifier_opt:
   out_and_err_modifier in_modifier
+  | in_modifier out_and_err_modifier
+  | out_modifier err_modifer in_modifier
+  | out_modifier in_modifier err_modifer
+  | in_modifier out_modifier err_modifer
+  | in_modifier err_modifer out_modifier
+  | err_modifer in_modifier out_modifier
+  | err_modifer out_modifier in_modifier
   ;
 
 out_modifier:
