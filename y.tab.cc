@@ -1393,7 +1393,7 @@ yyreduce:
     printf("   Yacc: insert out and error \"%s\"\n", (yyvsp[0].cpp_string)->c_str());
     Shell::_currentCommand._outFile = (yyvsp[0].cpp_string);
     Shell::_currentCommand._appendOut = false;
-    //Shell::_currentCommand._errFile = $2;
+    Shell::_currentCommand._errFile = (yyvsp[0].cpp_string);
     Shell::_currentCommand._appendErr = false;
   }
 #line 1400 "y.tab.cc" /* yacc.c:1646  */
