@@ -58,7 +58,7 @@ void Command::clear() {
     }
     _inFile = NULL;
 
-    if ( _errFile != nullptr ) {
+    if ( _errFile ) {
         delete _errFile;
     }
     _errFile = NULL;
