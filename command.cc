@@ -49,13 +49,13 @@ void Command::clear() {
     _simpleCommands.clear();
 
     if ( _outFile ) {        
-        //_outFile and _inFile could point to the same string. If they do,
+        //_outFile and _errFile could point to the same string. If they do,
         //set both to null
-        if( _outFile == _inFile ) {
+        if( _outFile == _errFile ) {
             _inFile = NULL;
         }
         
-        delete _outFile;
+        delete _errFile;
     }
     _outFile = NULL;
 
