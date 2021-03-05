@@ -52,7 +52,7 @@ void Command::clear() {
         //_outFile and _errFile could point to the same string. If they do,
         //set both to null
         if( _outFile == _errFile ) {
-            _inFile = NULL;
+            _errFile = NULL;
         }
         
         delete _errFile;
