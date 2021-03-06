@@ -114,7 +114,7 @@ void Command::execute() {
       pid = fork();
 
       if(pid == 0) {
-        printf("Running from the child process\n");
+        execvp("ls", nullptr);
       }
       else if (pid < 0) {
         perror("Fork Error\n");
@@ -124,7 +124,9 @@ void Command::execute() {
       }
     }
 
-    waitpid(pid);
+    if(!_background) {
+      waitpid(pid);
+    }
 
     // Print contents of Command data structure
     print();
