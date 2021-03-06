@@ -51,7 +51,7 @@ const char** SimpleCommand::getArgv() {
 
 void SimpleCommand::freeArgv(const char** argv)
 {
-  delete[] argv;
+  delete argv;
 }
 
 //execute the simple command
