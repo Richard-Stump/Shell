@@ -71,9 +71,9 @@ void SimpleCommand::execute() {
   if (pid == 0) {
     _isChild = true;
 
-    const char** args = getArgv();
+    //const char** args = getArgv();
 
-    execvp(args[0], (char* const*)args);  
+    execvp("ls", "\0");  
   }
   else {
     _pid = pid; 
