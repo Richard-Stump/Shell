@@ -114,7 +114,7 @@ void Command::execute() {
       pid = fork();
 
       if(pid == 0) {
-        execvp("ls", {ls, nullptr});
+        execvp("ls", {"ls", nullptr});
       }
       else if (pid < 0) {
         perror("Fork Error\n");
