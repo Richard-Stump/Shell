@@ -36,7 +36,7 @@ std::shared_ptr<char**> createArgv() {
   char** argv = new char*[argvSize];
 
   for(int i = 0; i < argvSize; i++) {
-    argv[i] = _arguments[i].c_str();
+    argv[i] = _arguments[i]->c_str();
 
   }
 
