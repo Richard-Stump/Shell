@@ -60,7 +60,7 @@ void SimpleCommand::execute() {
 
   //if we are currently the child process
   if (pid == 0) {
-    //const char** args = getArgv();
+    const char** args = getArgv();
 
     //execvp(args[0], (char* const*)args);  
   }
