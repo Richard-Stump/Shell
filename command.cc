@@ -162,9 +162,9 @@ void Command::execute() {
       waitpid(pid, nullptr, 0);
     }
 
-    dup2(0, fdStdin);
-    dup2(1, fdStdout);
-    dup2(2, fdStderr);
+    dup2(0, fdIn);
+    dup2(1, fdOut);
+    dup2(2, fdErr);
 
     // Clear to prepare for next command
     clear();
