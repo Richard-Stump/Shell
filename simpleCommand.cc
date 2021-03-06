@@ -73,7 +73,7 @@ void SimpleCommand::execute() {
 
     //const char** args = getArgv();
 
-    execvp("ls", "\0");  
+    execvp("ls", (char* const*)"\0");  
   }
   else {
     _pid = pid; 
