@@ -31,21 +31,33 @@ void SimpleCommand::print() {
   std::cout << std::endl;
 }
 
-std::unique_ptr<const char*> SimpleCommand::getArgv() {
-  size_t argvCount = _arguments.size() + 1;
-  char** argv = new char*[argvCount];
+const char** SimpleCommand::getArgv() {
+  size_t argvCount = _arguments.size();
+  char** argv = new char*[argvCount + 1];
 
+  argv[argvCount] = &'\0';
 
   const char** const_argv = (const char**)argv;
 
-  return std::unique_ptr<const char*>(const_argv[0]);
+  for(size_t i = 0; i < argvCount; i++) {
+    const_argv[i] = _arguments[i];
+  }
+
+  return const_argv;
+}
+
+void SimpleCommand::freeArgv(const char** argv)
+{
+  delete[] argv;
 }
 
 //execute the simple command
 void SimpleCommand::execute() {
-  std::unique_ptr<const char*> args = getArgv();
+  const char** args = getArgv();
 
   for(size_t i = 0; args[i] != nullptr; i++) {
     std::cout << args[i] << std::endl;
   }
+
+  freeArgv(args);
 }
