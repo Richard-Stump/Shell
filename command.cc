@@ -143,17 +143,22 @@ void Command::execute() {
     int fdStdout = dup(1);
     int fdStderr = dup(2);
 
-    int fdRedirectIn = open(_inFile->c_str(), 0);
+    if (_inFile) {
+      int fdRedirectIn = open(_inFile->c_str(), 0);
+      dup2(0, fdRedirectIn);
+    }
 
-    int outFlags = _appendOut ? (O_CREAT | O_APPEND) : (O_CREAT);
-    int fdRedirectOut = open(_outFile->c_str(), outFlags);
+    if (_outFile) {
+      int outFlags = _appendOut ? (O_CREAT | O_APPEND) : (O_CREAT);
+      int fdRedirectOut = open(_outFile->c_str(), outFlags);
+      dup2(1, fdRedirectOut);
+    }
 
-    int errFlags = _appendOut ? (O_CREAT | O_APPEND) : (O_CREAT);
-    int fdRedirectErr = open(_errFile->c_str(), errFlags);
-
-    dup2(0, fdRedirectIn);
-    dup2(1, fdRedirectOut);
-    dup2(2, fdRedirectErr);
+    if(_errFile) {
+      int errFlags = _appendOut ? (O_CREAT | O_APPEND) : (O_CREAT);
+      int fdRedirectErr = open(_errFile->c_str(), errFlags);
+      dup2(2, fdRedirectErr);
+    }
 
     if(!_background) {
       waitpid(pid, nullptr, 0);
