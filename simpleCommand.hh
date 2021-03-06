@@ -15,7 +15,7 @@ struct SimpleCommand {
   void insertArgument( std::string * argument );
   void print();
 
-  char* const[] getArgv();
+  char* const* getArgv();
 };
 
 #endif

@@ -30,7 +30,7 @@ void SimpleCommand::print() {
   std::cout << std::endl;
 }
 
-char* const[] SimpleCommand::getArgv() {
+char* const* SimpleCommand::getArgv() {
   size_t argvCount = _arguments.size();
   const char** argv = new char*[argvCount + 1];
 
@@ -40,5 +40,5 @@ char* const[] SimpleCommand::getArgv() {
 
   argv[argvCount] = nullptr;
 
-  return (char* const[])argv;
+  return (char* const*)argv;
 }
