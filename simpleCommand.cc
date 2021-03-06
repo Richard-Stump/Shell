@@ -33,7 +33,7 @@ void SimpleCommand::print() {
 
 std::shared_ptr<const char**> SimpleCommand::createArgv() {
   size_t argvSize = _arguments.size() + 1;
-  const char** argv = new char*[argvSize];
+  const char** argv = new const char*[argvSize];
 
   for(size_t i = 0; i < argvSize; i++) {
     argv[i] = _arguments[i]->c_str();
