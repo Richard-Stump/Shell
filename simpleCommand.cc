@@ -33,18 +33,18 @@ void SimpleCommand::print() {
 
 std::unique_ptr<const char*[]> SimpleCommand::getArgv() {
   size_t argvCount = _arguments.size() + 1;
-  char*[] argv = new char*[argvCount];
+  char** argv = new char*[argvCount];
 
   argv[argvCount - 1] = '\0';
 
-  const char*[] const_argv = (const char*[])argv;
+  const char** const_argv = (const char**)argv;
 
-  return std::unique_ptr<const char*[]>(const_argv);
+  return std::unique_ptr<const char**>(const_argv);
 }
 
 //execute the simple command
 void SimpleCommand::execute() {
-  std::unique_ptr<const char*[]> args = getArgv();
+  std::unique_ptr<const char**> args = getArgv();
 
   for(size_t i = 0; args[i] != nullptr; i++) {
     std::cout << args[i] << std::endl;
