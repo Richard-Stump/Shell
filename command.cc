@@ -129,7 +129,7 @@ void Command::execute() {
     if(_outFile) {
       int outFlags = O_WRONLY | O_CREAT | (_appendOut ? O_APPEND : 0);
       int fdOut = open(_outFile->c_str(), outFlags);
-      dup2(1, fdOut)
+      dup2(1, fdOut);
     }
 
     if(_errFile){
