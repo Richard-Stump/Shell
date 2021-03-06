@@ -121,7 +121,7 @@ void Command::execute() {
     int tmpOut = dup(1);
     int tmpErr = dup(2);
 
-    int fdIn, fdOut, fdErr
+    int fdIn, fdOut, fdErr;
 
     if(_inFile) {
       fdIn = open(_inFile->c_str(), O_WRONLY);
