@@ -33,17 +33,16 @@ void SimpleCommand::print() {
 
 const char** SimpleCommand::getArgv() {
   size_t argvCount = _arguments.size();
-  char** argv = new char*[argvCount + 1];
+  const char** argv = new const char*[argvCount + 1];
 
-  argv[argvCount] = "\0";
-
-  const char** const_argv = (const char**)argv;
 
   for(size_t i = 0; i < argvCount; i++) {
     const_argv[i] = _arguments[i]->c_str();
   }
 
-  return const_argv;
+  argv[argvCount] = "\0";
+
+  return argv;
 }
 
 void SimpleCommand::freeArgv(const char** argv)
