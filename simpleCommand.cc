@@ -33,7 +33,7 @@ void SimpleCommand::print() {
 
 std::unique_ptr<char*[]> SimpleCommand::getArgv() {
   size_t argvCount = _arguments.size() + 1;
-  const char*[] argv = new char*[argvCount];
+  const char** argv = new char*[argvCount];
 
   return std::unique_ptr<const char*[]> argv;
 }
