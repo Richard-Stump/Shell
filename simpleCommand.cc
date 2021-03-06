@@ -31,26 +31,6 @@ void SimpleCommand::print() {
   std::cout << std::endl;
 }
 
-std::shared_ptr<const char**> SimpleCommand::createArgv() {
-  size_t argvSize = _arguments.size() + 1;
-  const char** argv = new const char*[argvSize];
-
-  for(size_t i = 0; i < argvSize; i++) {
-    argv[i] = _arguments[i]->c_str();
-
-  }
-
-  ((char*)argv[argvSize - 1])[0] = '\0';
-
-  return std::shared_ptr<const char**>(argv); //template errors suck...
-}
-
 //execute the simple command
 void SimpleCommand::execute() {
-  std::shared_ptr<char**> argv = createArgv();
-
-  for(size_t i = 0; argv[i] != nullptr; i++)
-  {
-    printf("arg %d: \"%s\"", i, argv[i]);
-  }
 }
