@@ -134,6 +134,9 @@ void Command::execute() {
         perror("Fork Error\n");
         return;
       }
+      else {
+
+      }
     }
 
     int fdStdin = dup(0);
@@ -152,10 +155,13 @@ void Command::execute() {
     dup2(1, fdRedirectOut);
     dup2(2, fdRedirectErr);
 
-
     if(!_background) {
       waitpid(pid, nullptr, 0);
     }
+
+    dup2(0, fdStdin);
+    dup2(1, fdStdout);
+    dup2(2, fdStderr);
 
     // Clear to prepare for next command
     clear();
