@@ -108,6 +108,13 @@ void Command::execute() {
         return;
     }
 
+    // Print contents of Command data structure
+    print();
+
+    // Add execution here
+    // For every simple command fork a new process
+    // Setup i/o redirection
+    // and call exec
     int pid;
 
     for( SimpleCommand* sc : _simpleCommands ) {
@@ -120,7 +127,7 @@ void Command::execute() {
 
         delete[] argv;
 
-        perror("execvp error\n");
+        perror("execvp error");
         _exit(1);
       }
       else if (pid < 0) {
@@ -129,17 +136,13 @@ void Command::execute() {
       }
     }
 
+    int defStdin = stdin;
+    int defStdout = stdout;
+    int defStderr = stderr;
+
     if(!_background) {
       waitpid(pid, nullptr, 0);
     }
-
-    // Print contents of Command data structure
-    print();
-
-    // Add execution here
-    // For every simple command fork a new process
-    // Setup i/o redirection
-    // and call exec
 
     // Clear to prepare for next command
     clear();
