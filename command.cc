@@ -117,6 +117,10 @@ void Command::execute() {
     // and call exec
     int pid;
 
+    int fdStdin = dup(0);
+    int fdStdout = dup(1);
+    int fdStderr = dup(2);
+    
     for( SimpleCommand* sc : _simpleCommands ) {
       pid = fork();
 
@@ -135,9 +139,6 @@ void Command::execute() {
         return;
       }
       else {
-        int fdStdin = dup(0);
-        int fdStdout = dup(1);
-        int fdStderr = dup(2);
 
         if (_inFile) {
           int fdRedirectIn = open(_inFile->c_str(), 0);
@@ -155,10 +156,6 @@ void Command::execute() {
           int fdRedirectErr = open(_errFile->c_str(), errFlags);
           dup2(2, fdRedirectErr);
         }
-
-        dup2(0, fdStdin);
-        dup2(1, fdStdout);
-        dup2(2, fdStderr);
       }
     }
 
@@ -166,6 +163,9 @@ void Command::execute() {
       waitpid(pid, nullptr, 0);
     }
 
+    dup2(0, fdStdin);
+    dup2(1, fdStdout);
+    dup2(2, fdStderr);
 
     // Clear to prepare for next command
     clear();
