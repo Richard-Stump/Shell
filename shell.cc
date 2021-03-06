@@ -1,14 +1,12 @@
 #include <cstdio>
+#include <unistd.h>
 
 #include "shell.hh"
 
 int yyparse(void);
 
 void Shell::prompt() {
-
-  if(isatty()) {
-    printf("myshell>");
-  }
+  printf("myshell>");
   fflush(stdout);
 }
 

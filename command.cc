@@ -104,6 +104,10 @@ void Command::execute() {
         return;
     }
 
+    for( simpleCommand& sc : _simpleCommands() ) {
+        sc.execute();
+    }
+
     // Print contents of Command data structure
     print();
 
