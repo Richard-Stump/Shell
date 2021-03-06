@@ -121,20 +121,23 @@ void Command::execute() {
     int tmpOut = dup(1);
     int tmpErr = dup(2);
 
+    int fdIn, fdOut, fdErr
+
     if(_inFile) {
-      int fdIn = open(_inFile->c_str(), O_WRONLY);
+      fdIn = open(_inFile->c_str(), O_WRONLY);
       dup2(0, fdIn);
     }
 
+
     if(_outFile) {
       int outFlags = O_WRONLY | O_CREAT | (_appendOut ? O_APPEND : 0);
-      int fdOut = open(_outFile->c_str(), outFlags);
+      fdOut = open(_outFile->c_str(), outFlags);
       dup2(1, fdOut);
     }
 
     if(_errFile){
       int errFlags = O_WRONLY | O_CREAT | (_appendErr ? O_APPEND : 0);
-      int fdErr = open(_outFile->c_str(), errFlags);
+      fdErr = open(_outFile->c_str(), errFlags);
       dup2(2, fdErr);
     }
 
@@ -160,6 +163,10 @@ void Command::execute() {
     if(!_background) {
       waitpid(pid, nullptr, 0);
     }
+
+    if(_inFile) close(fdIn);
+    if(_outFile) close(fdOut);
+    if(_errFile) close(fdErr);
 
     dup2(0, tmpIn);
     dup2(1, tmpOut);
