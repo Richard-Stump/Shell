@@ -55,6 +55,10 @@ void SimpleCommand::execute() {
   const char** args = getArgv();
 
   for(size_t i = 0; args[i] != nullptr; i++) {
+    if (args[i] == nullptr) {
+      std::cout << "NULL" << std::endl;
+    }
+
     std::cout << args[i] << std::endl;
   }
 
