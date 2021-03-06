@@ -135,38 +135,37 @@ void Command::execute() {
         return;
       }
       else {
+        int fdStdin = dup(0);
+        int fdStdout = dup(1);
+        int fdStderr = dup(2);
 
+        if (_inFile) {
+          int fdRedirectIn = open(_inFile->c_str(), 0);
+          dup2(0, fdRedirectIn);
+        }
+
+        if (_outFile) {
+          int outFlags = _appendOut ? (O_CREAT | O_APPEND) : (O_CREAT);
+          int fdRedirectOut = open(_outFile->c_str(), outFlags);
+          dup2(1, fdRedirectOut);
+        }
+
+        if(_errFile) {
+          int errFlags = _appendOut ? (O_CREAT | O_APPEND) : (O_CREAT);
+          int fdRedirectErr = open(_errFile->c_str(), errFlags);
+          dup2(2, fdRedirectErr);
+        }
+
+        dup2(0, fdStdin);
+        dup2(1, fdStdout);
+        dup2(2, fdStderr);
       }
-    }
-
-    int fdStdin = dup(0);
-    int fdStdout = dup(1);
-    int fdStderr = dup(2);
-
-    if (_inFile) {
-      int fdRedirectIn = open(_inFile->c_str(), 0);
-      dup2(0, fdRedirectIn);
-    }
-
-    if (_outFile) {
-      int outFlags = _appendOut ? (O_CREAT | O_APPEND) : (O_CREAT);
-      int fdRedirectOut = open(_outFile->c_str(), outFlags);
-      dup2(1, fdRedirectOut);
-    }
-
-    if(_errFile) {
-      int errFlags = _appendOut ? (O_CREAT | O_APPEND) : (O_CREAT);
-      int fdRedirectErr = open(_errFile->c_str(), errFlags);
-      dup2(2, fdRedirectErr);
     }
 
     if(!_background) {
       waitpid(pid, nullptr, 0);
     }
 
-    dup2(0, fdStdin);
-    dup2(1, fdStdout);
-    dup2(2, fdStderr);
 
     // Clear to prepare for next command
     clear();
