@@ -40,7 +40,7 @@ const char** SimpleCommand::getArgv() {
     argv[i] = _arguments[i]->c_str();
   }
 
-  argv[argvCount] = "\0";
+  argv[argvCount] = nullptr;
 
   return argv;
 }
