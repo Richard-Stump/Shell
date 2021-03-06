@@ -6,7 +6,9 @@
 
 #include "simpleCommand.hh"
 
-SimpleCommand::SimpleCommand() {
+const int NOT
+
+SimpleCommand::SimpleCommand() : _running(false) {
   _arguments = std::vector<std::string *>();
 }
 
@@ -35,7 +37,6 @@ const char** SimpleCommand::getArgv() {
   size_t argvCount = _arguments.size();
   const char** argv = new const char*[argvCount + 1];
 
-
   for(size_t i = 0; i < argvCount; i++) {
     argv[i] = _arguments[i]->c_str();
   }
@@ -52,15 +53,24 @@ void SimpleCommand::freeArgv(const char** argv)
 
 //execute the simple command
 void SimpleCommand::execute() {
-  const char** args = getArgv();
+  int pid = fork();
 
-  for(size_t i = 0; args[i] != nullptr; i++) {
-    if (args[i] == nullptr) {
-      std::cout << "NULL" << std::endl;
-    }
+  //if we are currently the child process
+  if (pid == 0) {
+    const char** args = getArgv();
 
-    std::cout << args[i] << std::endl;
+    execvp(args[0], args);
+
+    freeArgv(args);
   }
+  else {
+    _pid = pid; 
+    _running = true;
+  }
+}
 
-  freeArgv(args);
+void SimpleCommand::wait() {
+  if (_running) {
+    waitpid(_pid, NULL, 0);
+  }
 }

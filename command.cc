@@ -108,6 +108,8 @@ void Command::execute() {
         sc->execute();
     }
 
+    _simpleCommands.back()->wait();
+
     // Print contents of Command data structure
     print();
 
