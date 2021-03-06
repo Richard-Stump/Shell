@@ -87,7 +87,7 @@ void SimpleCommand::execute() {
 }
 
 void SimpleCommand::wait() {
-  if (_running) {
+  if (_running && !_isChild) {
     waitpid(_pid, NULL, 0);
   }
 }
