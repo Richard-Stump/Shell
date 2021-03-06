@@ -18,7 +18,7 @@ struct SimpleCommand {
   void wait();
 
   const char** getArgv();
-  void freeArgv(const char** argv);
+  void freeArgv(const char**& argv);
 
 private:
   int   _pid;
