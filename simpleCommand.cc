@@ -40,7 +40,7 @@ const char** SimpleCommand::getArgv() {
   const char** const_argv = (const char**)argv;
 
   for(size_t i = 0; i < argvCount; i++) {
-    const_argv[i] = _arguments[i];
+    const_argv[i] = _arguments[i]->c_str();
   }
 
   return const_argv;
