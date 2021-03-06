@@ -19,6 +19,9 @@
 #include <unistd.h>
 
 #include <iostream>
+#include <unistd.h>
+#include <sys/wait.h>
+
 
 #include "command.hh"
 #include "shell.hh"
@@ -105,17 +108,23 @@ void Command::execute() {
         return;
     }
 
+    int pid;
+
     for( SimpleCommand* sc : _simpleCommands ) {
-      int pid = fork();
+      pid = fork();
 
       if(pid == 0) {
         printf("Running from the child process\n");
       }
-      else {
-        printf("Forked\n");
+      else if (pid < 0) {
+        perror("Fork Error\n");
       }
-
+      else {
+        perror("Process Forked");
+      }
     }
+
+    waitpid(pid);
 
     // Print contents of Command data structure
     print();
