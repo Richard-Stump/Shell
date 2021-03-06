@@ -125,7 +125,7 @@ void Command::execute() {
     }
 
     if(!_background) {
-      waitpid(pid);
+      waitpid(pid, nullptr, 0);
     }
 
     // Print contents of Command data structure
