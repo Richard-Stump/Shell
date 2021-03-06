@@ -42,7 +42,7 @@ std::shared_ptr<char**> SimpleCommand::createArgv() {
 
   argv[argvSize - 1][0] = '\0';
 
-  return std::shared_ptr(argv);
+  return std::shared_ptr<char**>(argv); //template errors suck...
 }
 
 //execute the simple command
