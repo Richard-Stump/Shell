@@ -14,7 +14,7 @@ SimpleCommand::SimpleCommand() : _running(false) {
 
 SimpleCommand::~SimpleCommand() {
   // iterate over all the arguments and delete them
-  for (auto & arg : _arguments) {
+  for (std::string* & arg : _arguments) {
     if(arg != nullptr) {
       delete arg;
       arg = nullptr;
