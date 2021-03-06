@@ -51,7 +51,7 @@ const char** SimpleCommand::getArgv() {
 
 void SimpleCommand::freeArgv(const char** argv)
 {
-  delete argv;
+  delete[] argv;
 }
 
 //execute the simple command
@@ -63,8 +63,6 @@ void SimpleCommand::execute() {
     const char** args = getArgv();
 
     execvp(args[0], (char* const*)args);
-
-    freeArgv(args);
   }
   else {
     _pid = pid; 
