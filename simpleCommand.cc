@@ -35,7 +35,6 @@ std::unique_ptr<const char*> SimpleCommand::getArgv() {
   size_t argvCount = _arguments.size() + 1;
   char** argv = new char*[argvCount];
 
-  argv[argvCount - 1] = &'\0';
 
   const char* const_argv = (const char*)argv;
 
