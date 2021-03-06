@@ -16,7 +16,7 @@ struct SimpleCommand {
   void print();
   void execute();
 
-  std::unique_ptr<char*[]> getArgv();
+  std::unique_ptr<const char*[]> getArgv();
 };
 
 #endif
