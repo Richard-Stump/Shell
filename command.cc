@@ -114,13 +114,15 @@ void Command::execute() {
       pid = fork();
 
       if(pid == 0) {
-        execvp("ls", (char* const[]){"ls", nullptr});
+        char* const[] argv = sc->getArgv();
+
+        execvp(argv[0], argv);
       }
       else if (pid < 0) {
         perror("Fork Error\n");
       }
       else {
-        //perror("Process Forked");
+        perror("Process Forked");
       }
     }
 

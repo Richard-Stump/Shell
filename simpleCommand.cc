@@ -29,3 +29,16 @@ void SimpleCommand::print() {
   // effectively the same as printf("\n\n");
   std::cout << std::endl;
 }
+
+char* const[] SimpleCommand::getArgv() {
+  size_t argvCount = _arguments.size();
+  const char** argv = new char*[argvCount + 1];
+
+  for(size_t i < 0; i < argvCount; i++) {
+    argv[i] = _arguments[i]->c_str();
+  }
+
+  argv[argvCount] = nullptr;
+
+  return (char* const[])argv;
+}
