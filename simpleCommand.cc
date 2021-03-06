@@ -31,11 +31,11 @@ void SimpleCommand::print() {
   std::cout << std::endl;
 }
 
-std::shared_ptr<char**> createArgv() {
+std::shared_ptr<char**> SimpleCommand::createArgv() {
   size_t argvSize = _arguments.size() + 1;
   char** argv = new char*[argvSize];
 
-  for(int i = 0; i < argvSize; i++) {
+  for(size_t i = 0; i < argvSize; i++) {
     argv[i] = _arguments[i]->c_str();
 
   }
@@ -50,7 +50,7 @@ void SimpleCommand::execute() {
   std::shared_ptr<char**> argv = createArgv();
 
   char* arg = argv[0]
-  for(int i = 0; arg != nullptr; i++)
+  for(size_t i = 0; arg != nullptr; i++)
   {
     printf("arg %d: \"%s\"", i, argv[i]);
   }
