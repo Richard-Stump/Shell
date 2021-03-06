@@ -70,6 +70,8 @@ void SimpleCommand::execute() {
 
   //if we are currently the child process
   if (pid == 0) {
+    printf("Running from the child\n");
+
     _isChild = true;
 
     //const char** args = getArgv();
@@ -79,6 +81,8 @@ void SimpleCommand::execute() {
   else {
     _pid = pid; 
     _running = true;
+
+    printf("Child forked\n");
   }
 }
 
