@@ -117,10 +117,28 @@ void Command::execute() {
     // and call exec
     int pid;
 
-    int fdStdin = dup(0);
-    int fdStdout = dup(1);
-    int fdStderr = dup(2);
-    
+    int tmpIn = dup(0);
+    int tmpOut = dup(1);
+    int tmpErr = dup(2);
+
+
+    if(_inFile) {
+      int fdIn = open(_inFile->c_str(), O_WRONLY);
+      dup2(0, fdIn);
+    }
+
+    if(_outFile) {
+      int outFlags = O_WRONLY | O_CREAT | (_appendOut ? O_APPEND : 0);
+      int fdOut = open(_outFile->c_str(), outFlags);
+      dup2(1, fdOut)
+    }
+
+    if(_errFile){
+      int errFlags = O_WRONLY | O_CREAT | (_appendErr ? O_APPEND : 0);
+      int fdErr = open(_outFile->c_str(), errFlags);
+      dup2(2, fdErr);
+    }
+
     for( SimpleCommand* sc : _simpleCommands ) {
       pid = fork();
 
@@ -137,25 +155,6 @@ void Command::execute() {
       else if (pid < 0) {
         perror("Fork Error\n");
         return;
-      }
-      else {
-
-        if (_inFile) {
-          int fdRedirectIn = open(_inFile->c_str(), 0);
-          dup2(0, fdRedirectIn);
-        }
-
-        if (_outFile) {
-          int outFlags = _appendOut ? (O_CREAT | O_APPEND) : (O_CREAT);
-          int fdRedirectOut = open(_outFile->c_str(), outFlags);
-          dup2(1, fdRedirectOut);
-        }
-
-        if(_errFile) {
-          int errFlags = _appendOut ? (O_CREAT | O_APPEND) : (O_CREAT);
-          int fdRedirectErr = open(_errFile->c_str(), errFlags);
-          dup2(2, fdRedirectErr);
-        }
       }
     }
 
