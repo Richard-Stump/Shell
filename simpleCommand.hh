@@ -22,7 +22,7 @@ struct SimpleCommand {
 
 private:
   int   _pid;
-  bool  running;
+  bool  _running;
 };
 
 #endif

@@ -1,12 +1,11 @@
 #include <cstdio>
 #include <cstdlib>
+#include <unistd.h>
 
 #include <iostream>
 #include <memory>
 
 #include "simpleCommand.hh"
-
-const int NOT
 
 SimpleCommand::SimpleCommand() : _running(false) {
   _arguments = std::vector<std::string *>();
