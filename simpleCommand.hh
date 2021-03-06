@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 struct SimpleCommand {
 
@@ -15,7 +16,7 @@ struct SimpleCommand {
   void print();
   void execute();
 
-  const char** createArgv();
+  std::unique_ptr<char**> getArgv();
 };
 
 #endif
