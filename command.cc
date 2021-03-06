@@ -142,10 +142,10 @@ void Command::execute() {
 
     int fdRedirectIn = open(_inFile->c_str(), 0);
 
-    int outFlags = _appendOut ? (O_CREATE | O_APPEND) : (O_CREATE);
+    int outFlags = _appendOut ? (O_CREAT | O_APPEND) : (O_CREAT);
     int fdRedirectOut = open(_outFile->c_str(), outFlags);
 
-    int errFlags = _appendOut ? (O_CREATE | O_APPEND) : (O_CREATE);
+    int errFlags = _appendOut ? (O_CREAT | O_APPEND) : (O_CREAT);
     int fdRedirectErr = open(_errFile->c_str(), errFlags);
 
     dup2(0, fdRedirectIn);
