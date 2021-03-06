@@ -31,14 +31,14 @@ void SimpleCommand::print() {
   std::cout << std::endl;
 }
 
-std::unique_ptr<const char*> SimpleCommand::getArgv() {
+std::unique_ptr<const char[*]> SimpleCommand::getArgv() {
   size_t argvCount = _arguments.size() + 1;
   char** argv = new char*[argvCount];
 
 
-  const char* const_argv = (const char*)argv;
+  const char** const_argv = (const char**)argv;
 
-  return std::unique_ptr<const char*>(const_argv);
+  return std::unique_ptr<const char*>(const_argv[0]);
 }
 
 //execute the simple command
