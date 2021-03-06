@@ -14,16 +14,6 @@ struct SimpleCommand {
   ~SimpleCommand();
   void insertArgument( std::string * argument );
   void print();
-  void execute();
-  void wait();
-
-  const char** getArgv();
-  void freeArgv(const char**& argv);
-
-private:
-  int   _pid;
-  bool  _running;
-  bool  _isChild = false;
 };
 
 #endif

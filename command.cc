@@ -107,6 +107,16 @@ void Command::execute() {
 
     for( SimpleCommand* sc : _simpleCommands ) {
         sc->execute();
+
+      int pid = fork();
+
+      if(pid == 0) {
+        printf("Running from the child process\n");
+      }
+      else {
+        printf("Forked\n");
+      }
+
     }
 
     _simpleCommands.back()->wait();
