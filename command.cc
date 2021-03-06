@@ -121,7 +121,6 @@ void Command::execute() {
     int tmpOut = dup(1);
     int tmpErr = dup(2);
 
-
     if(_inFile) {
       int fdIn = open(_inFile->c_str(), O_WRONLY);
       dup2(0, fdIn);
@@ -162,9 +161,9 @@ void Command::execute() {
       waitpid(pid, nullptr, 0);
     }
 
-    dup2(0, fdIn);
-    dup2(1, fdOut);
-    dup2(2, fdErr);
+    dup2(0, tmpIn);
+    dup2(1, tmpOut);
+    dup2(2, tmpErr);
 
     // Clear to prepare for next command
     clear();
