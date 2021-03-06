@@ -40,7 +40,7 @@ std::unique_ptr<char*[]> getArgv() {
 
 //execute the simple command
 void SimpleCommand::execute() {
-  std::unique_ptr<const char**> args = getArgv();
+  std::unique_ptr<const char*[]]> args = getArgv();
 
   for(size_t i = 0; args[i] != nullptr; i++) {
     std::cout << args[i] << std::endl;
