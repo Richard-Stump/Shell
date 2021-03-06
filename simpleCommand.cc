@@ -31,11 +31,11 @@ void SimpleCommand::print() {
   std::cout << std::endl;
 }
 
-std::unique_ptr<char**> getArgv() {
+std::unique_ptr<char*[]> getArgv() {
   size_t argvCount = _arguments.size() + 1;
-  const char** argv = new char*[argvCount];
+  const char*[] argv = new char*[argvCount];
 
-  return std::unique_ptr<const char**> argv;
+  return std::unique_ptr<const char*[]]> argv;
 }
 
 //execute the simple command
