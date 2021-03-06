@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <unistd.h>
+#include <sys/wait.h>
 
 #include <iostream>
 #include <memory>
