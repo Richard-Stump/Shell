@@ -16,16 +16,16 @@
 
 #include <cstdio>
 #include <cstdlib>
-#include <unistd.h>
-
 #include <iostream>
+
 #include <unistd.h>
 #include <sys/wait.h>
-
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 #include "command.hh"
 #include "shell.hh"
-
 
 Command::Command() {
     // Initialize a new vector of Simple Commands
@@ -136,9 +136,22 @@ void Command::execute() {
       }
     }
 
-    int defStdin = stdin;
-    int defStdout = stdout;
-    int defStderr = stderr;
+    int fdStdin = dup(0);
+    int fdStdout = dup(1);
+    int fdStderr = dup(2);
+
+    int fdRedirectIn = open(_inFile->c_str(), 0);
+
+    int outFlags = _appendOut ? (O_CREATE | O_APPEND) : (O_CREATE);
+    int fdRedirectOut = open(_outFile->c_str(), outFlags);
+
+    int errFlags = _appendOut ? (O_CREATE | O_APPEND) : (O_CREATE);
+    int fdRedirectErr = open(_errFile->c_str(), errFlags);
+
+    dup2(0, fdRedirectIn);
+    dup2(1, fdRedirectOut);
+    dup2(2, fdRedirectErr);
+
 
     if(!_background) {
       waitpid(pid, nullptr, 0);
