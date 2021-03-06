@@ -58,9 +58,10 @@ const char** SimpleCommand::getArgv() {
   return argv;
 }
 
-void SimpleCommand::freeArgv(const char** argv)
+void SimpleCommand::freeArgv(const char**& argv)
 {
   delete[] argv;
+  argv = nullptr;
 }
 
 //execute the simple command
