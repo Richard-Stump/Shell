@@ -117,12 +117,13 @@ void Command::execute() {
         char* const* argv = sc->getArgv();
 
         execvp(argv[0], argv);
+
+        perror("execvp error\n");
+        _exit(1);
       }
       else if (pid < 0) {
         perror("Fork Error\n");
-      }
-      else {
-        perror("Process Forked");
+        return;
       }
     }
 
