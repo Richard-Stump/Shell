@@ -37,7 +37,7 @@ const char** SimpleCommand::getArgv() {
 
 
   for(size_t i = 0; i < argvCount; i++) {
-    const_argv[i] = _arguments[i]->c_str();
+    argv[i] = _arguments[i]->c_str();
   }
 
   argv[argvCount] = "\0";
