@@ -40,7 +40,7 @@ std::shared_ptr<char**> SimpleCommand::createArgv() {
 
   }
 
-  argv[argvSize] = '\0';
+  argv[argvSize - 1][0] = '\0';
 
   return std::shared_ptr(argv);
 }
@@ -49,8 +49,7 @@ std::shared_ptr<char**> SimpleCommand::createArgv() {
 void SimpleCommand::execute() {
   std::shared_ptr<char**> argv = createArgv();
 
-  char* arg = argv[0]
-  for(size_t i = 0; arg != nullptr; i++)
+  for(size_t i = 0; argv[i] != nullptr; i++)
   {
     printf("arg %d: \"%s\"", i, argv[i]);
   }
