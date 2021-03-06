@@ -23,6 +23,7 @@ struct SimpleCommand {
 private:
   int   _pid;
   bool  _running;
+  bool  _isChild = false;
 };
 
 #endif

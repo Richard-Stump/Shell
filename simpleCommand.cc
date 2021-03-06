@@ -13,6 +13,15 @@ SimpleCommand::SimpleCommand() : _running(false) {
 }
 
 SimpleCommand::~SimpleCommand() {
+  printf("Freeing Simple command");
+
+  if(_isChild) {
+    printf(" which is a child process\n");
+  }
+  else {
+    printf("\n");
+  }
+
   // iterate over all the arguments and delete them
   for (auto & arg : _arguments) {
     if(arg != nullptr) {
@@ -60,6 +69,8 @@ void SimpleCommand::execute() {
 
   //if we are currently the child process
   if (pid == 0) {
+    _isChild = true;
+
     const char** args = getArgv();
 
     execvp(args[0], (char* const*)args);  
