@@ -104,7 +104,7 @@ void Command::execute() {
         return;
     }
 
-    for( simpleCommand& sc : _simpleCommands() ) {
+    for( SimpleCommand& sc : _simpleCommands() ) {
         sc.execute();
     }
 

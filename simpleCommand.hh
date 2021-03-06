@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 struct SimpleCommand {
 
@@ -14,6 +15,8 @@ struct SimpleCommand {
   void insertArgument( std::string * argument );
   void print();
   void execute();
+
+  std::shared_ptr<char**> createArgv();
 };
 
 #endif
