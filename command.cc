@@ -120,7 +120,7 @@ void Command::execute() {
         perror("Fork Error\n");
       }
       else {
-        perror("Process Forked");
+        //perror("Process Forked");
       }
     }
 
