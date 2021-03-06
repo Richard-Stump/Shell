@@ -16,7 +16,7 @@ struct SimpleCommand {
   void print();
   void execute();
 
-  std::shared_ptr<char**> createArgv();
+  std::shared_ptr<const char**> createArgv();
 };
 
 #endif
