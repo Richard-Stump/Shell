@@ -118,6 +118,8 @@ void Command::execute() {
 
         execvp(argv[0], argv);
 
+        delete[] argv;
+
         perror("execvp error\n");
         _exit(1);
       }
