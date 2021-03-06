@@ -114,7 +114,7 @@ void Command::execute() {
       pid = fork();
 
       if(pid == 0) {
-        char* const[] argv = sc->getArgv();
+        char* const* argv = sc->getArgv();
 
         execvp(argv[0], argv);
       }
