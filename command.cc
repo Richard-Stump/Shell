@@ -119,17 +119,14 @@ void Command::execute() {
     int tmpIn = dup(0);
     int tmpOut = dup(1);
 
-    int fdIn;
+    int pid, fdIn, fdOut;
 
     if(_inFile) {
-      fdIn = open(_inFile->c_str(), O_WRONLY);
+      fdIn = open(_inFile->c_str(), O_RONLY);
     }
     else {
       fdIn = dup(tmpIn);
     }
-
-    int pid;
-    int fdOut;
 
     for( SimpleCommand* sc : _simpleCommands ) {
       dup2(fdIn, 0);
