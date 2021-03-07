@@ -129,21 +129,10 @@ void Command::execute() {
       fdIn = dup(tmpIn);
     }
 
-
-    if(_errFile) {
-      int errFlags = O_WRONLY | O_CREAT | (_appendOut ? O_APPEND : O_TRUNC);
-      fdErr = open(_errFile->c_str(), errFlags);
-    }
-    else {
-      fdErr = dup(tmpErr);
-    }
-
-
     for( SimpleCommand* sc : _simpleCommands ) {
       dup2(fdIn, 0);
       close(fdIn);
       
-      dup2(fdErr, 2);
 
       //the last simple command
       if (sc == _simpleCommands.back()) 
@@ -169,8 +158,18 @@ void Command::execute() {
 
       }
 
+      if(_errFile) {
+        int errFlags = O_WRONLY | O_CREAT | (_appendOut ? O_APPEND : O_TRUNC);
+        fdErr = open(_errFile->c_str(), errFlags);
+      }
+      else {
+        fdErr = dup(tmpErr);
+      }
+
+      dup2(fdErr, 2);
       dup2(fdOut, 1);
       close(fdOut);
+      close(fdErr);
 
       pid = fork();
 
