@@ -158,7 +158,7 @@ void Command::execute() {
       }
 
       if(_errFile && _errFile == _outFile) {
-        fdeRR = dup(fdOut);
+        fdErr = dup(fdOut);
       }
       if(_errFile) {
         int errFlags = O_WRONLY | O_CREAT | (_appendOut ? O_APPEND : O_TRUNC);
