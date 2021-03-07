@@ -137,12 +137,13 @@ void Command::execute() {
       fdErr = dup(tmpErr);
     }
 
-    dup2(fdErr, 2);
 
     for( SimpleCommand* sc : _simpleCommands ) {
       dup2(fdIn, 0);
       close(fdIn);
       
+      dup2(fdErr, 2);
+
       //the last simple command
       if (sc == _simpleCommands.back()) 
       {
