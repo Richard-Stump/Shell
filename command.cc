@@ -182,7 +182,7 @@ void Command::execute() {
     }
 
     dup2(tmpIn, 0);
-    dup2(tmpOyt, 1);
+    dup2(tmpOut, 1);
     close(tmpIn);
     close(tmpOut);
 
