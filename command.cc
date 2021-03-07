@@ -129,6 +129,7 @@ void Command::execute() {
       fdIn = dup(tmpIn);
     }
 
+/*
     if(_errFile) {
       int errFlags = O_WRONLY | O_CREAT | (_appendOut ? O_APPEND : O_TRUNC);
       fdErr = open(_errFile->c_str(), errFlags);
@@ -136,13 +137,13 @@ void Command::execute() {
     else {
       fdErr = dup(tmpErr);
     }
-
+*/
 
     for( SimpleCommand* sc : _simpleCommands ) {
       dup2(fdIn, 0);
       close(fdIn);
       
-      dup2(fdErr, 2);
+      //dup2(fdErr, 2);
 
       //the last simple command
       if (sc == _simpleCommands.back()) 
@@ -193,7 +194,7 @@ void Command::execute() {
       waitpid(pid, nullptr, 0);
     }
 
-    close(fdErr);
+    //close(fdErr);
 
     //restore the default stdin, stdout, and stderr
     dup2(tmpIn, 0);
