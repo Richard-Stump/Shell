@@ -134,7 +134,7 @@ void Command::execute() {
       fdErr = open(_errFile->c_str(), errFlags);
     }
     else {
-      fdErr = dup(tmpErr)
+      fdErr = dup(tmpErr);
     }
 
     dup2(fdErr, 2);
