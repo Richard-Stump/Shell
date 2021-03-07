@@ -118,8 +118,9 @@ void Command::execute() {
 
     int tmpIn = dup(0);
     int tmpOut = dup(1);
+    int tmpErr = dup(2);
 
-    int pid, fdIn, fdOut;
+    int pid, fdIn, fdOut, fdErr;
 
     if(_inFile) {
       fdIn = open(_inFile->c_str(), O_RDONLY);
@@ -128,6 +129,16 @@ void Command::execute() {
       fdIn = dup(tmpIn);
     }
 
+    if(_errFile) {
+      int errFlags = O_WRONLY | O_CREAT | (_appendOut ? O_APPEND : O_TRUNC);
+      fdErr = open(_errFile->c_str(), errFlags);
+    }
+    else {
+      fdErr = dup(tmpErr)
+    }
+
+    dup2(fdErr, 2);
+
     for( SimpleCommand* sc : _simpleCommands ) {
       dup2(fdIn, 0);
       close(fdIn);
@@ -135,6 +146,8 @@ void Command::execute() {
       //the last simple command
       if (sc == _simpleCommands.back()) 
       {
+        //if the user has specified an output file, open it and use it. Else,
+        //use the default stdout.
         if(_outFile) {
           int outFlags = O_WRONLY | O_CREAT | (_appendOut ? O_APPEND : O_TRUNC);
           fdOut = open(_outFile->c_str(), outFlags);
@@ -145,6 +158,7 @@ void Command::execute() {
       }
       else {
         //not the last simple command
+        //set the pipe up for this command
         int fdPipe[2];
         pipe(fdPipe);
 
@@ -178,10 +192,15 @@ void Command::execute() {
       waitpid(pid, nullptr, 0);
     }
 
+    close(fdErr);
+
+    //restore the default stdin, stdout, and stderr
     dup2(tmpIn, 0);
     dup2(tmpOut, 1);
+    dup2(tmpErr, 2);
     close(tmpIn);
     close(tmpOut);
+    close(tmpErr);
 
     // Clear to prepare for next command
     clear();
