@@ -59,7 +59,7 @@ void Command::clear() {
             _errFile = NULL;
         }
         
-        delete _errFile;
+        delete _outFile;
     }
     _outFile = NULL;
 
@@ -69,7 +69,7 @@ void Command::clear() {
     _inFile = NULL;
 
     if ( _errFile ) {
-        delete _errFile;
+      delete _errFile;
     }
     _errFile = NULL;
 
