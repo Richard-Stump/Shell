@@ -118,9 +118,8 @@ void Command::execute() {
 
     int tmpIn = dup(0);
     int tmpOut = dup(1);
-    int tmpErr = dup(2);
 
-    int fdIn, fdOut, fdErr;
+    int fdIn;
 
     if(_inFile) {
       fdIn = open(_inFile->c_str(), O_WRONLY);
@@ -152,8 +151,8 @@ void Command::execute() {
         int fdPipe[2];
         pipe(fdPipe);
 
-        fdIn = pipe[0];
-        fdOut = pipe[1];
+        fdIn = fdPipe[0];
+        fdOut = fdPipe[1];
 
       }
 
