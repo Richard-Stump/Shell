@@ -1412,9 +1412,9 @@ yyreduce:
 #line 174 "shell.y" /* yacc.c:1646  */
     {
     printf("   Yacc: insert out and error \"%s\" with append\n", (yyvsp[0].cpp_string)->c_str());
-    //Shell::_currentCommand._outFile = $2;
+    Shell::_currentCommand._outFile = (yyvsp[0].cpp_string);
     Shell::_currentCommand._appendOut = true;
-    //Shell::_currentCommand._errFile = &$2;
+    Shell::_currentCommand._errFile = &(yyvsp[0].cpp_string);
     Shell::_currentCommand._appendErr = true;
   }
 #line 1421 "y.tab.cc" /* yacc.c:1646  */

@@ -58,7 +58,7 @@ command_line:
 
 simple_command:	
   pipe_list iomodifier_opt NEWLINE {
-    printf("   Yacc: Execute command\n");
+    //printf("   Yacc: Execute command\n");
     Shell::_currentCommand.execute();
   }
   | pipe_list iomodifier_opt AMPERSAND NEWLINE {
@@ -98,16 +98,16 @@ command_word:
 
 pipe_list:
   pipe_list PIPE command_and_args {
-    printf("   Yacc: insert recursive pipelist\n");
+    //printf("   Yacc: insert recursive pipelist\n");
   }
   | command_and_args {
-    printf("   Yacc: insert pipelist with 1 command\n");
+    //printf("   Yacc: insert pipelist with 1 command\n");
   }
   ;
 /*
 iomodifier_opt:
   GREAT WORD {
-    printf("   Yacc: insert output \"%s\"\n", $2->c_str());
+    //printf("   Yacc: insert output \"%s\"\n", $2->c_str());
     Shell::_currentCommand._outFile = $2;
   }
   | 
@@ -129,12 +129,12 @@ iomodifier_opt:
 
 out_modifier:
   GREAT WORD {
-    printf("   Yacc: insert output \"%s\"\n", $2->c_str());
+    //printf("   Yacc: insert output \"%s\"\n", $2->c_str());
     Shell::_currentCommand._outFile = $2;
     Shell::_currentCommand._appendOut = false;
   }
   | GREATGREAT WORD {
-    printf("   Yacc: insert output with \"%s\" with append\n", $2->c_str());
+    //printf("   Yacc: insert output with \"%s\" with append\n", $2->c_str());
     Shell::_currentCommand._outFile = $2;
     Shell::_currentCommand._appendOut = true;
   }
@@ -143,7 +143,7 @@ out_modifier:
 
 in_modifier:
   LESS WORD {
-    printf("   Yacc: insert input \"%s\"\n", $2->c_str());
+    //printf("   Yacc: insert input \"%s\"\n", $2->c_str());
     Shell::_currentCommand._inFile = $2;
   }
   | /* can be empty */
@@ -151,12 +151,12 @@ in_modifier:
 
 err_modifer:
   TWOGREAT WORD {
-    printf("   Yacc: insert error \"%s\"\n", $2->c_str());
+    //printf("   Yacc: insert error \"%s\"\n", $2->c_str());
     Shell::_currentCommand._errFile = $2;
     Shell::_currentCommand._appendErr = false;
   }
   | TWOGREATGREAT WORD {
-    printf("   Yacc: insert error \"%s\" with append\n", $2->c_str());
+    //printf("   Yacc: insert error \"%s\" with append\n", $2->c_str());
     Shell::_currentCommand._errFile = $2;
     Shell::_currentCommand._appendErr = true;
   }
@@ -165,17 +165,17 @@ err_modifer:
 
 out_and_err_modifier:
   AMPGREAT WORD {
-    printf("   Yacc: insert out and error \"%s\"\n", $2->c_str());
+    //printf("   Yacc: insert out and error \"%s\"\n", $2->c_str());
     Shell::_currentCommand._outFile = $2;
     Shell::_currentCommand._appendOut = false;
     Shell::_currentCommand._errFile = $2;
     Shell::_currentCommand._appendErr = false;
   }
   | AMPGREATGREAT WORD {
-    printf("   Yacc: insert out and error \"%s\" with append\n", $2->c_str());
+    //printf("   Yacc: insert out and error \"%s\" with append\n", $2->c_str());
     Shell::_currentCommand._outFile = $2;
     Shell::_currentCommand._appendOut = true;
-    Shell::_currentCommand._errFile = &$2;
+    Shell::_currentCommand._errFile = $2;
     Shell::_currentCommand._appendErr = true;
   }
   ;
