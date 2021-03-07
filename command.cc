@@ -143,7 +143,7 @@ void Command::execute() {
       dup2(fdIn, 0);
       close(fdIn);
       
-      //dup2(fdErr, 2);
+      dup2(fdErr, 2);
 
       //the last simple command
       if (sc == _simpleCommands.back()) 
