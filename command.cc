@@ -122,7 +122,7 @@ void Command::execute() {
     int pid, fdIn, fdOut;
 
     if(_inFile) {
-      fdIn = open(_inFile->c_str(), O_RONLY);
+      fdIn = open(_inFile->c_str(), O_RDONLY);
     }
     else {
       fdIn = dup(tmpIn);
@@ -136,7 +136,7 @@ void Command::execute() {
       if (sc == _simpleCommands.back()) 
       {
         if(_outFile) {
-          int outFlags = O_WRONLY | O_CREAT | (_appendOut ? O_APPEND : 0);
+          int outFlags = O_WRONLY | O_CREAT | (_appendOut ? O_APPEND : O_TRUNC);
           fdOut = open(_outFile->c_str(), outFlags);
         }
         else {
