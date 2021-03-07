@@ -160,7 +160,7 @@ void Command::execute() {
       if(_errFile && *_errFile == *_outFile) {
         fdErr = dup(fdOut);
       }
-      if(_errFile) {
+      else if(_errFile) {
         int errFlags = O_WRONLY | O_CREAT | (_appendOut ? O_APPEND : O_TRUNC);
         fdErr = open(_errFile->c_str(), errFlags);
       }
