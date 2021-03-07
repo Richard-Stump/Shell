@@ -115,7 +115,6 @@ void Command::execute() {
     // For every simple command fork a new process
     // Setup i/o redirection
     // and call exec
-    int pid;
 
     int tmpIn = dup(0);
     int tmpOut = dup(1);
@@ -125,23 +124,42 @@ void Command::execute() {
 
     if(_inFile) {
       fdIn = open(_inFile->c_str(), O_WRONLY);
-      dup2(0, fdIn);
+    }
+    else {
+      fdIn = dup(tmpIn);
     }
 
-
-    if(_outFile) {
-      int outFlags = O_WRONLY | O_CREAT | (_appendOut ? O_APPEND : 0);
-      fdOut = open(_outFile->c_str(), outFlags);
-      dup2(1, fdOut);
-    }
-
-    if(_errFile){
-      int errFlags = O_WRONLY | O_CREAT | (_appendErr ? O_APPEND : 0);
-      fdErr = open(_outFile->c_str(), errFlags);
-      dup2(2, fdErr);
-    }
+    int pid;
+    int fdOut;
 
     for( SimpleCommand* sc : _simpleCommands ) {
+      dup2(fdIn, 0);
+      close(fdIn);
+      
+      //the last simple command
+      if (sc == _simpleCommands.back()) 
+      {
+        if(_outFile) {
+          int outFlags = O_WRONLY | O_CREAT | (_appendOut ? O_APPEND : 0);
+          fdOut = open(_outFile->c_str(), outFlags);
+        }
+        else {
+          fdOut = dup(tmpOut);
+        }
+      }
+      else {
+        //not the last simple command
+        int fdPipe[2];
+        pipe(fdPipe);
+
+        fdIn = pipe[0];
+        fdOut = pipe[1];
+
+      }
+
+      dup2(fdOut, 1);
+      close(fdOut);
+
       pid = fork();
 
       if(pid == 0) {
@@ -164,13 +182,10 @@ void Command::execute() {
       waitpid(pid, nullptr, 0);
     }
 
-    if(_inFile) close(fdIn);
-    if(_outFile) close(fdOut);
-    if(_errFile) close(fdErr);
-
-    dup2(0, tmpIn);
-    dup2(1, tmpOut);
-    dup2(2, tmpErr);
+    dup2(tmpIn, 0);
+    dup2(tmpOyt, 1);
+    close(tmpIn);
+    close(tmpOut);
 
     // Clear to prepare for next command
     clear();
