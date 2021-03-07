@@ -157,7 +157,7 @@ void Command::execute() {
 
       }
 
-      if(_errFile && *_errFile == *_outFile) {
+      if(_errFile && _outFile && *_errFile == *_outFile) {
         fdErr = dup(fdOut);
       }
       else if(_errFile) {

@@ -421,19 +421,19 @@ static const YY_CHAR yy_ec[256] =
 
 static const YY_CHAR yy_meta[9] =
     {   0,
-        1,    2,    2,    1,    1,    1,    1,    1
+        1,    2,    2,    2,    1,    2,    2,    2
     } ;
 
 static const flex_int16_t yy_base[21] =
     {   0,
-        0,    0,   16,    0,   17,   17,    8,    7,    0,    5,
-        0,    0,    0,    6,    0,    7,    0,    0,   17,    9
+        0,    0,   16,    0,   17,   17,    8,    7,   17,    5,
+       17,    0,   17,    6,   17,    7,   17,   17,   17,    9
     } ;
 
 static const flex_int16_t yy_def[21] =
     {   0,
-       19,    1,   19,   20,   19,   19,   20,   20,   20,   20,
-       20,   20,   20,   20,   20,   20,   20,   20,    0,   19
+       19,    1,   19,   20,   19,   19,   19,   20,   19,   19,
+       19,   20,   19,   19,   19,   19,   19,   19,    0,   19
     } ;
 
 static const flex_int16_t yy_nxt[26] =
@@ -868,7 +868,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 76 "shell.l"
+#line 75 "shell.l"
 {
   /* Assume that file names have only alpha chars */
   yylval.cpp_string = new std::string(yytext);
@@ -877,7 +877,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 81 "shell.l"
+#line 80 "shell.l"
 ECHO;
 	YY_BREAK
 #line 884 "lex.yy.cc"
@@ -1897,4 +1897,4 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 81 "shell.l"
+#line 80 "shell.l"
