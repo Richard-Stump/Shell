@@ -133,7 +133,7 @@ io_modifier:
       yyerrok;
     }
   }
-  | GREATGREAT {
+  | GREATGREAT WORD {
     Shell::_currentCommand._outFile = $2;
     Shell::_currentCommand._appendOut = true;
 
@@ -142,7 +142,7 @@ io_modifier:
       yyerrok;
     }
   }
-  | TWOGREAT {
+  | TWOGREAT WORD {
     Shell::_currentCommand._errFile = $2;
     Shell::_currentCommand._appendErr = false;
 
@@ -151,7 +151,7 @@ io_modifier:
       yyerrok;
     }
   }
-  | TWOGREATGREAT {
+  | TWOGREATGREAT WORD {
     Shell::_currentCommand._errFile = $2;
     Shell::_currentCommand._appendErr = true;
 
@@ -160,7 +160,7 @@ io_modifier:
       yyerrok;
     }
   }
-  | AMPGREAT {
+  | AMPGREAT WORD {
     Shell::_currentCommand._outFile = $2;
     Shell::_currentCommand._appendOut = false;
     Shell::_currentCommand._errFile = $2;
@@ -171,7 +171,7 @@ io_modifier:
       yyerrok;
     }
   }
-  | AMPGREATGREAT {
+  | AMPGREATGREAT WORD {
     Shell::_currentCommand._outFile = $2;
     Shell::_currentCommand._appendOut = true;
     Shell::_currentCommand._errFile = $2;
@@ -182,7 +182,7 @@ io_modifier:
       yyerrok;
     }
   }
-  | LESS {
+  | LESS WORD {
     Shell::_currentCommand._inFile = $2;
 
     if( _inFile) {
