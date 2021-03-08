@@ -104,15 +104,6 @@ pipe_list:
     //printf("   Yacc: insert pipelist with 1 command\n");
   }
   ;
-/*
-iomodifier_opt:
-  GREAT WORD {
-    //printf("   Yacc: insert output \"%s\"\n", $2->c_str());
-    Shell::_currentCommand._outFile = $2;
-  }
-  | 
-  ;
-*/
 /* out_and_err_modifier should not apear with either out_modifier or 
  * err_modifer 
  */
@@ -127,56 +118,77 @@ iomodifier_opt:
   | err_modifer out_modifier in_modifier
   ;
 
-out_modifier:
+iomodifier_opt:
+  iomodifier_opt io_modifier
+  | /* can be empty */
+  ;
+
+io_modifier:
   GREAT WORD {
-    //printf("   Yacc: insert output \"%s\"\n", $2->c_str());
     Shell::_currentCommand._outFile = $2;
     Shell::_currentCommand._appendOut = false;
+
+    if( _outFile ) {
+      yyerror("Ambiguous output redirect");
+      yyerrok;
+    }
   }
-  | GREATGREAT WORD {
-    //printf("   Yacc: insert output with \"%s\" with append\n", $2->c_str());
+  | GREATGREAT {
     Shell::_currentCommand._outFile = $2;
     Shell::_currentCommand._appendOut = true;
-  }
-  | /* can be empty */
-  ;
 
-in_modifier:
-  LESS WORD {
-    //printf("   Yacc: insert input \"%s\"\n", $2->c_str());
+    if( _outFile ) {
+      yyerror("Ambiguous output redirect");
+      yyerrok;
+    }
+  }
+  | TWOGREAT {
+    Shell::_currentCommand._errFile = $2;
+    Shell::_currentCommand._appendErr = false;
+
+    if( _errFile ) {
+      yyerror("Ambiguous output redirect");
+      yyerrok;
+    }
+  }
+  | TWOGREATGREAT {
+    Shell::_currentCommand._errFile = $2;
+    Shell::_currentCommand._appendErr = true;
+
+    if( _errFile ) {
+      yyerror("Ambiguous output redirect");
+      yyerrok;
+    }
+  }
+  | AMPGREAT {
+    Shell::_currentCommand._outFile = $2;
+    Shell::_currentCommand._appendOut = false;
+    Shell::_currentCommand._errFile = $2;
+    Shell::_currentCommand._appendErr = false;
+
+    if( _outFile || _errFile ) {
+      yyerror("Ambiguous output redirect");
+      yyerrok;
+    }
+  }
+  | AMPGREATGREAT {
+    Shell::_currentCommand._outFile = $2;
+    Shell::_currentCommand._appendOut = true;
+    Shell::_currentCommand._errFile = $2;
+    Shell::_currentCommand._appendErr = true;
+
+    if( _outFile || _errFile ) {
+      yyerror("Ambiguous output redirect");
+      yyerrok;
+    }
+  }
+  | LESS {
     Shell::_currentCommand._inFile = $2;
-  }
-  | /* can be empty */
-  ;
 
-err_modifer:
-  TWOGREAT WORD {
-    //printf("   Yacc: insert error \"%s\"\n", $2->c_str());
-    Shell::_currentCommand._errFile = $2;
-    Shell::_currentCommand._appendErr = false;
-  }
-  | TWOGREATGREAT WORD {
-    //printf("   Yacc: insert error \"%s\" with append\n", $2->c_str());
-    Shell::_currentCommand._errFile = $2;
-    Shell::_currentCommand._appendErr = true;
-  }
-  | /* Can be empty */
-  ;
-
-out_and_err_modifier:
-  AMPGREAT WORD {
-    //printf("   Yacc: insert out and error \"%s\"\n", $2->c_str());
-    Shell::_currentCommand._outFile = $2;
-    Shell::_currentCommand._appendOut = false;
-    Shell::_currentCommand._errFile = $2;
-    Shell::_currentCommand._appendErr = false;
-  }
-  | AMPGREATGREAT WORD {
-    //printf("   Yacc: insert out and error \"%s\" with append\n", $2->c_str());
-    Shell::_currentCommand._outFile = $2;
-    Shell::_currentCommand._appendOut = true;
-    Shell::_currentCommand._errFile = $2;
-    Shell::_currentCommand._appendErr = true;
+    if( _inFile) {
+      yyerror("Ambiguous input redirect");
+      yyerrok;
+    }
   }
   ;
 
