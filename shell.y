@@ -113,7 +113,7 @@ iomodifier_opt:
 io_modifier:
   GREAT WORD {
     if( Shell::_currentCommand._outFile ) {
-      yyerror("Ambiguous output redirect\n");
+      yyerror("Ambiguous output redirect.\n");
       yyerrok;
     }
 
@@ -122,7 +122,7 @@ io_modifier:
   }
   | GREATGREAT WORD {
     if( Shell::_currentCommand._outFile ) {
-      yyerror("Ambiguous output redirect\n");
+      yyerror("Ambiguous output redirect.\n");
       yyerrok;
     }
 
@@ -131,7 +131,7 @@ io_modifier:
   }
   | TWOGREAT WORD {
     if( Shell::_currentCommand._errFile ) {
-      yyerror("Ambiguous output redirect\n");
+      yyerror("Ambiguous output redirect.\n");
       yyerrok;
     }
 
@@ -140,7 +140,7 @@ io_modifier:
   }
   | TWOGREATGREAT WORD {
     if( Shell::_currentCommand._errFile ) {
-      yyerror("Ambiguous output redirect\n");
+      yyerror("Ambiguous output redirect.\n");
       yyerrok;
     }
 
@@ -149,7 +149,7 @@ io_modifier:
   }
   | AMPGREAT WORD {
     if( Shell::_currentCommand._outFile || Shell::_currentCommand._errFile ) {
-      yyerror("Ambiguous output redirect\n");
+      yyerror("Ambiguous output redirect.\n");
       yyerrok;
     }
 

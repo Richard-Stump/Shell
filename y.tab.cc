@@ -1335,7 +1335,7 @@ yyreduce:
 #line 114 "shell.y" /* yacc.c:1646  */
     {
     if( Shell::_currentCommand._outFile ) {
-      yyerror("Ambiguous output redirect");
+      yyerror("Ambiguous output redirect\n");
       yyerrok;
     }
 
@@ -1349,7 +1349,7 @@ yyreduce:
 #line 123 "shell.y" /* yacc.c:1646  */
     {
     if( Shell::_currentCommand._outFile ) {
-      yyerror("Ambiguous output redirect");
+      yyerror("Ambiguous output redirect\n");
       yyerrok;
     }
 
@@ -1363,7 +1363,7 @@ yyreduce:
 #line 132 "shell.y" /* yacc.c:1646  */
     {
     if( Shell::_currentCommand._errFile ) {
-      yyerror("Ambiguous output redirect");
+      yyerror("Ambiguous output redirect\n");
       yyerrok;
     }
 
@@ -1377,7 +1377,7 @@ yyreduce:
 #line 141 "shell.y" /* yacc.c:1646  */
     {
     if( Shell::_currentCommand._errFile ) {
-      yyerror("Ambiguous output redirect");
+      yyerror("Ambiguous output redirect\n");
       yyerrok;
     }
 
@@ -1391,7 +1391,7 @@ yyreduce:
 #line 150 "shell.y" /* yacc.c:1646  */
     {
     if( Shell::_currentCommand._outFile || Shell::_currentCommand._errFile ) {
-      yyerror("Ambiguous output redirect");
+      yyerror("Ambiguous output redirect\n");
       yyerrok;
     }
 
@@ -1407,7 +1407,7 @@ yyreduce:
 #line 161 "shell.y" /* yacc.c:1646  */
     {
     if( Shell::_currentCommand._outFile || Shell::_currentCommand._errFile ) {
-      yyerror("Ambiguous output redirect");
+      yyerror("Ambiguous output redirect\n");
       yyerrok;
     }
 
@@ -1424,10 +1424,10 @@ yyreduce:
 #line 173 "shell.y" /* yacc.c:1646  */
     {
     if( Shell::_currentCommand._inFile) {
-      yyerror("Ambiguous input redirect");
+      yyerror("Ambiguous input redirect\n");
       yyerrok;
     }
-    
+
     Shell::_currentCommand._inFile = (yyvsp[0].cpp_string);
   }
 #line 1434 "y.tab.cc" /* yacc.c:1646  */
