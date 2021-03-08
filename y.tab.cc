@@ -473,7 +473,7 @@ static const yytype_uint8 yyrline[] =
 {
        0,    47,    47,    51,    52,    56,    60,    64,    68,    69,
       73,    80,    81,    85,    92,   100,   103,   109,   110,   114,
-     123,   132,   141,   150,   161,   172
+     123,   132,   141,   150,   161,   173
 };
 #endif
 
@@ -1334,13 +1334,13 @@ yyreduce:
   case 19:
 #line 114 "shell.y" /* yacc.c:1646  */
     {
-    Shell::_currentCommand._outFile = (yyvsp[0].cpp_string);
-    Shell::_currentCommand._appendOut = false;
-
     if( Shell::_currentCommand._outFile ) {
       yyerror("Ambiguous output redirect");
       yyerrok;
     }
+
+    Shell::_currentCommand._outFile = (yyvsp[0].cpp_string);
+    Shell::_currentCommand._appendOut = false;
   }
 #line 1346 "y.tab.cc" /* yacc.c:1646  */
     break;
@@ -1348,13 +1348,13 @@ yyreduce:
   case 20:
 #line 123 "shell.y" /* yacc.c:1646  */
     {
-    Shell::_currentCommand._outFile = (yyvsp[0].cpp_string);
-    Shell::_currentCommand._appendOut = true;
-
     if( Shell::_currentCommand._outFile ) {
       yyerror("Ambiguous output redirect");
       yyerrok;
     }
+
+    Shell::_currentCommand._outFile = (yyvsp[0].cpp_string);
+    Shell::_currentCommand._appendOut = true;
   }
 #line 1360 "y.tab.cc" /* yacc.c:1646  */
     break;
@@ -1362,13 +1362,13 @@ yyreduce:
   case 21:
 #line 132 "shell.y" /* yacc.c:1646  */
     {
-    Shell::_currentCommand._errFile = (yyvsp[0].cpp_string);
-    Shell::_currentCommand._appendErr = false;
-
     if( Shell::_currentCommand._errFile ) {
       yyerror("Ambiguous output redirect");
       yyerrok;
     }
+
+    Shell::_currentCommand._errFile = (yyvsp[0].cpp_string);
+    Shell::_currentCommand._appendErr = false;
   }
 #line 1374 "y.tab.cc" /* yacc.c:1646  */
     break;
@@ -1376,13 +1376,13 @@ yyreduce:
   case 22:
 #line 141 "shell.y" /* yacc.c:1646  */
     {
-    Shell::_currentCommand._errFile = (yyvsp[0].cpp_string);
-    Shell::_currentCommand._appendErr = true;
-
     if( Shell::_currentCommand._errFile ) {
       yyerror("Ambiguous output redirect");
       yyerrok;
     }
+
+    Shell::_currentCommand._errFile = (yyvsp[0].cpp_string);
+    Shell::_currentCommand._appendErr = true;
   }
 #line 1388 "y.tab.cc" /* yacc.c:1646  */
     break;
@@ -1390,15 +1390,15 @@ yyreduce:
   case 23:
 #line 150 "shell.y" /* yacc.c:1646  */
     {
-    Shell::_currentCommand._outFile = (yyvsp[0].cpp_string);
-    Shell::_currentCommand._appendOut = false;
-    Shell::_currentCommand._errFile = (yyvsp[0].cpp_string);
-    Shell::_currentCommand._appendErr = false;
-
     if( Shell::_currentCommand._outFile || Shell::_currentCommand._errFile ) {
       yyerror("Ambiguous output redirect");
       yyerrok;
     }
+
+    Shell::_currentCommand._outFile = (yyvsp[0].cpp_string);
+    Shell::_currentCommand._appendOut = false;
+    Shell::_currentCommand._errFile = (yyvsp[0].cpp_string);
+    Shell::_currentCommand._appendErr = false;
   }
 #line 1404 "y.tab.cc" /* yacc.c:1646  */
     break;
@@ -1406,34 +1406,35 @@ yyreduce:
   case 24:
 #line 161 "shell.y" /* yacc.c:1646  */
     {
+    if( Shell::_currentCommand._outFile || Shell::_currentCommand._errFile ) {
+      yyerror("Ambiguous output redirect");
+      yyerrok;
+    }
+
     Shell::_currentCommand._outFile = (yyvsp[0].cpp_string);
     Shell::_currentCommand._appendOut = true;
     Shell::_currentCommand._errFile = (yyvsp[0].cpp_string);
     Shell::_currentCommand._appendErr = true;
 
-    if( Shell::_currentCommand._outFile || Shell::_currentCommand._errFile ) {
-      yyerror("Ambiguous output redirect");
-      yyerrok;
-    }
   }
-#line 1420 "y.tab.cc" /* yacc.c:1646  */
+#line 1421 "y.tab.cc" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 172 "shell.y" /* yacc.c:1646  */
+#line 173 "shell.y" /* yacc.c:1646  */
     {
-    Shell::_currentCommand._inFile = (yyvsp[0].cpp_string);
-
     if( Shell::_currentCommand._inFile) {
       yyerror("Ambiguous input redirect");
       yyerrok;
     }
+    
+    Shell::_currentCommand._inFile = (yyvsp[0].cpp_string);
   }
-#line 1433 "y.tab.cc" /* yacc.c:1646  */
+#line 1434 "y.tab.cc" /* yacc.c:1646  */
     break;
 
 
-#line 1437 "y.tab.cc" /* yacc.c:1646  */
+#line 1438 "y.tab.cc" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1661,7 +1662,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 182 "shell.y" /* yacc.c:1906  */
+#line 183 "shell.y" /* yacc.c:1906  */
 
 
 void
