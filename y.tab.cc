@@ -1266,7 +1266,7 @@ yyreduce:
         case 6:
 #line 60 "shell.y" /* yacc.c:1646  */
     {
-    //printf("   Yacc: Execute command\n");
+    printf("   Yacc: Execute command\n");
     Shell::_currentCommand.execute();
   }
 #line 1273 "y.tab.cc" /* yacc.c:1646  */
@@ -1299,7 +1299,7 @@ yyreduce:
   case 13:
 #line 85 "shell.y" /* yacc.c:1646  */
     {
-    //printf("   Yacc: insert argument \"%s\"\n", $1->c_str());
+    printf("   Yacc: insert argument \"%s\"\n", (yyvsp[0].cpp_string)->c_str());
     Command::_currentSimpleCommand->insertArgument( (yyvsp[0].cpp_string) );\
   }
 #line 1306 "y.tab.cc" /* yacc.c:1646  */
@@ -1308,7 +1308,7 @@ yyreduce:
   case 14:
 #line 92 "shell.y" /* yacc.c:1646  */
     {
-    //printf("   Yacc: insert command \"%s\"\n", $1->c_str());
+    printf("   Yacc: insert command \"%s\"\n", (yyvsp[0].cpp_string)->c_str());
     Command::_currentSimpleCommand = new SimpleCommand();
     Command::_currentSimpleCommand->insertArgument( (yyvsp[0].cpp_string) );
   }
