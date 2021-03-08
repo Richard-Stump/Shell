@@ -112,70 +112,71 @@ iomodifier_opt:
 
 io_modifier:
   GREAT WORD {
-    Shell::_currentCommand._outFile = $2;
-    Shell::_currentCommand._appendOut = false;
-
     if( Shell::_currentCommand._outFile ) {
       yyerror("Ambiguous output redirect");
       yyerrok;
     }
+
+    Shell::_currentCommand._outFile = $2;
+    Shell::_currentCommand._appendOut = false;
   }
   | GREATGREAT WORD {
-    Shell::_currentCommand._outFile = $2;
-    Shell::_currentCommand._appendOut = true;
-
     if( Shell::_currentCommand._outFile ) {
       yyerror("Ambiguous output redirect");
       yyerrok;
     }
+
+    Shell::_currentCommand._outFile = $2;
+    Shell::_currentCommand._appendOut = true;
   }
   | TWOGREAT WORD {
-    Shell::_currentCommand._errFile = $2;
-    Shell::_currentCommand._appendErr = false;
-
     if( Shell::_currentCommand._errFile ) {
       yyerror("Ambiguous output redirect");
       yyerrok;
     }
+
+    Shell::_currentCommand._errFile = $2;
+    Shell::_currentCommand._appendErr = false;
   }
   | TWOGREATGREAT WORD {
-    Shell::_currentCommand._errFile = $2;
-    Shell::_currentCommand._appendErr = true;
-
     if( Shell::_currentCommand._errFile ) {
       yyerror("Ambiguous output redirect");
       yyerrok;
     }
+
+    Shell::_currentCommand._errFile = $2;
+    Shell::_currentCommand._appendErr = true;
   }
   | AMPGREAT WORD {
-    Shell::_currentCommand._outFile = $2;
-    Shell::_currentCommand._appendOut = false;
-    Shell::_currentCommand._errFile = $2;
-    Shell::_currentCommand._appendErr = false;
-
     if( Shell::_currentCommand._outFile || Shell::_currentCommand._errFile ) {
       yyerror("Ambiguous output redirect");
       yyerrok;
     }
+
+    Shell::_currentCommand._outFile = $2;
+    Shell::_currentCommand._appendOut = false;
+    Shell::_currentCommand._errFile = $2;
+    Shell::_currentCommand._appendErr = false;
   }
   | AMPGREATGREAT WORD {
+    if( Shell::_currentCommand._outFile || Shell::_currentCommand._errFile ) {
+      yyerror("Ambiguous output redirect");
+      yyerrok;
+    }
+
     Shell::_currentCommand._outFile = $2;
     Shell::_currentCommand._appendOut = true;
     Shell::_currentCommand._errFile = $2;
     Shell::_currentCommand._appendErr = true;
 
-    if( Shell::_currentCommand._outFile || Shell::_currentCommand._errFile ) {
-      yyerror("Ambiguous output redirect");
-      yyerrok;
-    }
   }
   | LESS WORD {
-    Shell::_currentCommand._inFile = $2;
-
     if( Shell::_currentCommand._inFile) {
       yyerror("Ambiguous input redirect");
       yyerrok;
     }
+    
+    Shell::_currentCommand._inFile = $2;
   }
   ;
 
