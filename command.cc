@@ -130,6 +130,10 @@ void Command::execute() {
     }
 
     for( SimpleCommand* sc : _simpleCommands ) {
+      fprintf(stderr, "Starting simpleCommand: ");
+      sc->print();
+      fprintf(stderr, "\n");
+
       dup2(fdIn, 0);
       close(fdIn);
 
@@ -154,7 +158,6 @@ void Command::execute() {
 
         fdIn = fdPipe[0];
         fdOut = fdPipe[1];
-
       }
 
       if(_errFile && _outFile && *_errFile == *_outFile) {
@@ -175,8 +178,12 @@ void Command::execute() {
 
       pid = fork();
 
+      fprintf(stderr, "  PID: %d", pid);
+
       if(pid == 0) {
         char* const* argv = sc->getArgv();
+        
+        fprintf(stderr, "  Starting child\n");
 
         execvp(argv[0], argv);
 
@@ -192,6 +199,8 @@ void Command::execute() {
     }
 
     if(!_background) {
+      fprintf(stderr, "Waiting for command w/ PID: %d\n\t", pid);
+      _simpleCommands.back->print();
       waitpid(pid, nullptr, 0);
     }
 
