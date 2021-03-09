@@ -132,7 +132,6 @@ void Command::execute() {
     for( SimpleCommand* sc : _simpleCommands ) {
       fprintf(stderr, "Starting simpleCommand: ");
       sc->print();
-      fprintf(stderr, "\n");
 
       dup2(fdIn, 0);
       close(fdIn);
@@ -178,12 +177,12 @@ void Command::execute() {
 
       pid = fork();
 
-      fprintf(stderr, "  PID: %d", pid);
 
       if(pid == 0) {
         char* const* argv = sc->getArgv();
         
-        fprintf(stderr, "  Starting child\n");
+        fprintf(stderr, "\nStarting child: ");
+        sc->print();
 
         execvp(argv[0], argv);
 
@@ -195,6 +194,9 @@ void Command::execute() {
       else if (pid < 0) {
         perror("Fork Error\n");
         return;
+      }
+      else {
+        fprintf(stderr, "  PID: %d\n", pid);
       }
     }
 
