@@ -200,7 +200,7 @@ void Command::execute() {
 
     if(!_background) {
       fprintf(stderr, "Waiting for command w/ PID: %d\n\t", pid);
-      _simpleCommands.back->print();
+      _simpleCommands.back()->print();
       waitpid(pid, nullptr, 0);
     }
 
