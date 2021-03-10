@@ -1,4 +1,6 @@
 #include <cstdio>
+#include <stdlib.h>
+#include <time.h>
 
 #include <unistd.h>
 #include <signal.h>
@@ -7,13 +9,17 @@
 
 int yyparse(void);
 
-std::vector<char*> exitMessages = {
+std::vector<const char*> exitMessages = {
     "Goodbye!",
-    "Too-da-loo!",
+    "Toodle-loo!",
     "See Ya!",
     "Goodbyte!",
-    "Hasta la vista, Baby!"
-}
+    "Hasta la vista, Baby!",
+    "Au revoir!",
+    "Ciao",
+    "Bye-bye!",
+    "Bye-byte!",
+};
 
 void Shell::prompt() {
   if( isatty(0) ) {
@@ -24,10 +30,19 @@ void Shell::prompt() {
 
 void Shell::signal(int sig) {
   fprintf(stderr, "From signal handler\n");
+
+  if(Shell::_currentCommand._simpleCommands.size() == 0) {
+    Shell::_currentCommand.clear();
+    Shell::prompt();
+  }
 }
 
-void ShellL::printExitMessage() {
+void Shell::printExitMessage() {
+  srand(time(NULL));
 
+  int messIndex = rand() % exitMessages.size();
+
+  printf("%s\n", exitMessages[messIndex]);
 }
 
 int main() {

@@ -25,7 +25,7 @@ void myunputc(int c) {
 
 %%
 
-"exit" {
+"exit"|"quit" {
   Shell::printExitMessage();
   exit(0);
 }

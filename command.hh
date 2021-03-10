@@ -28,6 +28,8 @@ private:
   int getOutRedirect(int cur, std::string* name, bool append);
   
   bool getRedirectDescriptors(int& fdIn, int& fdOut, int& fdErr);
+
+  int _pid;
 };
 
 #endif
