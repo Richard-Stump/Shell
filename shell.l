@@ -87,12 +87,13 @@ void myunputc(int c) {
   std::string* finalStr = new std::string();
 
   while(endPos != std::string::npos) {
-    *finalStr += arg.substr(startPos, endPos - startPos - 1);
+    *finalStr += arg.substr(startPos, endPos - startPos);
+
     startPos = endPos + 1;
-    endPos = arg.find('\\', startPos);
+    endPos = arg.find('\\', 0);
   }
 
-  *finalStr += arg.substr(startPos, arg.size() - startPos - 1);
+  *finalStr += arg.substr(startPos, arg.size() - startPos);
 
   yylval.cpp_string = finalStr;
   return WORD;
