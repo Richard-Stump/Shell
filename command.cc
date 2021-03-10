@@ -109,7 +109,7 @@ void Command::execute() {
     }
 
     // Print contents of Command data structure
-    print();
+    //print();
 
     // Add execution here
     // For every simple command fork a new process
@@ -141,7 +141,7 @@ void Command::execute() {
         else
           fdOut = getOutRedirect(tmpOut, _outFile, _appendOut);
 
-        fprintf(stderr, "fdOut = %d\n", fdOut);
+        //fprintf(stderr, "fdOut = %d\n", fdOut);
 
         if (fdOut < 0) {
           perror("Could not open out file");
