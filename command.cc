@@ -111,13 +111,8 @@ void Command::execute() {
         return;
     }
 
-    // Print contents of Command data structure
+    //Print contents of Command data structure
     //print();
-
-    // Add execution here
-    // For every simple command fork a new process
-    // Setup i/o redirection
-    // and call exec
 
     //save the standard IO descriptors so that we can restore them later
     int tmpIn = dup(0);

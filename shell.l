@@ -10,6 +10,7 @@
 %{
 
 #include <cstring>
+#include "shell.hh"
 #include "y.tab.hh"
 
 static  void yyunput (int c,char *buf_ptr  );
@@ -23,6 +24,11 @@ void myunputc(int c) {
 %option noyywrap
 
 %%
+
+"exit" {
+  Shell::printExitMessage();
+  exit(0);
+}
 
 \n {
   return NEWLINE;

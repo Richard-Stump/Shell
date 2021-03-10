@@ -6,6 +6,9 @@
 struct Shell {
 
   static void prompt();
+  static void signal(int sig);
+
+  static void printExitMessage();
 
   static Command _currentCommand;
 };
