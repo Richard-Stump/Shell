@@ -26,6 +26,8 @@ struct Command {
 private:
   int getInRedirect(int cur, std::string* name);
   int getOutRedirect(int cur, std::string* name, bool append);
+  
+  bool getRedirectDescriptors(int& fdIn, int& fdOut, int& fdErr);
 };
 
 #endif

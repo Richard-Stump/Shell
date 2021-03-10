@@ -37,7 +37,13 @@ void SimpleCommand::print() {
   std::cout << std::endl;
 }
 
-//returns the PID of the child process
+/**
+ * Execute this simple command using the file descriptors is IO
+ * @param fdIn  The file descriptor for input
+ * @param fdOut The File descriptor for output
+ * @param fdErr The file descriptor for error output
+ * @return The PID of the new process
+ */
 int SimpleCommand::execute(int fdIn, int fdOut, int fdErr)
 {
   //set the standard IO for the child process
@@ -67,6 +73,11 @@ int SimpleCommand::execute(int fdIn, int fdOut, int fdErr)
   }
 }
 
+/** 
+ * Returns the arguments of the simple command as a char* const* array
+ * @return An array of C char* const* pointers holding the arguments. This
+ *         list is null terminated
+ */
 char* const* SimpleCommand::getArgv() {
   size_t argvCount = _arguments.size();
   const char** argv = new const char*[argvCount + 1];

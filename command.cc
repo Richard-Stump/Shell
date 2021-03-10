@@ -101,6 +101,9 @@ void Command::print() {
     printf( "\n\n" );
 }
 
+/**
+ * Execute the command line
+ */
 void Command::execute() {
     // Don't do anything if there are no simple commands
     if ( _simpleCommands.size() == 0 ) {
@@ -116,40 +119,40 @@ void Command::execute() {
     // Setup i/o redirection
     // and call exec
 
-    int pid, fdIn, fdOut, fdErr;
-
     //save the standard IO descriptors so that we can restore them later
     int tmpIn = dup(0);
     int tmpOut = dup(1);
     int tmpErr = dup(2);
 
-    fdIn = getInRedirect(tmpIn, _inFile);
-    fdErr = getOutRedirect(tmpErr, _errFile, _appendErr);
+    //file desciptors for redirection. Start with the same descriptors that were
+    //used to save stdIO. These will either be duplicated or overwritten when
+    //opening the redirection
+    int fdIn       = tmpIn;
+    int fdFinalOut = tmpOut;
+    int fdErr      = tmpErr;
 
+    //open the redirect files, and if any of them produce an error prompt the
+    //user again
+    if(!getRedirectDescriptors(fdIn, fdFinalOut, fdErr)) {
+      close(tmpIn);
+      close(tmpOut);
+      close(tmpErr);
+      clear();
+      Shell::prompt();
+      return;
+    }
+
+    int pid, fdOut;
     for(SimpleCommand* sc : _simpleCommands) {
       int nextFdIn; //the fdIn for the next command
 
-      //if the current command is the last command, redirect it's output to a
-      //file, otherwise, set up the pipe between two commands
+      //if the current command is the last command, redirect it's output the
+      //output file, otherwise, set up the pipe between two commands
       if(sc == _simpleCommands.back()) {
-        //if the output and error files are the same, just copy the descriptor
-        //for the error file
-        
-        //this causes issues for some reason...........
-        if(_outFile && _errFile && (*_outFile == *_errFile))
-          fdOut = dup(fdErr);
-        else
-          fdOut = getOutRedirect(tmpOut, _outFile, _appendOut);
-
-        //fprintf(stderr, "fdOut = %d\n", fdOut);
-
-        if (fdOut < 0) {
-          perror("Could not open out file");
-          break;
-        }
+        fdOut = fdFinalOut;
       }
       else {
-        int fdPipe[2];
+        int fdPipe[2];  //get a pipe from the os
         pipe(fdPipe);
 
         nextFdIn = fdPipe[0];
@@ -172,7 +175,7 @@ void Command::execute() {
       waitpid(pid, nullptr, 0);
     }
 
-    //restore stdin and out
+    //restore stdIO
     dup2(tmpIn, 0);
     dup2(tmpOut, 1);
     dup2(tmpErr, 2);
@@ -190,6 +193,13 @@ void Command::execute() {
     return;
 }
 
+/**
+ * Gets the file descriptor to be used as the first input file, this is either
+ * the current input descriptor, or a new one if name is not NULL
+ * @param cur  The current input file handler
+ * @param name The name of the file to open, or null to use the current one
+ * @return The file descriptor to a read-only file
+ */
 int Command::getInRedirect(int cur, std::string* name) {
   if(name) {
     int flags = O_RDONLY;
@@ -200,16 +210,64 @@ int Command::getInRedirect(int cur, std::string* name) {
   }
 }
 
+/**
+ * Gets a file descriptor that can be used as output. This is either a copy of
+ * the current descriptor, or a new one if name is not NULL.
+ * @param cur The current output file descriptor
+ * @param name The name of the file to open, or null to use the current one
+ * @param append If true, open the file as appendable.
+ * @return File descriptor to the file to be used as output
+ */
 int Command::getOutRedirect(int cur, std::string* name, bool append) {
   if(name) {
     int flags = O_RDWR | O_CREAT | (append ? O_APPEND : O_TRUNC);
-    int fd = open(name->c_str(), flags);
+    int fd = open(name->c_str(), flags, 0777);//forgetting the permissions flag
+                                              //here caused me hours of pain...
 
     return fd;
   }
   else {
     return dup(cur);
   }
+}
+
+/**
+ * Gets the file descriptors to be used for redirecting input and output
+ * @param fdIn File descriptor of the current input file
+ * @param fdOut File desciprtor for the current output file
+ * @param fdErr File descriptor for the current error file
+ * @return True if successful, false if there was an error
+ */
+bool Command::getRedirectDescriptors(int& fdIn, int& fdOut, int& fdErr) {
+  int success = true;
+  
+  //Open the input file and if its invalid, set success to false to indicate
+  //an error
+  fdIn = getInRedirect(fdIn, _inFile);
+  if (fdIn < 0) {
+    perror("Could not open input file");
+    success = false;
+  }
+  
+  fdErr = getOutRedirect(fdErr, _errFile, _appendErr);
+  if (fdErr < 0) {
+    perror("Could not open error file");
+    success = false;
+  }
+
+  //If the output and error files are the same file, copy the descriptor for the
+  //error file, otherwise open the output file.
+  if (_outFile && _errFile && *_errFile == *_outFile)
+    fdOut = dup(fdErr);
+  else
+    fdOut = getOutRedirect(fdOut, _outFile, _appendOut);
+
+  if (fdOut < 0) {
+    perror("Could not open output file");
+    success = false;
+  }
+
+  return success;
 }
 
 SimpleCommand * Command::_currentSimpleCommand;
