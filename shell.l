@@ -26,8 +26,7 @@ void myunputc(int c) {
 %%
 
 "exit"|"quit" {
-  Shell::printExitMessage();
-  exit(0);
+  Shell::exit();
 }
 
 \n {
@@ -84,12 +83,13 @@ void myunputc(int c) {
   size_t startPos = 0;
   std::string* finalStr = new std::string();
 
-  //each the entire word for sequences between backslashes
   for(size_t i = 0; i < arg.length(); i++) {
-    if(arg[i] == '\\') {
+    if(i != arg.length() - 1 && arg[i] == '\\') {
       *finalStr += arg.substr(startPos, i - startPos);
+      *finalStr += arg[i + 1];
 
-      startPos = i + 1;
+      startPos = i + 2;
+      i++;
     }
   }
 
@@ -107,7 +107,7 @@ void myunputc(int c) {
   return WORD;
 }
 
-[^ \t\n][^ \t\n]* {
+[^ <>|&\t\n][^ <>|&\t\n]* {
   /* Assume that file names have only alpha chars */
   yylval.cpp_string = new std::string(yytext);
   return WORD;

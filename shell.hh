@@ -11,6 +11,7 @@ struct Shell {
   static void changeDir();
 
   static void printExitMessage();
+  static void exit();
 
   static Command _currentCommand;
 };

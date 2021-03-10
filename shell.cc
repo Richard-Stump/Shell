@@ -52,6 +52,12 @@ void Shell::printExitMessage() {
   printf("%s\n", exitMessages[messIndex]);
 }
 
+void Shell::exit() {
+  Shell::printExitMessage();
+  Shell::_currentCommand.clear();
+  ::exit(1);
+}
+
 void Shell::changeDir()
 {
   
