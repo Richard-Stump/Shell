@@ -82,18 +82,20 @@ void myunputc(int c) {
   std::string arg(yytext);
 
   size_t startPos = 0;
-  size_t endPos   = arg.find('\\', 0);
-
   std::string* finalStr = new std::string();
 
-  while(endPos != std::string::npos) {
-    *finalStr += arg.substr(startPos, endPos - startPos);
+  //each the entire word for sequences between backslashes
+  for(size_t i = 0; i < arg.length(); i++) {
+    if(arg[i] == '\\') {
+      *finalStr += arg.substr(startPos, i - startPos);
 
-    startPos = endPos + 1;
-    endPos = arg.find('\\', 0);
+      startPos = i + 1;
+    }
   }
 
-  *finalStr += arg.substr(startPos, arg.size() - startPos);
+  //after reaching the end of the string, add the rest of it to the final
+  //word.
+  *finalStr += arg.substr(startPos, arg.length() - startPos);
 
   yylval.cpp_string = finalStr;
   return WORD;
