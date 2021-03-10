@@ -109,7 +109,7 @@ void Command::execute() {
     }
 
     // Print contents of Command data structure
-    //print();
+    print();
 
     // Add execution here
     // For every simple command fork a new process
@@ -136,10 +136,17 @@ void Command::execute() {
         //for the error file
         
         //this causes issues for some reason...........
-        //if(_outFile && _errFile && (*_outFile == *_errFile))
-        //  fdOut = dup(fdErr);
-        //else
+        if(_outFile && _errFile && (*_outFile == *_errFile))
+          fdOut = dup(fdErr);
+        else
           fdOut = getOutRedirect(tmpOut, _outFile, _appendOut);
+
+        fprintf(stderr, "fdOut = %d\n", fdOut);
+
+        if (fdOut < 0) {
+          perror("Could not open out file");
+          break;
+        }
       }
       else {
         int fdPipe[2];
@@ -196,7 +203,9 @@ int Command::getInRedirect(int cur, std::string* name) {
 int Command::getOutRedirect(int cur, std::string* name, bool append) {
   if(name) {
     int flags = O_WRONLY | O_CREAT | (append ? O_APPEND : O_TRUNC);
-    return open(name->c_str(), flags);
+    int fd = open(name->c_str(), flags);
+
+    return fd;
   }
   else {
     return dup(cur);
