@@ -80,7 +80,19 @@ void myunputc(int c) {
 
 [^ \t\n]*\\.[^ \t\n]* {
   std::string arg(yytext);
-  yylval.cpp_string = new std::string(arg.substr(1, arg.size() - 1));
+
+  size_t startPos = 0;
+  size_t endPos   = arg.find('\\', 0);
+
+  std::string* finalStr = new std::string();
+
+  while(pos != std::string::npos) {
+    finalStr += arg.substr(startPos, pos - startPos - 1);
+    startPos = endPos + 1;
+    endPos = arg.find('\\', startPos);
+  }
+
+  yylval.cpp_string = new std::string(arg.substr(startPos, arg.size() - 1));
   return WORD;
 }
 
