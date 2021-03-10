@@ -65,7 +65,9 @@ simple_command:
     Shell::_currentCommand._background = true;
     Shell::_currentCommand.execute();
   }
-  | NEWLINE 
+  | NEWLINE {
+    Shell::prompt();
+  }
   | error NEWLINE { yyerrok; }
   ;
 
