@@ -202,7 +202,7 @@ int Command::getInRedirect(int cur, std::string* name) {
 
 int Command::getOutRedirect(int cur, std::string* name, bool append) {
   if(name) {
-    int flags = O_WRONLY | O_CREAT | (append ? O_APPEND : O_TRUNC);
+    int flags = O_CREAT | (append ? O_APPEND : O_TRUNC);
     int fd = open(name->c_str(), flags);
 
     return fd;
