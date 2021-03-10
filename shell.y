@@ -58,7 +58,7 @@ command_line:
 
 simple_command:	
   pipe_list iomodifier_opt NEWLINE {
-    printf("   Yacc: Execute command\n");
+    //printf("   Yacc: Execute command\n");
     Shell::_currentCommand.execute();
   }
   | pipe_list iomodifier_opt AMPERSAND NEWLINE {
@@ -98,10 +98,10 @@ command_word:
 
 pipe_list:
   pipe_list PIPE command_and_args {
-    printf("   Yacc: insert recursive pipelist\n");
+    //printf("   Yacc: insert recursive pipelist\n");
   }
   | command_and_args {
-    printf("   Yacc: insert pipelist with 1 command\n");
+    //printf("   Yacc: insert pipelist with 1 command\n");
   }
   ;
   
