@@ -116,111 +116,89 @@ void Command::execute() {
     // Setup i/o redirection
     // and call exec
 
+    int pid, fdIn, fdOut, fdErr;
+
+    //save the standard IO descriptors so that we can restore them later
     int tmpIn = dup(0);
     int tmpOut = dup(1);
     int tmpErr = dup(2);
 
-    int pid, fdIn, fdOut, fdErr;
+    fdIn = getInRedirect(tmpIn, _inFile);
+    fdErr = getOutRedirect(tmpErr, _errFile, _appendErr);
 
-    if(_inFile) {
-      fdIn = open(_inFile->c_str(), O_RDONLY);
-    }
-    else {
-      fdIn = dup(tmpIn);
-    }
+    for(SimpleCommand* sc : _simpleCommands) {
+      int nextFdIn; //the fdIn for the next command
 
-    for( SimpleCommand* sc : _simpleCommands ) {
-      fprintf(stderr, "Starting simpleCommand: ");
-      sc->print();
-
-      dup2(fdIn, 0);
-      close(fdIn);
-
-      //the last simple command
-      if (sc == _simpleCommands.back()) 
-      {
-        //if the user has specified an output file, open it and use it. Else,
-        //use the default stdout.
-        if(_outFile) {
-          int outFlags = O_WRONLY | O_CREAT | (_appendOut ? O_APPEND : O_TRUNC);
-          fdOut = open(_outFile->c_str(), outFlags);
-        }
-        else {
-          fdOut = dup(tmpOut);
-        }
+      //if the current command is the last command, redirect it's output to a
+      //file, otherwise, set up the pipe between two commands
+      if(sc == _simpleCommands.back()) {
+        //if the output and error files are the same, just copy the descriptor
+        //for the error file
+        if(_outFile && _errFile && *_outFile == *_errFile)
+          fdOut = dup(fdErr);
+        else
+          fdOut = getOutRedirect(tmpOut, _outFile, _appendOut);
       }
       else {
-        //not the last simple command
-        //set the pipe up for this command
         int fdPipe[2];
         pipe(fdPipe);
 
-        fdIn = fdPipe[0];
+        nextFdIn = fdPipe[0];
         fdOut = fdPipe[1];
       }
 
-      if(_errFile && _outFile && *_errFile == *_outFile) {
-        fdErr = dup(fdOut);
-      }
-      else if(_errFile) {
-        int errFlags = O_WRONLY | O_CREAT | (_appendOut ? O_APPEND : O_TRUNC);
-        fdErr = open(_errFile->c_str(), errFlags);
-      }
-      else {
-        fdErr = dup(tmpErr);
-      }
+      pid = sc->execute(fdIn, fdOut, fdErr);
 
-      dup2(fdErr, 2);
-      close(fdErr);
-      dup2(fdOut, 1);
+      //close the filed we've opened for in and out
+      close(fdIn);
       close(fdOut);
 
-      pid = fork();
-
-
-      if(pid == 0) {
-        char* const* argv = sc->getArgv();
-        
-        fprintf(stderr, "\nStarting child: ");
-        sc->print();
-
-        execvp(argv[0], argv);
-
-        delete[] argv;
-
-        perror("execvp error");
-        _exit(1);
-      }
-      else if (pid < 0) {
-        perror("Fork Error\n");
-        return;
-      }
-      else {
-        fprintf(stderr, "  PID: %d\n", pid);
-      }
+      fdIn = nextFdIn; //set fdIn for the next command to execute
     }
 
+    close(fdErr);
+
+    //wait for the last process unless it is to run in the background
     if(!_background) {
-      fprintf(stderr, "Waiting for command w/ PID: %d\n\t", pid);
-      _simpleCommands.back()->print();
       waitpid(pid, nullptr, 0);
     }
 
-    //close(fdErr);
-
-    //restore the default stdin, stdout, and stderr
+    //restore stdin and out
     dup2(tmpIn, 0);
     dup2(tmpOut, 1);
     dup2(tmpErr, 2);
+
+    //close the temporary descriptors
     close(tmpIn);
     close(tmpOut);
     close(tmpErr);
 
-    // Clear to prepare for next command
+    //clear the command table to prepare for the next command
     clear();
 
-    // Print new prompt
+    //prompt the user for the next command
     Shell::prompt();
+    return;
+}
+
+int Command::getInRedirect(int cur, std::string* name) {
+  if(name) {
+    int flags = O_RDONLY;
+    return open(name->c_str(), flags);
+  }
+  else {
+    return dup(cur);
+  }
+}
+
+int Command::getOutRedirect(int cur, std::string* name, bool append) {
+  if(name) {
+    int flags = O_WRONLY | O_CREAT | (append ? O_APPEND : O_TRUNC);
+    return open(name->c_str(), flags);
+  }
+  else {
+    return dup(cur);
+  }
 }
 
 SimpleCommand * Command::_currentSimpleCommand;

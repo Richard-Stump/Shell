@@ -22,6 +22,10 @@ struct Command {
   void execute(); 
 
   static SimpleCommand *_currentSimpleCommand;
+
+private:
+  int getInRedirect(int cur, std::string* name);
+  int getOutRedirect(int cur, std::string* name, bool append);
 };
 
 #endif
