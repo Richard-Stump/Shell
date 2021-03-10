@@ -8,6 +8,8 @@ struct Shell {
   static void prompt();
   static void signal(int sig);
 
+  static void changeDir();
+
   static void printExitMessage();
 
   static Command _currentCommand;

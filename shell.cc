@@ -24,8 +24,9 @@ std::vector<const char*> exitMessages = {
   "Au revoir!",
   "Bye-bye!",
   "Bye-byte!",
-  "Oh sure, run away from your responsibilities!",
-  "Go ahead and leave. See if I care."
+  "Don't leave yet -- There's a daemon around that corner! ",
+  "Go ahead and leave. See if I care.",
+  "Rage quitting a shell!?"
 };
 
 void Shell::prompt() {
@@ -37,17 +38,23 @@ void Shell::prompt() {
 
 void Shell::signal(int sig) {
   fprintf(stderr, "From signal handler\n");
-  
+
   Shell::_currentCommand.clear();
   Shell::prompt();
 }
 
+//display a random error message
 void Shell::printExitMessage() {
   srand(time(NULL));
 
   int messIndex = rand() % exitMessages.size();
 
   printf("%s\n", exitMessages[messIndex]);
+}
+
+void Shell::changeDir()
+{
+  
 }
 
 int main() {

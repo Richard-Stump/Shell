@@ -78,6 +78,18 @@ void myunputc(int c) {
   return AMPGREAT;
 }
 
+[^ \t\n]*\\.[^ \t\n]* {
+  std::string arg(yytext);
+  yylval.cpp_string = new std::string(arg.substr(1, arg.size() - 1));
+  return WORD;
+}
+
+\".*\" {
+  std::string arg(yytext);
+  yylval.cpp_string = new std::string(arg.substr(1, arg.size() - 2));
+  return WORD;
+}
+
 [^ \t\n][^ \t\n]* {
   /* Assume that file names have only alpha chars */
   yylval.cpp_string = new std::string(yytext);
