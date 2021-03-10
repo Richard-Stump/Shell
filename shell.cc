@@ -10,15 +10,22 @@
 int yyparse(void);
 
 std::vector<const char*> exitMessages = {
-    "Goodbye!",
-    "Toodle-loo!",
-    "See Ya!",
-    "Goodbyte!",
-    "Hasta la vista, Baby!",
-    "Au revoir!",
-    "Ciao",
-    "Bye-bye!",
-    "Bye-byte!",
+  "Goodbye!",
+  "Goodbye!",
+  "Goodbye!",
+  "Goodbye!",
+  "Goodbye!",
+  "Goodbye!",
+  "Goodbye!",
+  "Toodle-loo!",
+  "See Ya!",
+  "Goodbyte!",
+  "Hasta la vista, Baby!",
+  "Au revoir!",
+  "Bye-bye!",
+  "Bye-byte!",
+  "Oh sure, run away from your responsibilities!",
+  "Go ahead and leave. See if I care."
 };
 
 void Shell::prompt() {
@@ -30,11 +37,9 @@ void Shell::prompt() {
 
 void Shell::signal(int sig) {
   fprintf(stderr, "From signal handler\n");
-
-  if(Shell::_currentCommand._simpleCommands.size() == 0) {
-    Shell::_currentCommand.clear();
-    Shell::prompt();
-  }
+  
+  Shell::_currentCommand.clear();
+  Shell::prompt();
 }
 
 void Shell::printExitMessage() {
