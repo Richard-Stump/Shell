@@ -134,8 +134,10 @@ void Command::execute() {
       if(sc == _simpleCommands.back()) {
         //if the output and error files are the same, just copy the descriptor
         //for the error file
+        
+        //this causes issues for some reason...........
         //if(_outFile && _errFile && (*_outFile == *_errFile))
-         // fdOut = dup(fdErr);
+        //  fdOut = dup(fdErr);
         //else
           fdOut = getOutRedirect(tmpOut, _outFile, _appendOut);
       }
