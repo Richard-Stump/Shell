@@ -1,9 +1,11 @@
 #include <cstdio>
 #include <stdlib.h>
 #include <time.h>
+#include <map>
 
 #include <unistd.h>
 #include <signal.h>
+#include <sys/wait.h>
 
 #include "shell.hh"
 
@@ -36,11 +38,22 @@ void Shell::prompt() {
   }
 }
 
-void Shell::signal(int sig) {
+void Shell::sigInt(int sig) {
   fprintf(stderr, "From signal handler\n");
 
   Shell::_currentCommand.clear();
   Shell::prompt();
+}
+
+void Shell::sigChild(int sig, siginfo_t *info, void *ucontext) {
+  int status;
+
+  waitpid(info->si_pid, &status, 0);
+
+
+
+  printf("%d exited\n", info->si_pid);
+  prompt();
 }
 
 //display a random error message
@@ -64,14 +77,25 @@ void Shell::changeDir()
 }
 
 int main() {
-  //set up the signal handler
-  struct sigaction sigAction;
-  sigAction.sa_handler = Shell::signal;
-  sigemptyset(&sigAction.sa_mask);
-  sigAction.sa_flags = SA_RESTART;
+  //set up the interrupt signal handler
+  struct sigaction intAction;
+  intAction.sa_handler = Shell::sigInt;
+  sigemptyset(&intAction.sa_mask);
+  intAction.sa_flags = SA_RESTART;
 
-  if(sigaction(SIGINT, &sigAction, NULL)) {
+  if(sigaction(SIGINT, &intAction, NULL)) {
     perror("Could not set SIGINT handler");
+    exit(2);
+  }
+
+  //set up the child signal handler
+  struct sigaction childAction;
+  childAction.sa_sigaction = Shell::sigChild;
+  sigemptyset(&childAction.sa_mask);
+  childAction.sa_flags = SA_RESTART;
+
+  if(sigaction(SIGCHLD, &childAction, NULL)) {
+    perror("Could not set SIGCHILD handler");
     exit(2);
   }
 
@@ -79,4 +103,9 @@ int main() {
   yyparse();
 }
 
+void Shell::addBackgroundProcess(int pid, bool last) {
+  _backgroundMap.insert({pid, last})
+}
+
 Command Shell::_currentCommand;
+std::map<int, bool> _backgroundMap;

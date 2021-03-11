@@ -80,22 +80,16 @@ void myunputc(int c) {
 [^ \t\n]*\\.[^ \t\n]* {
   std::string arg(yytext);
 
-  size_t startPos = 0;
-  std::string* finalStr = new std::string();
+  std::string* finalStr = new std::string(""); 
 
   for(size_t i = 0; i < arg.length(); i++) {
-    if(i != arg.length() - 1 && arg[i] == '\\') {
-      *finalStr += arg.substr(startPos, i - startPos);
-      *finalStr += arg[i + 1];
-
-      startPos = i + 2;
-      i++;
+    if(arg[i] == '\\') {
+      *finalStr += arg[++i];
+    }
+    else {
+      *finalStr += arg[i];
     }
   }
-
-  //after reaching the end of the string, add the rest of it to the final
-  //word.
-  *finalStr += arg.substr(startPos, arg.length() - startPos);
 
   yylval.cpp_string = finalStr;
   return WORD;
@@ -107,7 +101,7 @@ void myunputc(int c) {
   return WORD;
 }
 
-[^ <>|&\t\n][^ <>|&\t\n]* {
+[^ \\<>|&\t\n][^ \\<>|&\t\n]* {
   /* Assume that file names have only alpha chars */
   yylval.cpp_string = new std::string(yytext);
   return WORD;

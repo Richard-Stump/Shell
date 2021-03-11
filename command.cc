@@ -153,6 +153,11 @@ void Command::execute() {
 
         nextFdIn = fdPipe[0];
         fdOut = fdPipe[1];
+
+        //also add the command to the background list 
+        if(_background) {
+          Shell::addBackgroundProcess(pid, false);
+        }
       }
 
       pid = sc->execute(fdIn, fdOut, fdErr);
@@ -166,8 +171,12 @@ void Command::execute() {
 
     close(fdErr);
 
-    //wait for the last process unless it is to run in the background
-    if(!_background) {
+    //If the command is supposed to run in the background, add the last
+    //command to the background list, else, wait on it.
+    if(_background) {
+      Shell::addBackgroundProcess(pid, true);
+    }
+    else {
       waitpid(pid, nullptr, 0);
     }
 
