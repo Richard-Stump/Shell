@@ -1,9 +1,15 @@
 #ifndef shell_hh
 #define shell_hh
 
-#include <map>
+#include <vector>
 
 #include "command.hh"
+
+struct BackgroundProcess
+{
+  int   _pid;
+  bool  _isLast;
+};
 
 struct Shell {
 
@@ -21,7 +27,7 @@ struct Shell {
   static Command _currentCommand;
 
 protected:
-  static std::map<int, bool> _backgroundMap;
+  static std::vector<BackgroundProcess> _backgroundProcesses;
 };
 
 #endif

@@ -1,7 +1,7 @@
 #include <cstdio>
 #include <stdlib.h>
 #include <time.h>
-#include <map>
+#include <vector>
 
 #include <unistd.h>
 #include <signal.h>
@@ -39,16 +39,25 @@ void Shell::prompt() {
 }
 
 void Shell::sigInt(int sig) {
-  fprintf(stderr, "From signal handler\n");
-
   Shell::_currentCommand.clear();
   Shell::prompt();
 }
 
 void Shell::sigChild(int sig, siginfo_t *info, void *ucontext) {
-  printf("Pid: %d", info->si_pid);
+  int pid = info->si_pid;
 
-  waitpid(info->si_pid, nullptr, 0);
+  for(int i = 0; i < _backgroundProcesses.size(); i++) {
+    if(_backgroundProcesses[i]._pid == pid) {
+      waitpid(pid, nullptr, 0);
+
+      if(_backgroundProcesses[i]._isLast) {
+        printf("%d exited\n", pid);
+        Shell::prompt();
+      }
+
+      _backgroundProcesses.erase(_backgroundProcesses.begin() + i);
+    }
+  }
 }
 
 //display a random error message
@@ -71,6 +80,11 @@ void Shell::changeDir()
   
 }
 
+
+void Shell::addBackgroundProcess(int pid, bool last) {
+  _backgroundProcesses.push_back( {pid, last} );
+}
+
 int main() {
   //set up the interrupt signal handler
   struct sigaction intAction;
@@ -87,7 +101,7 @@ int main() {
   struct sigaction childAction;
   childAction.sa_sigaction = Shell::sigChild;
   sigemptyset(&childAction.sa_mask);
-  childAction.sa_flags = SA_RESTART;
+  childAction.sa_flags = SA_RESTART | SA_SIGINFO;
 
   if(sigaction(SIGCHLD, &childAction, NULL)) {
     perror("Could not set SIGCHILD handler");
@@ -98,9 +112,5 @@ int main() {
   yyparse();
 }
 
-void Shell::addBackgroundProcess(int pid, bool last) {
-  Shell::_backgroundMap[pid] = last;
-}
-
 Command Shell::_currentCommand;
-std::map<int, bool> Shell::_backgroundMap;
+std::vector<BackgroundProcess> Shell::_backgroundProcesses;

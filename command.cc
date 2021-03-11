@@ -153,15 +153,14 @@ void Command::execute() {
 
         nextFdIn = fdPipe[0];
         fdOut = fdPipe[1];
-
-        //also add the command to the background list 
-        if(_background) {
-          Shell::addBackgroundProcess(pid, false);
-        }
       }
 
       pid = sc->execute(fdIn, fdOut, fdErr);
 
+      if(_background) {
+        Shell::addBackgroundProcess(pid, false);
+      }
+ 
       //close the filed we've opened for in and out
       close(fdIn);
       close(fdOut);
