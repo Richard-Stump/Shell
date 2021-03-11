@@ -20,8 +20,8 @@ struct Shell {
 
   static Command _currentCommand;
 
-private:
-  static std::map<int> _backgroundSet;
+protected:
+  static std::map<int, bool> _backgroundMap;
 };
 
 #endif

@@ -46,14 +46,9 @@ void Shell::sigInt(int sig) {
 }
 
 void Shell::sigChild(int sig, siginfo_t *info, void *ucontext) {
-  int status;
+  printf("Pid: %d", info->si_pid);
 
-  waitpid(info->si_pid, &status, 0);
-
-
-
-  printf("%d exited\n", info->si_pid);
-  prompt();
+  waitpid(info->si_pid, nullptr, 0);
 }
 
 //display a random error message
@@ -104,8 +99,8 @@ int main() {
 }
 
 void Shell::addBackgroundProcess(int pid, bool last) {
-  _backgroundMap.insert({pid, last})
+  Shell::_backgroundMap[pid] = last;
 }
 
 Command Shell::_currentCommand;
-std::map<int, bool> _backgroundMap;
+std::map<int, bool> Shell::_backgroundMap;
