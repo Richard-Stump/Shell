@@ -157,7 +157,7 @@ void Command::execute() {
 
       pid = sc->execute(fdIn, fdOut, fdErr);
 
-      if(_background) {
+      if(_background && sc != _simpleCommands.back()) {
         Shell::addBackgroundProcess(pid, false);
       }
  

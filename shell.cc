@@ -45,11 +45,13 @@ void Shell::sigInt(int sig) {
 
 void Shell::sigChild(int sig, siginfo_t *info, void *ucontext) {
   int pid = info->si_pid;
+  
+  waitpid(pid, nullptr, 0);
+
+  return;
 
   for(int i = 0; i < _backgroundProcesses.size(); i++) {
     if(_backgroundProcesses[i]._pid == pid) {
-      waitpid(pid, nullptr, 0);
-
       if(_backgroundProcesses[i]._isLast) {
         printf("%d exited\n", pid);
         Shell::prompt();
