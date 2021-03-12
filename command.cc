@@ -113,7 +113,7 @@ void Command::execute() {
     }
 
     //Print contents of Command data structure
-    //print();
+    print();
 
     //save the standard IO descriptors so that we can restore them later
     int tmpIn = dup(0);

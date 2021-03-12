@@ -91,3 +91,7 @@ char* const* SimpleCommand::getArgv() {
 
   return (char* const*)argv;
 }
+
+int BuiltinCommand::execute(int fdIn, int fdOut, int fdErr) {
+  printf("Executing builtin\n");
+}

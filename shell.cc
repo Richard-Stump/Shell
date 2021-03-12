@@ -38,19 +38,17 @@ void Shell::prompt() {
   }
 }
 
-void Shell::sigInt(int sig) {
+void Shell::sigInt(int ) {
   Shell::_currentCommand.clear();
   Shell::prompt();
 }
 
-void Shell::sigChild(int sig, siginfo_t *info, void *ucontext) {
+void Shell::sigChild(int , siginfo_t* info, void* ) {
   int pid = info->si_pid;
   
-  waitpid(pid, nullptr, 0);
+  while(waitpid(-1, nullptr, WNOHANG) > 0);
 
-  return;
-
-  for(int i = 0; i < _backgroundProcesses.size(); i++) {
+  for(size_t i = 0; i < _backgroundProcesses.size(); i++) {
     if(_backgroundProcesses[i]._pid == pid) {
       if(_backgroundProcesses[i]._isLast) {
         printf("%d exited\n", pid);

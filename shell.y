@@ -28,6 +28,7 @@
 }
 
 %token <cpp_string> WORD
+%token <cpp_string> BUILTIN
 %token NOTOKEN  NEWLINE PIPE AMPERSAND
 %token GREAT GREATGREAT LESS AMPGREAT AMPGREATGREAT TWOGREAT TWOGREATGREAT
 
@@ -54,7 +55,7 @@ command_list:
 
 command_line: 
   simple_command
-       ;
+  ;
 
 simple_command:	
   pipe_list iomodifier_opt NEWLINE {
@@ -71,6 +72,15 @@ simple_command:
   | error NEWLINE { yyerrok; }
   ;
 
+pipe_list:
+  pipe_list PIPE command_and_args {
+    //printf("   Yacc: insert recursive pipelist\n");
+  }
+  | command_and_args {
+    //printf("   Yacc: insert pipelist with 1 command\n");
+  }
+  ;
+
 command_and_args:
   command_word argument_list {
     Shell::_currentCommand.
@@ -85,28 +95,24 @@ argument_list:
 
 argument:
   WORD {
-    //printf("   Yacc: insert argument \"%s\"\n", $1->c_str());
+    printf("   Yacc: insert argument \"%s\"\n", $1->c_str());
     Command::_currentSimpleCommand->insertArgument( $1 );\
   }
   ;
 
 command_word:
   WORD {
-    //printf("   Yacc: insert command \"%s\"\n", $1->c_str());
+    printf("   Yacc: insert command \"%s\"\n", $1->c_str());
     Command::_currentSimpleCommand = new SimpleCommand();
+    Command::_currentSimpleCommand->insertArgument( $1 );
+  }
+  | BUILTIN {
+    printf("   Yacc: insert bulitin \"%s\"\n", $1->c_str());
+    Command::_currentSimpleCommand = (SimpleCommand*)new BuiltinCommand();
     Command::_currentSimpleCommand->insertArgument( $1 );
   }
   ;
 
-pipe_list:
-  pipe_list PIPE command_and_args {
-    //printf("   Yacc: insert recursive pipelist\n");
-  }
-  | command_and_args {
-    //printf("   Yacc: insert pipelist with 1 command\n");
-  }
-  ;
-  
 iomodifier_opt:
   iomodifier_opt io_modifier
   | /* can be empty */

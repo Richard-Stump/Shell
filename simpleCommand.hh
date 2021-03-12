@@ -5,6 +5,8 @@
 #include <vector>
 #include <memory>
 
+typedef int (*builtin_func_t)(std::vector<std::string*> args);
+
 struct SimpleCommand {
 
   // Simple command is simply a vector of strings
@@ -15,9 +17,16 @@ struct SimpleCommand {
   void insertArgument( std::string * argument );
   void print();
 
-  int execute(int fdIn, int fdOut, int fdErr);
+  virtual int execute(int fdIn, int fdOut, int fdErr);
 
+protected:
   char* const* getArgv();
+};
+
+
+struct BuiltinCommand : public SimpleCommand {
+  BuiltinCommand();
+  int execute(int fdIn, int fdOut, int fdErr) override;
 };
 
 #endif

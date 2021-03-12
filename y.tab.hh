@@ -56,32 +56,34 @@ extern int yydebug;
   enum yytokentype
   {
     WORD = 258,
-    NOTOKEN = 259,
-    NEWLINE = 260,
-    PIPE = 261,
-    AMPERSAND = 262,
-    GREAT = 263,
-    GREATGREAT = 264,
-    LESS = 265,
-    AMPGREAT = 266,
-    AMPGREATGREAT = 267,
-    TWOGREAT = 268,
-    TWOGREATGREAT = 269
+    BUILTIN = 259,
+    NOTOKEN = 260,
+    NEWLINE = 261,
+    PIPE = 262,
+    AMPERSAND = 263,
+    GREAT = 264,
+    GREATGREAT = 265,
+    LESS = 266,
+    AMPGREAT = 267,
+    AMPGREATGREAT = 268,
+    TWOGREAT = 269,
+    TWOGREATGREAT = 270
   };
 #endif
 /* Tokens.  */
 #define WORD 258
-#define NOTOKEN 259
-#define NEWLINE 260
-#define PIPE 261
-#define AMPERSAND 262
-#define GREAT 263
-#define GREATGREAT 264
-#define LESS 265
-#define AMPGREAT 266
-#define AMPGREATGREAT 267
-#define TWOGREAT 268
-#define TWOGREATGREAT 269
+#define BUILTIN 259
+#define NOTOKEN 260
+#define NEWLINE 261
+#define PIPE 262
+#define AMPERSAND 263
+#define GREAT 264
+#define GREATGREAT 265
+#define LESS 266
+#define AMPGREAT 267
+#define AMPGREATGREAT 268
+#define TWOGREAT 269
+#define TWOGREATGREAT 270
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -94,7 +96,7 @@ union YYSTYPE
   // Example of using a c++ type in yacc
   std::string *cpp_string;
 
-#line 98 "y.tab.hh" /* yacc.c:1909  */
+#line 100 "y.tab.hh" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

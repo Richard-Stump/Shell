@@ -13,7 +13,7 @@
 #include "shell.hh"
 #include "y.tab.hh"
 
-static  void yyunput (int c,char *buf_ptr  );
+static  void yyunput (int c,char *buf_ptr);
 
 void myunputc(int c) {
   unput(c);
@@ -99,6 +99,11 @@ void myunputc(int c) {
   std::string arg(yytext);
   yylval.cpp_string = new std::string(arg.substr(1, arg.size() - 2));
   return WORD;
+}
+
+"printenv"|"setenv"|"unsetenv"|"source"|"cd" {
+  yylval.cpp_string = new std::string(yytext);
+  return BUILTIN;
 }
 
 [^ \\<>|&\t\n][^ \\<>|&\t\n]* {

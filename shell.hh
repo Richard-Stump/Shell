@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include <signal.h>
+
 #include "command.hh"
 
 struct BackgroundProcess
