@@ -139,7 +139,9 @@ void Shell::unsetEnv(std::string* name)
 }
 
 void Shell::printEnv() {
-  
+  for(size_t i = 0; environ[i] != NULL; i++) {
+    
+  }
 }
 
 void Shell::addBackgroundProcess(int pid, bool last) {
