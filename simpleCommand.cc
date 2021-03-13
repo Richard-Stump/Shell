@@ -65,6 +65,7 @@ int SimpleCommand::execute(int fdIn, int fdOut, int fdErr)
   if(pid == 0) {
     if(_isBuiltin) {
       executeBuiltin();
+      exit(0);
     }
     else {
       executeNormal();

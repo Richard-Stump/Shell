@@ -25,6 +25,28 @@ void myunputc(int c) {
 
 %%
 
+$\(.*\) {
+  std::string str(yytext);
+  str = str.substr(2, str.length() - 2 - 1);
+
+  std::string output("");
+
+  Shell::executeSubshell(&str, &output);
+
+  printf("Subshell output:\n%s", output.c_str());
+}
+
+`.*` {
+  std::string str(yytext);
+  str = str.substr(1, str.length() - 1 - 1);
+
+  std::string output("");
+
+  Shell::executeSubshell(&str, &output);
+  
+  printf("Subshell output:\n%s", output.c_str());
+}
+
 "exit"|"quit" {
   Shell::exit();
 }

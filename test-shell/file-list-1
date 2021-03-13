@@ -54,6 +54,7 @@ test-shell
 test_source
 test_subshell
 test_tilde
+test.txt
 test_unsetenv
 test_wildcards1
 test_wildcards2

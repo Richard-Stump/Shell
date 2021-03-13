@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <vector>
+#include <string.h>
 
 #include <unistd.h>
 #include <signal.h>
@@ -81,7 +82,9 @@ void Shell::printExitMessage() {
 }
 
 void Shell::exit() {
-  Shell::printExitMessage();
+
+  if(isatty(0))
+    Shell::printExitMessage();
   Shell::_currentCommand.clear();
   ::exit(1);
 }
@@ -140,12 +143,47 @@ void Shell::unsetEnv(std::string* name)
 
 void Shell::printEnv() {
   for(size_t i = 0; environ[i] != NULL; i++) {
-    
+    printf("%s\n", environ[i]);
   }
 }
 
 void Shell::addBackgroundProcess(int pid, bool last) {
   _backgroundProcesses.push_back( {pid, last} );
+}
+
+void Shell::executeSubshell(std::string* command, std::string* output)
+{
+  printf("%s\n", command->c_str());
+
+  int pipeIn[2], pipeOut[2];
+  pipe(pipeIn);
+  pipe(pipeOut);
+
+  int pid = fork();
+
+  if (pid == 0) {
+    dup2(pipeIn[0], 0);
+    dup2(pipeOut[1], 1);
+
+    char args[2] = {"/proc/self/exe", nullptr};
+
+    execvp(args[0], (char* const*)args);
+  }
+  else if (pid < 0) {
+    perror("fork error");
+    _exit(1);
+  }
+  else {
+    write(pipeIn[1], command->c_str(), command->size());
+    write(pipeIn[1], "\nexit\n", strlen("\nexit\n"));
+
+    char buff[128];
+
+    while(read(pipeOut[0], buff, 127) > 0) {
+      buff[127] = '\0';
+      output += (const char*)(buff);
+    }
+  }
 }
 
 int main() {

@@ -30,6 +30,8 @@ struct Shell {
   static void unsetEnv(std::string* name);
   static void printEnv();
 
+  static void executeSubshell(std::string* command, std::string* output);
+
   static void addBackgroundProcess(int pid, bool last);
 
   static Command _currentCommand;
