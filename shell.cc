@@ -128,6 +128,20 @@ std::string Shell::expandTilde(std::string* string)
   return finalStr;
 }
 
+void Shell::setEnv(std::string* name, std::string* value)
+{
+  setenv(name->c_str(), value->c_str(), 1);
+}
+
+void Shell::unsetEnv(std::string* name)
+{
+  unsetenv(name->c_str());
+}
+
+void Shell::printEnv() {
+  
+}
+
 void Shell::addBackgroundProcess(int pid, bool last) {
   _backgroundProcesses.push_back( {pid, last} );
 }

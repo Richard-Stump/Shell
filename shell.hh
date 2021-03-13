@@ -26,6 +26,10 @@ struct Shell {
   static std::string getHome();
   static std::string expandTilde(std::string* string);
 
+  static void setEnv(std::string* name, std::string* value);
+  static void unsetEnv(std::string* name);
+  static void printEnv();
+
   static void addBackgroundProcess(int pid, bool last);
 
   static Command _currentCommand;

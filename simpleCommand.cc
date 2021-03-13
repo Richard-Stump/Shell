@@ -101,6 +101,19 @@ void SimpleCommand::executeBuiltin()
     else
       Shell::changeDir(_arguments[1]);
   }
+  if(*_arguments[0] == "setenv") {
+    if(_arguments.size() == 3) {
+      Shell::setEnv(_arguments[1], _arguments[2]);
+    }
+  }
+  if(*_arguments[0] == "unsetenv") {
+    if(_arguments.size() == 2) {
+      Shell::unsetEnv(_arguments[1]);
+    }
+  }
+  if(*_arguments[0] == "printenv") {
+    Shell::printEnv();
+  }
 }
 
 /** 
