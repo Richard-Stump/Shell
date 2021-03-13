@@ -101,13 +101,22 @@ void myunputc(int c) {
   return WORD;
 }
 
-"printenv"|"setenv"|"unsetenv"|"source"|"cd" {
+"setenv"|"unsetenv"|"source"|"cd" {
   yylval.cpp_string = new std::string(yytext);
-  return BUILTIN;
+  return BUILTIN_PARENT;
+}
+
+"printenv" {
+  yylval.cpp_string = new std::string(yytext);
+  return BUILTIN_CHILD;
 }
 
 [^ \\<>|&\t\n][^ \\<>|&\t\n]* {
   /* Assume that file names have only alpha chars */
-  yylval.cpp_string = new std::string(yytext);
+  std::string tmp(yytext);
+
+  tmp = Shell::expandTilde(&tmp);
+
+  yylval.cpp_string = new std::string(tmp);
   return WORD;
 }

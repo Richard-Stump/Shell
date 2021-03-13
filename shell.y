@@ -28,7 +28,8 @@
 }
 
 %token <cpp_string> WORD
-%token <cpp_string> BUILTIN
+%token <cpp_string> BUILTIN_PARENT
+%token <cpp_string> BUILTIN_CHILD
 %token NOTOKEN  NEWLINE PIPE AMPERSAND
 %token GREAT GREATGREAT LESS AMPGREAT AMPGREATGREAT TWOGREAT TWOGREATGREAT
 
@@ -95,21 +96,32 @@ argument_list:
 
 argument:
   WORD {
-    printf("   Yacc: insert argument \"%s\"\n", $1->c_str());
+    //printf("   Yacc: insert argument \"%s\"\n", $1->c_str());
     Command::_currentSimpleCommand->insertArgument( $1 );\
   }
   ;
 
 command_word:
   WORD {
-    printf("   Yacc: insert command \"%s\"\n", $1->c_str());
+    //printf("   Yacc: insert command \"%s\"\n", $1->c_str());
     Command::_currentSimpleCommand = new SimpleCommand();
     Command::_currentSimpleCommand->insertArgument( $1 );
+    Command::_currentSimpleCommand->_isBuiltin = false;
+    Command::_currentSimpleCommand->_runAsParent = false;
   }
-  | BUILTIN {
-    printf("   Yacc: insert bulitin \"%s\"\n", $1->c_str());
-    Command::_currentSimpleCommand = (SimpleCommand*)new BuiltinCommand();
+  | BUILTIN_PARENT {
+    //printf("   Yacc: insert bulitin parent \"%s\"\n", $1->c_str());
+    Command::_currentSimpleCommand = new SimpleCommand();
     Command::_currentSimpleCommand->insertArgument( $1 );
+    Command::_currentSimpleCommand->_isBuiltin = true;
+    Command::_currentSimpleCommand->_runAsParent = true;
+  }
+  | BUILTIN_CHILD {
+    //printf("   Yacc: insert bulitin child \"%s\"\n", $1->c_str());
+    Command::_currentSimpleCommand = new SimpleCommand();
+    Command::_currentSimpleCommand->insertArgument( $1 );
+    Command::_currentSimpleCommand->_isBuiltin = true;
+    Command::_currentSimpleCommand->_runAsParent = false;
   }
   ;
 

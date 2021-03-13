@@ -113,7 +113,7 @@ void Command::execute() {
     }
 
     //Print contents of Command data structure
-    print();
+    //print();
 
     //save the standard IO descriptors so that we can restore them later
     int tmpIn = dup(0);
@@ -155,11 +155,18 @@ void Command::execute() {
         fdOut = fdPipe[1];
       }
 
-      pid = sc->execute(fdIn, fdOut, fdErr);
 
-      if(_background && sc != _simpleCommands.back()) {
-        Shell::addBackgroundProcess(pid, false);
+      if(sc->_runAsParent) {
+        sc->execute(fdIn, fdOut, fdErr);
       }
+      else {
+        pid = sc->execute(fdIn, fdOut, fdErr);
+
+        if(_background && sc != _simpleCommands.back()) {
+          Shell::addBackgroundProcess(pid, false);
+        }
+      }
+
  
       //close the filed we've opened for in and out
       close(fdIn);

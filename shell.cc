@@ -6,6 +6,9 @@
 #include <unistd.h>
 #include <signal.h>
 #include <sys/wait.h>
+#include <sys/types.h>
+#include <linux/limits.h>
+#include <pwd.h>
 
 #include "shell.hh"
 
@@ -33,7 +36,11 @@ std::vector<const char*> exitMessages = {
 
 void Shell::prompt() {
   if( isatty(0) ) {
-    printf("myshell>");
+    char workingDir[PATH_MAX];
+
+    getcwd(workingDir, PATH_MAX);
+
+    printf("\033[32m%s>\033[0m", workingDir);
     fflush(stdout);
   }
 }
@@ -75,11 +82,47 @@ void Shell::exit() {
   ::exit(1);
 }
 
-void Shell::changeDir()
+void Shell::changeDir(std::string* path)
 {
-  
+  std::string finalPath;
+
+  finalPath = Shell::expandTilde(path);
+
+  if(chdir(finalPath.c_str()) != 0) {
+    perror("cd");
+  }
 }
 
+std::string Shell::getHome()
+{
+  struct passwd* pw = getpwuid(getuid());
+
+  std::string home(pw->pw_dir);
+
+  //printf("%s\n", home.c_str());
+
+  return home;
+}
+
+std::string Shell::expandTilde(std::string* string)
+{
+  //printf("Expanding \"%s\"\n", string->c_str());
+
+  std::string finalStr;
+
+  for(size_t i = 0; i < string->length(); i++) {
+    if(string->at(i) == '~') {
+      finalStr += Shell::getHome();
+    }
+    else {
+      finalStr += string->at(i);
+    }
+  }
+
+  //printf("Final string: \"%s\"\n", finalStr.c_str());
+
+  return finalStr;
+}
 
 void Shell::addBackgroundProcess(int pid, bool last) {
   _backgroundProcesses.push_back( {pid, last} );

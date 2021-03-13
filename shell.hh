@@ -14,15 +14,17 @@ struct BackgroundProcess
 };
 
 struct Shell {
-
   static void prompt();
   static void sigInt(int sig);
   static void sigChild(int sig, siginfo_t *info, void *ucontext);
 
-  static void changeDir();
+  static void changeDir(std::string* path);
 
   static void printExitMessage();
   static void exit();
+
+  static std::string getHome();
+  static std::string expandTilde(std::string* string);
 
   static void addBackgroundProcess(int pid, bool last);
 

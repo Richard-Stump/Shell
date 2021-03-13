@@ -11,6 +11,7 @@
 #include <fcntl.h>
 
 #include "simpleCommand.hh"
+#include "shell.hh"
 
 SimpleCommand::SimpleCommand() {
   _arguments = std::vector<std::string *>();
@@ -51,18 +52,23 @@ int SimpleCommand::execute(int fdIn, int fdOut, int fdErr)
   dup2(fdOut, 1);
   dup2(fdErr, 2);
 
+  if(_isBuiltin && _runAsParent) {
+    executeBuiltin();
+    return -1;
+  }
+
   int pid = fork();
 
   //if we are running as the child, load/execute the program specified in argv[1]
   //if there is an error while forking, exit
   //otherwise, return the PID of the child
   if(pid == 0) {
-    char* const* argv = getArgv();
-
-    execvp(argv[0], argv);
-
-    perror("execvp error\n");
-    _exit(1);
+    if(_isBuiltin) {
+      executeBuiltin();
+    }
+    else {
+      executeNormal();
+    }
   }
   else if (pid < 0) {
     perror("fork error\n");
@@ -70,6 +76,30 @@ int SimpleCommand::execute(int fdIn, int fdOut, int fdErr)
   }
   else {
     return pid;
+  }
+  
+  return -1;
+}
+
+void SimpleCommand::executeNormal()
+{
+  char* const* argv = getArgv();
+
+  execvp(argv[0], argv);
+
+  perror("execvp error\n");
+  _exit(1);
+}
+
+void SimpleCommand::executeBuiltin()
+{
+  if(*_arguments[0] == "cd") {
+    if(_arguments.size() == 1) {
+      std::string home = "~";
+      Shell::changeDir(&home);
+    }
+    else
+      Shell::changeDir(_arguments[1]);
   }
 }
 
@@ -90,8 +120,4 @@ char* const* SimpleCommand::getArgv() {
   argv[argvCount] = nullptr;
 
   return (char* const*)argv;
-}
-
-int BuiltinCommand::execute(int fdIn, int fdOut, int fdErr) {
-  printf("Executing builtin\n");
 }

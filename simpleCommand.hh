@@ -1,11 +1,10 @@
-#ifndef simplcommand_hh
+#ifndef simplecommand_hh
 #define simplecommand_hh
 
 #include <string>
 #include <vector>
 #include <memory>
 
-typedef int (*builtin_func_t)(std::vector<std::string*> args);
 
 struct SimpleCommand {
 
@@ -17,16 +16,16 @@ struct SimpleCommand {
   void insertArgument( std::string * argument );
   void print();
 
-  virtual int execute(int fdIn, int fdOut, int fdErr);
+  int execute(int fdIn, int fdOut, int fdErr);
+
+  bool _isBuiltin;
+  bool _runAsParent;
 
 protected:
   char* const* getArgv();
-};
 
-
-struct BuiltinCommand : public SimpleCommand {
-  BuiltinCommand();
-  int execute(int fdIn, int fdOut, int fdErr) override;
+  void executeNormal();
+  void executeBuiltin();
 };
 
 #endif
