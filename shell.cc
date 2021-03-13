@@ -37,10 +37,14 @@ std::vector<const char*> exitMessages = {
 void Shell::prompt() {
   if( isatty(0) ) {
     char workingDir[PATH_MAX];
+    char finalDir[PATH_MAX];
 
     getcwd(workingDir, PATH_MAX);
+    
+    realpath(workingDir, finalDir);
 
-    printf("\033[32m%s>\033[0m", workingDir);
+
+    printf("\033[32m%s>\033[0m", finalDir);
     fflush(stdout);
   }
 }
