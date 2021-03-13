@@ -89,7 +89,7 @@ void Shell::changeDir(std::string* path)
   finalPath = Shell::expandTilde(path);
 
   if(chdir(finalPath.c_str()) != 0) {
-    perror("cd");
+    fprintf(stderr, "cd: can't cd to %s", path->c_str());
   }
 }
 
