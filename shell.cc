@@ -15,51 +15,44 @@
 
 int yyparse(void);
 
+//list of random messages that can be printed when the user exits
 std::vector<const char*> exitMessages = {
-  "Goodbye!",
-  "Goodbye!",
-  "Goodbye!",
-  "Goodbye!",
-  "Goodbye!",
-  "Goodbye!",
-  "Goodbye!",
-  "Toodle-loo!",
-  "See Ya!",
-  "Goodbyte!",
-  "Hasta la vista, Baby!",
-  "Au revoir!",
-  "Bye-bye!",
-  "Bye-byte!",
+  "Goodbye!", "Goodbye!", "Goodbye!", "Goodbye!", "Goodbye!", "Goodbye!",
+  "Goodbye!", "Toodle-loo!", "See Ya!", "Goodbyte!", "Hasta la vista, Baby!",
+  "Au revoir!", "Bye-bye!", "Bye-byte!", "Rage quitting a shell!?",
   "Don't leave yet -- There's a daemon around that corner! ",
-  "Go ahead and leave. See if I care.",
-  "Rage quitting a shell!?"
+  "Go ahead and leave. See if I care.", "Good riddence!",
+  "Don't leave, I\'ll miss you!", "Is it that time already?"
 };
 
+//display a small prompt of the directory the user is in
 void Shell::prompt() {
   if( isatty(0) ) {
+    //get the current working directory
     char workingDir[PATH_MAX];
-    char finalDir[PATH_MAX];
-
     getcwd(workingDir, PATH_MAX);
-    
-    realpath(workingDir, finalDir);
 
-
-    printf("\033[32m%s>\033[0m", finalDir);
+    //display it in green, because why not?
+    printf("\033[32m%s>\033[0m", workingDir);
     fflush(stdout);
   }
 }
 
+//handle a control-c interrupt
 void Shell::sigInt(int ) {
   Shell::_currentCommand.clear();
   Shell::prompt();
 }
 
+//Handles the signal from a child exiting. This is so that child processes are
+//proporly closed. 
 void Shell::sigChild(int , siginfo_t* info, void* ) {
   int pid = info->si_pid;
   
   while(waitpid(-1, nullptr, WNOHANG) > 0);
 
+  //remove the file from the list of background processes, and then
+  //print a message if it was the last on in a commmand sequence.
   for(size_t i = 0; i < _backgroundProcesses.size(); i++) {
     if(_backgroundProcesses[i]._pid == pid) {
       if(_backgroundProcesses[i]._isLast) {
@@ -81,12 +74,13 @@ void Shell::printExitMessage() {
   printf("%s\n", exitMessages[messIndex]);
 }
 
+//closes the shell and prints an exit message if the input is coming from a TTY
 void Shell::exit() {
 
   if(isatty(0))
     Shell::printExitMessage();
   Shell::_currentCommand.clear();
-  ::exit(1);
+  ::exit(0);
 }
 
 void Shell::changeDir(std::string* path)
@@ -100,23 +94,22 @@ void Shell::changeDir(std::string* path)
   }
 }
 
+//get the home folder of the user.
 std::string Shell::getHome()
 {
+  //TODO: replace this code with code that uses the HOME environment variable
   struct passwd* pw = getpwuid(getuid());
 
   std::string home(pw->pw_dir);
-
-  //printf("%s\n", home.c_str());
 
   return home;
 }
 
 std::string Shell::expandTilde(std::string* string)
 {
-  //printf("Expanding \"%s\"\n", string->c_str());
-
   std::string finalStr;
 
+  //search for all the tildas and replace them with the home directory
   for(size_t i = 0; i < string->length(); i++) {
     if(string->at(i) == '~') {
       finalStr += Shell::getHome();
@@ -125,8 +118,6 @@ std::string Shell::expandTilde(std::string* string)
       finalStr += string->at(i);
     }
   }
-
-  //printf("Final string: \"%s\"\n", finalStr.c_str());
 
   return finalStr;
 }
@@ -151,38 +142,64 @@ void Shell::addBackgroundProcess(int pid, bool last) {
   _backgroundProcesses.push_back( {pid, last} );
 }
 
-void Shell::executeSubshell(std::string* command, std::string* output)
+//execute a subshell command, given by *command, and place its output in *output
+void Shell::executeSubshell(std::string* command, std::string* output,
+                            bool replaceNewlines)
 {
-  printf("%s\n", command->c_str());
-
+  //create the pipes nessesary to perform the subshell.
+  //   One that goes from the parent to the child, and another that goes from
+  //   the child to the parent
   int pipeIn[2], pipeOut[2];
-  pipe(pipeIn);
-  pipe(pipeOut);
+  if(pipe(pipeIn) == -1) {
+    perror("Error creating input pipe");
+  }
+  if(pipe(pipeOut) == -1) {
+    perror("error creating output pipe");
+  }
 
   int pid = fork();
 
-  if (pid == 0) {
+  if(pid == 0) {
+    //set stdin and stdout for the child to the propor pipe descriptors
     dup2(pipeIn[0], 0);
     dup2(pipeOut[1], 1);
+    //close all the descriptors because we don't need them anymore
+    close(pipeIn[0]);
+    close(pipeIn[1]);
+    close(pipeOut[0]);
+    close(pipeOut[1]);
 
-    char args[2] = {"/proc/self/exe", nullptr};
+    //execute the subshell
+    execlp("/proc/self/exe", "/proc/self/exe", (char*)NULL);
 
-    execvp(args[0], (char* const*)args);
+    perror("execlp error");
   }
   else if (pid < 0) {
     perror("fork error");
     _exit(1);
   }
   else {
+    //write the given command and an exit statement to the child process
     write(pipeIn[1], command->c_str(), command->size());
-    write(pipeIn[1], "\nexit\n", strlen("\nexit\n"));
+    write(pipeIn[1], "\nquit\n", strlen("\nquit\n"));
 
-    char buff[128];
+    //close all the pipes except the output from the child. These need to be
+    //closed so that the child knows when they can stop reading
+    close(pipeIn[0]);
+    close(pipeIn[1]);
+    close(pipeOut[1]);
+    
+    char buff;
 
-    while(read(pipeOut[0], buff, 127) > 0) {
-      buff[127] = '\0';
-      output += (const char*)(buff);
+    while(read(pipeOut[0], &buff, 1) != 0) {
+      //replace all newlines in the output with spaces
+      if(replaceNewlines && buff == '\n') 
+        buff = ' '; 
+
+      *output += buff;
     }
+    
+    close(pipeOut[0]); //close the output from the child
   }
 }
 

@@ -10,6 +10,9 @@
 %{
 
 #include <cstring>
+#include <stdio.h>
+#include <iostream>
+
 #include "shell.hh"
 #include "y.tab.hh"
 
@@ -18,14 +21,41 @@ static  void yyunput (int c,char *buf_ptr);
 void myunputc(int c) {
   unput(c);
 }
+void yyerror(const char * s);
 
 %}
 
 %option noyywrap
 
+/* State for including source files */
+%x incl
 %%
 
-$\(.*\) {
+source BEGIN(incl); /* string that signifies an include */
+
+<incl>[ \t]*        /* consume whitespace */
+<incl>[^ \t\n]+ {   /* Get the file name  */
+  FILE* inFile = fopen(yytext, "r");
+
+  /* throw an error if the file doesn't exist */
+  if(!inFile) {
+    yyerror("Could not open source file\n");
+  }
+
+  yypush_buffer_state(yy_create_buffer(inFile, YY_BUF_SIZE));
+
+  BEGIN(INITIAL);
+}
+<<EOF>> {
+  /* after the current source file is consumed, pop it from the stack */
+  yypop_buffer_state();
+  if(!YY_CURRENT_BUFFER) {
+    yyterminate();
+  }
+}
+
+$\(.*\) { /* Match the subshell */
+  //obtain the actual command from the matched string
   std::string str(yytext);
   str = str.substr(2, str.length() - 2 - 1);
 
@@ -33,21 +63,28 @@ $\(.*\) {
 
   Shell::executeSubshell(&str, &output);
 
-  printf("Subshell output:\n%s", output.c_str());
+  //put the characters back in the buffer in reverse order
+  for(int i = output.length() - 1; i >= 0; --i) {
+    myunputc(output[i]);
+  }
 }
 
-`.*` {
+`.*` { /* Match the subshell 2, electric boogaloo*/
+  //obtain the actual command from the matched string
   std::string str(yytext);
   str = str.substr(1, str.length() - 1 - 1);
 
   std::string output("");
 
   Shell::executeSubshell(&str, &output);
-  
-  printf("Subshell output:\n%s", output.c_str());
+
+  //put the characters back in the buffer in reverse order
+  for(int i = output.length() - 1; i >= 0; --i) {
+    myunputc(output[i]);
+  }
 }
 
-"exit"|"quit" {
+"exit"|"quit" { /* commands to exit */
   Shell::exit();
 }
 
@@ -99,11 +136,12 @@ $\(.*\) {
   return AMPGREAT;
 }
 
-[^ \t\n]*\\.[^ \t\n]* {
+[^ \t\n]*\\.[^ \t\n]* { /* match any string that has an escape sequence in it */
   std::string arg(yytext);
 
   std::string* finalStr = new std::string(""); 
 
+  //search through the string for all slashes, and then remove them
   for(size_t i = 0; i < arg.length(); i++) {
     if(arg[i] == '\\') {
       *finalStr += arg[++i];
@@ -117,13 +155,13 @@ $\(.*\) {
   return WORD;
 }
 
-\".*\" {
+\".*\" { /*
   std::string arg(yytext);
   yylval.cpp_string = new std::string(arg.substr(1, arg.size() - 2));
   return WORD;
 }
 
-"setenv"|"unsetenv"|"source"|"cd" {
+"setenv"|"unsetenv"|"cd" {
   yylval.cpp_string = new std::string(yytext);
   return BUILTIN_PARENT;
 }

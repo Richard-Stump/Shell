@@ -27,11 +27,15 @@
   std::string *cpp_string;
 }
 
+/* these tokens have types associated with them, so they contain extra data */
 %token <cpp_string> WORD
 %token <cpp_string> BUILTIN_PARENT
 %token <cpp_string> BUILTIN_CHILD
+
+/* These tokens have no extra data associated with them */
 %token NOTOKEN  NEWLINE PIPE AMPERSAND
 %token GREAT GREATGREAT LESS AMPGREAT AMPGREATGREAT TWOGREAT TWOGREATGREAT
+%token SKIP
 
 %{
 //#define yylex yylex
@@ -45,6 +49,7 @@ int yylex();
 
 %%
 
+/*Top of the parsing tree*/
 goal:
   command_list
   ;
@@ -58,6 +63,9 @@ command_line:
   simple_command
   ;
 
+/* A list of commands, their arguments, and the IO modifiers  */
+/* The commands are separated by a '|' symbol, and they get   */
+/* piped together                                             */
 simple_command:	
   pipe_list iomodifier_opt NEWLINE {
     //printf("   Yacc: Execute command\n");
@@ -67,19 +75,16 @@ simple_command:
     Shell::_currentCommand._background = true;
     Shell::_currentCommand.execute();
   }
-  | NEWLINE {
+  | NEWLINE { //prompt the user again if they only input a new line
     Shell::prompt();
   }
   | error NEWLINE { yyerrok; }
   ;
 
+/* A list of commands to be piped together, or a single command */
 pipe_list:
-  pipe_list PIPE command_and_args {
-    //printf("   Yacc: insert recursive pipelist\n");
-  }
-  | command_and_args {
-    //printf("   Yacc: insert pipelist with 1 command\n");
-  }
+  pipe_list PIPE command_and_args
+  | command_and_args
   ;
 
 command_and_args:
@@ -101,6 +106,10 @@ argument:
   }
   ;
 
+/* The name of a command to run. These commands are other programs or inernal */
+/* commands depending on what the lexer returns as a token. Some internal     */
+/* commands may be run as the parent or the child. External commands are      */
+/* always run as a child process                                              */
 command_word:
   WORD {
     //printf("   Yacc: insert command \"%s\"\n", $1->c_str());
@@ -132,6 +141,7 @@ iomodifier_opt:
 
 io_modifier:
   GREAT WORD {
+    //Detect if the redirect has already been set. If so, throw an error
     if( Shell::_currentCommand._outFile ) {
       yyerror("Ambiguous output redirect.\n");
       yyerrok;
@@ -141,6 +151,7 @@ io_modifier:
     Shell::_currentCommand._appendOut = false;
   }
   | GREATGREAT WORD {
+    //Detect if the redirect has already been set. If so, throw an error
     if( Shell::_currentCommand._outFile ) {
       yyerror("Ambiguous output redirect.\n");
       yyerrok;
@@ -150,6 +161,7 @@ io_modifier:
     Shell::_currentCommand._appendOut = true;
   }
   | TWOGREAT WORD {
+    //Detect if the redirect has already been set. If so, throw an error
     if( Shell::_currentCommand._errFile ) {
       yyerror("Ambiguous output redirect.\n");
       yyerrok;
@@ -159,6 +171,7 @@ io_modifier:
     Shell::_currentCommand._appendErr = false;
   }
   | TWOGREATGREAT WORD {
+    //Detect if the redirect has already been set. If so, throw an error
     if( Shell::_currentCommand._errFile ) {
       yyerror("Ambiguous output redirect.\n");
       yyerrok;
@@ -168,6 +181,7 @@ io_modifier:
     Shell::_currentCommand._appendErr = true;
   }
   | AMPGREAT WORD {
+    //Detect if the redirect has already been set. If so, throw an error
     if( Shell::_currentCommand._outFile || Shell::_currentCommand._errFile ) {
       yyerror("Ambiguous output redirect.\n");
       yyerrok;
@@ -179,6 +193,7 @@ io_modifier:
     Shell::_currentCommand._appendErr = false;
   }
   | AMPGREATGREAT WORD {
+    //Detect if the redirect has already been set. If so, throw an error
     if( Shell::_currentCommand._outFile || Shell::_currentCommand._errFile ) {
       yyerror("Ambiguous output redirect\n");
       yyerrok;

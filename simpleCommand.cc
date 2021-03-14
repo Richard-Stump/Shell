@@ -92,8 +92,13 @@ void SimpleCommand::executeNormal()
   _exit(1);
 }
 
+//execute the different builtin commands. This function doesn't have to worry
+//about which functions are executed as children or parents because that is
+//already handled by the lexer, parser, and Simplecommand::execute()
 void SimpleCommand::executeBuiltin()
 {
+  //change the directory to the given argument. if there is no argument,
+  //change to the home directory
   if(*_arguments[0] == "cd") {
     if(_arguments.size() == 1) {
       std::string home = "~";
@@ -102,16 +107,23 @@ void SimpleCommand::executeBuiltin()
     else
       Shell::changeDir(_arguments[1]);
   }
+
+  //set an environment variable
   if(*_arguments[0] == "setenv") {
     if(_arguments.size() == 3) {
       Shell::setEnv(_arguments[1], _arguments[2]);
     }
   }
+
+  //unset an environment variable
   if(*_arguments[0] == "unsetenv") {
     if(_arguments.size() == 2) {
       Shell::unsetEnv(_arguments[1]);
     }
   }
+
+  //print an environment variable. This one should run as a child so that it's
+  //output can be piped
   if(*_arguments[0] == "printenv") {
     Shell::printEnv();
   }

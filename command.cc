@@ -113,8 +113,8 @@ void Command::execute() {
     }
 
     //Print contents of Command data structure
-    //print();
-
+    //if(isatty(0)) print();
+    
     //save the standard IO descriptors so that we can restore them later
     int tmpIn = dup(0);
     int tmpOut = dup(1);
@@ -155,7 +155,8 @@ void Command::execute() {
         fdOut = fdPipe[1];
       }
 
-
+      //if the current command is to be run as a parent, we don't want to
+      //thrash the PID returned by the last fork
       if(sc->_runAsParent) {
         sc->execute(fdIn, fdOut, fdErr);
       }
@@ -166,7 +167,6 @@ void Command::execute() {
           Shell::addBackgroundProcess(pid, false);
         }
       }
-
  
       //close the filed we've opened for in and out
       close(fdIn);
