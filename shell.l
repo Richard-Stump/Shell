@@ -35,6 +35,7 @@ source BEGIN(incl); /* string that signifies an include */
 
 <incl>[ \t]*        /* consume whitespace */
 <incl>[^ \t\n]+ {   /* Get the file name  */
+
   FILE* inFile = fopen(yytext, "r");
 
   /* throw an error if the file doesn't exist */
@@ -155,7 +156,7 @@ $\(.*\) { /* Match the subshell */
   return WORD;
 }
 
-\".*\" { /*
+\".*\" {
   std::string arg(yytext);
   yylval.cpp_string = new std::string(arg.substr(1, arg.size() - 2));
   return WORD;
