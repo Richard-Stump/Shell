@@ -61,6 +61,8 @@ source BEGIN(incl); /* string that signifies an include */
 <env_var>[ \t]*     /* Consume whitespace */
 <evn_var>[^ \t\n]+ {  /* Capture the environment var name */
   fprintf(stderr, "Env_var: \"%s\"", yytext);
+
+  BEGIN(INITIAL);
   return NOTOKEN;
 }
 
