@@ -29,7 +29,10 @@ void yyerror(const char * s);
 
 /* State for including source files */
 %x incl
+%x env_var
 %%
+
+"${" BEGIN(env_var); /* begining of an environment variable declaration */
 
 source BEGIN(incl); /* string that signifies an include */
 
@@ -53,6 +56,12 @@ source BEGIN(incl); /* string that signifies an include */
   if(!YY_CURRENT_BUFFER) {
     yyterminate();
   }
+}
+
+<env_var>[ \t]*     /* Consume whitespace */
+<evn_var>[^ \t\n]+ {  /* Capture the environment var name */
+  fprintf(stderr, "Env_var: \"%s\"", yytext);
+  return NOTOKEN;
 }
 
 $\(.*\) { /* Match the subshell */
@@ -83,6 +92,8 @@ $\(.*\) { /* Match the subshell */
   for(int i = output.length() - 1; i >= 0; --i) {
     myunputc(output[i]);
   }
+
+  return NOTOKEN;
 }
 
 "exit"|"quit" { /* commands to exit */
