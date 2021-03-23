@@ -13,6 +13,11 @@ struct BackgroundProcess
   bool  _isLast;
 };
 
+struct FinalCommand {
+  int _pid;
+  bool _background;
+};
+
 struct Shell {
   static void prompt();
   static void sigInt(int sig);
@@ -24,21 +29,35 @@ struct Shell {
   static void exit();
 
   static std::string getHome();
-  static std::string expandTilde(std::string* string);
+  static std::string trimWhitespace(std::string& string);
 
   static void setEnv(std::string* name, std::string* value);
   static void unsetEnv(std::string* name);
   static void printEnv();
+  static std::string getEnv(std::string& name);
+
+  static std::string expandTilde(std::string& string);
+  static std::string expandEnvironmentVars(std::string& string);
 
   static void executeSubshell(std::string* command, std::string* output, 
                               bool replaceNewlines = true);
 
   static void addBackgroundProcess(int pid, bool last);
+  static void addFinalCommand(int pid, bool background);
 
   static Command _currentCommand;
 
+  static int argc;
+  static const char** argv;
+  static std::string lastArg;
+  static int _lastBackPid;
+
 protected:
   static std::vector<BackgroundProcess> _backgroundProcesses;
+  static std::vector<FinalCommand> _finalCommands;
+
+  static int _lastRet;
+  static int _lastBackRet;
 };
 
 #endif

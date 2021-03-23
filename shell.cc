@@ -10,6 +10,7 @@
 #include <sys/types.h>
 #include <linux/limits.h>
 #include <pwd.h>
+#include <regex.h>
 
 #include "shell.hh"
 
@@ -46,21 +47,25 @@ void Shell::sigInt(int ) {
 
 //Handles the signal from a child exiting. This is so that child processes are
 //proporly closed. 
-void Shell::sigChild(int , siginfo_t* info, void* ) {
-  int pid = info->si_pid;
-  
+void Shell::sigChild(int, siginfo_t* info, void* ) {
   while(waitpid(-1, nullptr, WNOHANG) > 0);
 
-  //remove the file from the list of background processes, and then
-  //print a message if it was the last on in a commmand sequence.
-  for(size_t i = 0; i < _backgroundProcesses.size(); i++) {
-    if(_backgroundProcesses[i]._pid == pid) {
-      if(_backgroundProcesses[i]._isLast) {
-        printf("%d exited\n", pid);
+  for(size_t i = 0; i < _finalCommands.size(); i++) {
+    FinalCommand command = _finalCommands[i];
+    
+    //if the command is in the list, remove it and set the corresponding return
+    //value. If its a background process, print a message about it exiting
+    if(command._pid == info->si_pid){
+      if(command._background) {
+        _lastBackRet = info->si_status;
+        printf("%d exited\n", command._pid);
         Shell::prompt();
       }
+      else {
+        _lastRet = info->si_status;
+      }
 
-      _backgroundProcesses.erase(_backgroundProcesses.begin() + i);
+      _finalCommands.erase(_finalCommands.begin() + i);
     }
   }
 }
@@ -85,11 +90,7 @@ void Shell::exit() {
 
 void Shell::changeDir(std::string* path)
 {
-  std::string finalPath;
-
-  finalPath = Shell::expandTilde(path);
-
-  if(chdir(finalPath.c_str()) != 0) {
+  if(chdir(path->c_str()) != 0) {
     fprintf(stderr, "cd: can't cd to %s", path->c_str());
   }
 }
@@ -105,21 +106,27 @@ std::string Shell::getHome()
   return home;
 }
 
-std::string Shell::expandTilde(std::string* string)
+std::string Shell::trimWhitespace(std::string& str)
 {
-  std::string finalStr;
+  std::string output("");
 
-  //search for all the tildas and replace them with the home directory
-  for(size_t i = 0; i < string->length(); i++) {
-    if(string->at(i) == '~') {
-      finalStr += Shell::getHome();
-    }
-    else {
-      finalStr += string->at(i);
+  //trim the leading whitespace
+  for(int i = 0; i < str.length(); i++) {
+    if(str[i] != ' ' && str[i] != '\t') {
+      output = str.substr(i, str.length() - i);
+      break;
     }
   }
 
-  return finalStr;
+  //trim the trailing whitespace
+  for(int i = output.length() - 1; i > 0; i--) {
+    if(output[i] != ' ' && output[i] != '\t') {
+      output = output.substr(0, i + 1);
+      break;
+    }
+  }
+
+  return output;
 }
 
 void Shell::setEnv(std::string* name, std::string* value)
@@ -138,8 +145,120 @@ void Shell::printEnv() {
   }
 }
 
+std::string Shell::getEnv(std::string& name)
+{
+  if(name == "$") {
+    return std::to_string(getpid());
+  }
+  else if(name == "?") { /* return code of last command */ 
+    return std::to_string(_lastRet);
+  }
+  else if(name == "!") { /* PID of command last run in the background */ 
+    return std::to_string(_lastBackPid);
+  }
+  else if(name == "_") { /* last argument in the fully expanded previous command */
+    return lastArg;
+  }
+  else if(name == "SHELL") { /* Path of the shell */
+    char resolved[PATH_MAX];
+    realpath(argv[0], resolved); 
+    return std::string(resolved);
+  }
+  else { /* Get the variable from the environment */
+    const char* cVal = getenv(name.c_str());
+
+    if(cVal)
+      return cVal;
+    else
+      return "";
+  }
+}
+
+std::string Shell::expandEnvironmentVars(std::string& string)
+{
+  std::string result = string; //string for manipulating the input, and string
+                               //that is returned
+
+  const char* regexStr = "\\$\\{[^\\}]+\\}"; //regex for matching environment
+                                             //variables
+  regex_t regex;
+  int code = regcomp(&regex, regexStr, REG_EXTENDED);
+  
+  // If there is an error compiling the regex
+  if(code != 0) {
+    //get the compilation error string and put it into a buffer
+    char errbuff[128]; errbuff[127] = '\0';
+    regerror(code, &regex, errbuff, 127);
+    
+    fprintf(stderr, "environment variable regex is invalid!\n%d: %s\n", code, errbuff);
+    ::exit(-1);
+  }
+
+  regmatch_t match;
+
+  //loop until there are no more matches.
+  while(regexec(&regex, result.c_str(), 1, &match, 0) == 0) {
+    //get the name of the environment variable from inside the match ${NAME}
+    //then get the environment variables value
+    std::string name = result.substr(match.rm_so + 2,
+                                     match.rm_eo - match.rm_so - 3);
+    std::string value = getEnv(name);
+
+    //construct a new string that replaces ${NAME} with VALUE
+    std::string temp = result.substr(0, match.rm_so);
+    temp += value;
+    temp += result.substr(match.rm_eo, result.length() - match.rm_eo);
+
+    //set the result to our new string, and possibly loop again to find the
+    //next environment variable
+    result = temp;
+  }
+
+  regfree(&regex);
+
+  return result;
+}
+
+std::string Shell::expandTilde(std::string& string)
+{
+  if(string[0] != '~')
+    return string;
+  else if (string.length() == 1) {
+    std::string name = "HOME";
+    return getEnv(name);
+  }
+
+  size_t slashIndex = string.find('/');
+  
+  std::string subPath = "", userName = "";
+
+  //Get the subpath and username from the tilde expansion. If there is no sub
+  //path, just set the string for it to an empty string
+  if(slashIndex != std::string::npos) {
+    subPath = string.substr(slashIndex, string.length() - slashIndex);
+    userName = string.substr(1, slashIndex - 1);
+  }
+  else {
+    userName = string.substr(1, string.length() - 1);
+  }
+
+  //get home directory for the given user
+  struct passwd* password = getpwnam(userName.c_str());
+  if(password == nullptr) {
+    fprintf(stderr, "User does not exist\n");
+    ::exit(-1);
+  }
+
+  std::string home(password->pw_dir);
+
+  return home + subPath;
+}
 void Shell::addBackgroundProcess(int pid, bool last) {
   _backgroundProcesses.push_back( {pid, last} );
+}
+
+void Shell::addFinalCommand(int pid, bool background) {
+  _finalCommands.push_back( { pid, background });
 }
 
 //execute a subshell command, given by *command, and place its output in *output
@@ -203,7 +322,10 @@ void Shell::executeSubshell(std::string* command, std::string* output,
   }
 }
 
-int main() {
+int main(int argc, const char** argv) {
+  Shell::argc = argc;
+  Shell::argv = argv;
+
   //set up the interrupt signal handler
   struct sigaction intAction;
   intAction.sa_handler = Shell::sigInt;
@@ -230,5 +352,14 @@ int main() {
   yyparse();
 }
 
+int Shell::argc;
+const char** Shell::argv;
+std::string Shell::lastArg;
+int Shell::_lastBackPid;
+
 Command Shell::_currentCommand;
 std::vector<BackgroundProcess> Shell::_backgroundProcesses;
+std::vector<FinalCommand> Shell::_finalCommands;
+
+int Shell::_lastRet;
+int Shell::_lastBackRet;

@@ -33,9 +33,8 @@
 %token <cpp_string> BUILTIN_CHILD
 
 /* These tokens have no extra data associated with them */
-%token NOTOKEN  NEWLINE PIPE AMPERSAND
+%token NOTOKEN NEWLINE PIPE AMPERSAND
 %token GREAT GREATGREAT LESS AMPGREAT AMPGREATGREAT TWOGREAT TWOGREATGREAT
-%token SKIP
 
 %{
 //#define yylex yylex

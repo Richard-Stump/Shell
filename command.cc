@@ -112,6 +112,8 @@ void Command::execute() {
       return;
     }
 
+    Shell::lastArg = *_simpleCommands.back()->_arguments.back();
+
     //Print contents of Command data structure
     //if(isatty(0)) print();
     
@@ -162,10 +164,6 @@ void Command::execute() {
       }
       else {
         pid = sc->execute(fdIn, fdOut, fdErr);
-
-        if(_background && sc != _simpleCommands.back()) {
-          Shell::addBackgroundProcess(pid, false);
-        }
       }
  
       //close the filed we've opened for in and out
@@ -177,13 +175,15 @@ void Command::execute() {
 
     close(fdErr);
 
+    Shell::addFinalCommand(pid, _background);
+
     //If the command is supposed to run in the background, add the last
     //command to the background list, else, wait on it.
-    if(_background) {
-      Shell::addBackgroundProcess(pid, true);
+    if(!_background) {
+      waitpid(pid, nullptr, 0);
     }
     else {
-      waitpid(pid, nullptr, 0);
+      Shell::_lastBackPid = pid;
     }
 
     //restore stdIO

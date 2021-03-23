@@ -26,6 +26,9 @@ SimpleCommand::~SimpleCommand() {
 
 void SimpleCommand::insertArgument( std::string * argument ) {
   // simply add the argument to the vector
+  *argument = Shell::expandTilde(*argument);
+  *argument = Shell::expandEnvironmentVars(*argument);
+
   _arguments.push_back(argument);
 }
 
@@ -101,7 +104,8 @@ void SimpleCommand::executeBuiltin()
   //change to the home directory
   if(*_arguments[0] == "cd") {
     if(_arguments.size() == 1) {
-      std::string home = "~";
+      std::string name = "HOME";
+      std::string home = Shell::getEnv(name);
       Shell::changeDir(&home);
     }
     else
