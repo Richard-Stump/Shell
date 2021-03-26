@@ -266,8 +266,8 @@ void Shell::expandWildcards(std::string& path)
 
   std::string regexStr = wildcardToRegex(path);
 
-  fprintf(stderr, "\"%s\"\n", path.c_str());
-  fprintf(stderr, "\"%s\"\n", regexStr.c_str());
+  //fprintf(stderr, "\"%s\"\n", path.c_str());
+  //fprintf(stderr, "\"%s\"\n", regexStr.c_str());
 
   regex_t regex;
   int code = regcomp(&regex, regexStr.c_str(), REG_EXTENDED | REG_NOSUB);
