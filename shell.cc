@@ -294,7 +294,7 @@ void Shell::expandWildcards(std::string& path)
       std::string* arg = new std::string(nameList[nameCount]->d_name);
 
       Command::_currentSimpleCommand->insertArgument(arg);
-      fprintf(stderr, "%s\n", nameList[nameCount]->d_name);
+      //rintf(stderr, "%s\n", nameList[nameCount]->d_name);
     }
 
     free(nameList[nameCount]);
