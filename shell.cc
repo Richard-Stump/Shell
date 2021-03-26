@@ -292,7 +292,7 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
 
   if(suffix.empty()) {
     printIndent(indent);
-    fprintf(stderr, "Prefix Inserted: \"%s\"\n",);
+    fprintf(stderr, "Prefix Inserted\n");
 
     std::string* arg = new std::string(prefix);
     Command::_currentSimpleCommand->insertArgument(arg);
