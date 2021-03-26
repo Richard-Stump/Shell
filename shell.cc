@@ -11,6 +11,7 @@
 #include <linux/limits.h>
 #include <pwd.h>
 #include <regex.h>
+#include <dirent.h>
 
 #include "shell.hh"
 #include "y.tab.hh"
@@ -281,14 +282,27 @@ void Shell::expandWildcards(std::string& path)
     ::exit(-1);
   }
 
+  struct dirrent** nameList;
+  int nameCount = scandir(path.c_str(), &nameList, NULL, alphasort);
+  if(nameCount == -1) {
+    perror("Scandir error");
+    ::exit(-1);
+  }
+
+  while(nameCount--) {
+    fprintf(stderr, "%s\n", namelist[n]->d_name);
+    free(nameList[n]);
+  }
+
 }
 
 std::string Shell::wildcardToRegex(std::string wildcard)
 {
-  std::string result = "";
+  std::string result = "^";
 
   for(char c : wildcard) {
-    switch(c) {
+    switch(c) 
+    {
     case '*':
       result += ".*"; 
       break;
@@ -304,7 +318,7 @@ std::string Shell::wildcardToRegex(std::string wildcard)
     }
   }
   
-  return result;
+  return result + "$";
 }
 
 void Shell::addBackgroundProcess(int pid, bool last) {
