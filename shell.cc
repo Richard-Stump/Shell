@@ -291,7 +291,7 @@ void Shell::expandWildcards(std::string& path)
 
   while(nameCount--) {
     if(regexec(&regex, nameList[nameCount]->d_name, 0, nullptr, 0) == 0) {
-      std::string* arg = new std::string(nameList[nameCount->d_name]);
+      std::string* arg = new std::string(nameList[nameCount]->d_name);
 
       Command::_currentSimpleCommand->insertArgument(arg);
       fprintf(stderr, "%s\n", nameList[nameCount]->d_name);
