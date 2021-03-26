@@ -270,7 +270,7 @@ void Shell::expandWildcards(std::string& path)
   fprintf(stderr, "\"%s\"\n", regexStr.c_str());
 
   regex_t regex;
-  int code = regcomp(&regex, regexStr.c_str(), REG_EXTENDED);
+  int code = regcomp(&regex, regexStr.c_str(), REG_EXTENDED | REG_NOSUB);
   
   // If there is an error compiling the regex
   if(code != 0) {
@@ -290,7 +290,10 @@ void Shell::expandWildcards(std::string& path)
   }
 
   while(nameCount--) {
-    fprintf(stderr, "%s\n", nameList[nameCount]->d_name);
+    if(regexec(regex, regex.c_str(), 0, nullptr, 0) == 0) {
+      fprintf(stderr, "%s\n", nameList[nameCount]->d_name);
+    }
+    
     free(nameList[nameCount]);
   }
 
