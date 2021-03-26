@@ -258,13 +258,13 @@ std::string Shell::expandTilde(std::string& string)
 std::string Shell::expandWildcards(std::string& path)
 {
   //return the path if there are no wildcards
-  if(path.find('*') == std::string::npos || path.find('?') == std::string::npos)
+  if(path.find('*') == std::string::npos && path.find('?') == std::string::npos)
     return path;
 
   std::string regexStr = wildcardToRegex(path);
 
-  printf("\"%s\"\n", path.c_str());
-  printf("\"%s\"\n", regexStr.c_str());
+  fprintf(stderr, "\"%s\"\n", path.c_str());
+  fprintf(stderr, "\"%s\"\n", regexStr.c_str());
 
   return "";
 }
