@@ -292,7 +292,7 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
 
   if(suffix.empty()) {
     printIndent(indent);
-    fprintf(stderr, "Prefix Inserted\n");
+    fprintf(stderr, "Prefix Inserted: \"%s\"\n",);
 
     std::string* arg = new std::string(prefix);
     Command::_currentSimpleCommand->insertArgument(arg);
@@ -331,16 +331,7 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
 
   for(int i = 0; i < nameCount; i++) { 
     if(regexec(&regex, nameList[i]->d_name, 0, nullptr, 0) == 0) {
-
-      if(nameList[i]->d_name[0] == '.' && path[0] == '.') {
-        std::string* arg = new std::string(nameList[i]->d_name);
-        Command::_currentSimpleCommand->insertArgument(arg);
-      }
-      else if(nameList[i]->d_name[0] != '.') {
-        std::string* arg = new std::string(nameList[i]->d_name);
-        Command::_currentSimpleCommand->insertArgument(arg);
-      }
-      //rintf(stderr, "%s\n", nameList[nameCount]->d_name);
+      recursivelyExpandWildcards(prefix + '/' + nameList[i]->d_name, suffix);
     }
 
     free(nameList[i]);
