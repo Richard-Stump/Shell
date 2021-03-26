@@ -265,6 +265,8 @@ std::string Shell::expandWildcards(std::string& path)
 
   printf("\"%s\"\n", path.c_str());
   printf("\"%s\"\n", regexStr.c_str());
+
+  return "";
 }
 
 std::string Shell::wildcardToRegex(std::string wildcard)
