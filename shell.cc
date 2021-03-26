@@ -308,7 +308,7 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
   printIndent(indent); fprintf(stderr, "newPrefix: \"%s\"\n", prefix.c_str());
   printIndent(indent); fprintf(stderr, "newSuffix: \"%s\"\n", suffix.c_str());
 
-  std::string regexStr = wildcardtoRegex(component);
+  std::string regexStr = wildcardToRegex(component);
 
   indent -= in_plus;
 }
