@@ -280,6 +280,9 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
 
 void Shell::expandWildcards(std::string& path)
 {
+  Shell::recursivelyExpandWildcards("", path);
+  return;
+
   //return the path if there are no wildcards
   if(path.find('*') == std::string::npos && path.find('?') == std::string::npos)
   {
