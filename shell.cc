@@ -263,19 +263,34 @@ static void printIndent(int indent) {
 
 void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix) 
 {
-  static int indent = 0;
+  static int indent = 0; const int in_plus = 2;
 
-  printIndent(indent);
-  fprintf(stderr, "prefix: \"%s\"\n", prefix.c_str());
-  fprintf(stderr, "suffix: \"%s\"\n", suffix.c_str());
+  printIndent(indent); fprintf(stderr, "recursivelyExpandWildcards\n");
+  indent += in_plus;
+  printIndent(indent); fprintf(stderr, "prefix: \"%s\"\n", prefix.c_str());
+  printIndent(indent); fprintf(stderr, "suffix: \"%s\"\n", suffix.c_str());
 
   if(suffix.empty()) {
+    printIndent(indent);
     fprintf(stderr, "Suffix Inserted\n");
 
     std::string* arg = new std::string(prefix);
     Command::_currentSimpleCommand->insertArgument(arg);
+
+    indent -= in_plus;
     return;
   }
+
+  int slashIndex = suffix.find('/');
+  std::string component = "";
+  if(slashIndex == std::string::npos)
+    component = suffix;
+  else
+    component = suffix.substr(0, slashIndex);
+
+  printIndent(indent); fprintf(stderr, "component: \"%s\"\n", component.c_str());
+
+  indent -= in_plus;
 }
 
 void Shell::expandWildcards(std::string& path)
