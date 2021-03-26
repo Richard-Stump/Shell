@@ -261,12 +261,34 @@ std::string Shell::expandWildcards(std::string& path)
   if(path.find('*') == std::string::npos || path.find('?') == std::string::npos)
     return path;
 
-  
+  std::string regexStr = wildcardToRegex(path);
+
+  printf("\"%s\"\n", path.c_str());
+  printf("\"%s\"\n", regexStr.c_str());
 }
 
 std::string Shell::wildcardToRegex(std::string wildcard)
 {
+  std::string result = "";
 
+  for(char c : wildcard) {
+    switch(c) {
+    case '*':
+      result += ".*"; 
+      break;
+    case '?':
+      result += "."; 
+      break;
+    case '.':
+      result += "\\."; 
+      break;
+    default:
+      result += c;
+      break;  
+    }
+  }
+  
+  return result;
 }
 
 void Shell::addBackgroundProcess(int pid, bool last) {
