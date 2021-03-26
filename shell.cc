@@ -258,7 +258,7 @@ std::string Shell::expandTilde(std::string& string)
 
 static void printIndent(int indent) {
   for(int i = 0; i < indent; i++)
-    fprintf(stderr, ' ');
+    fprintf(stderr, " ");
 }
 
 void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix) 
