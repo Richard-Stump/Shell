@@ -267,6 +267,20 @@ void Shell::expandWildcards(std::string& path)
 
   fprintf(stderr, "\"%s\"\n", path.c_str());
   fprintf(stderr, "\"%s\"\n", regexStr.c_str());
+
+  regex_t regex;
+  int code = regcomp(&regex, regexStr, REG_EXTENDED);
+  
+  // If there is an error compiling the regex
+  if(code != 0) {
+    //get the compilation error string and put it into a buffer
+    char errbuff[128]; errbuff[127] = '\0';
+    regerror(code, &regex, errbuff, 127);
+    
+    fprintf(stderr, "Bad wildcard regex\n%d: %s\n", code, errbuff);
+    ::exit(-1);
+  }
+
 }
 
 std::string Shell::wildcardToRegex(std::string wildcard)
