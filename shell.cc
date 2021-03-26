@@ -290,10 +290,10 @@ void Shell::expandWildcards(std::string& path)
   }
 
   while(nameCount--) {
-    if(regexec(regex, regex.c_str(), 0, nullptr, 0) == 0) {
+    if(regexec(regex, nameList[nameCount]->d_name, 0, nullptr, 0) == 0) {
       fprintf(stderr, "%s\n", nameList[nameCount]->d_name);
     }
-    
+
     free(nameList[nameCount]);
   }
 
