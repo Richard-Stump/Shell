@@ -282,7 +282,7 @@ void Shell::expandWildcards(std::string& path)
     ::exit(-1);
   }
 
-  struct dirrent** nameList;
+  struct dirent** nameList;
   int nameCount = scandir(path.c_str(), &nameList, NULL, alphasort);
   if(nameCount == -1) {
     perror("Scandir error");
@@ -290,7 +290,7 @@ void Shell::expandWildcards(std::string& path)
   }
 
   while(nameCount--) {
-    fprintf(stderr, "%s\n", namelist[n]->d_name);
+    fprintf(stderr, "%s\n", nameList[n]->d_name);
     free(nameList[n]);
   }
 
