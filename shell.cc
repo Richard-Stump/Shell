@@ -256,6 +256,28 @@ std::string Shell::expandTilde(std::string& string)
   return home + subPath;
 }
 
+static void printIndent(int indent) {
+  for(int i = 0; i < indent; i++)
+    fprintf(stderr, ' ');
+}
+
+void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix) 
+{
+  static int indent = 0;
+
+  printIndent(indent);
+  fprintf(stderr, "prefix: \"%s\"\n", prefix.c_str());
+  fprintf(stderr, "suffix: \"%s\"\n", suffix.c_str());
+
+  if(suffix.empty()) {
+    fprintf(stderr, "Suffix Inserted\n");
+
+    std::string* arg = new std::string(prefix);
+    Command::_currentSimpleCommand->insertArgument(arg);
+    return;
+  }
+}
+
 void Shell::expandWildcards(std::string& path)
 {
   //return the path if there are no wildcards
