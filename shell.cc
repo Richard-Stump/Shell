@@ -269,7 +269,7 @@ void Shell::expandWildcards(std::string& path)
   fprintf(stderr, "\"%s\"\n", regexStr.c_str());
 
   regex_t regex;
-  int code = regcomp(&regex, regexStr, REG_EXTENDED);
+  int code = regcomp(&regex, regexStr.c_str(), REG_EXTENDED);
   
   // If there is an error compiling the regex
   if(code != 0) {
