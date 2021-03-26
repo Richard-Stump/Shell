@@ -292,7 +292,10 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
     newSuffix = suffix.substr(slashIndex);
   }
 
-  newPrefix = prefix + '/' + component;
+  if(prefix.empty())
+    newPrefix += '.';
+    
+  newPrefix += prefix + '/' + component;
 
   printIndent(indent); fprintf(stderr, "component: \"%s\"\n", component.c_str());
   printIndent(indent); fprintf(stderr, "newPrefix: \"%s\"\n", newPrefix.c_str());
