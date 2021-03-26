@@ -262,6 +262,7 @@ void Shell::expandWildcards(std::string& path)
   if(path.find('*') == std::string::npos && path.find('?') == std::string::npos)
   {
     Command::_currentSimpleCommand->insertArgument(&path);
+    return;
   }
 
   std::string regexStr = wildcardToRegex(path);
