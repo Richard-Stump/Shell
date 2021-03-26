@@ -57,7 +57,9 @@ protected:
   static std::string wildcardToRegex(std::string wildcard);
   static void recursivelyExpandWildcards(std::string prefix, 
                                          std::string suffix);
-
+  static void nextPathComponent(std::string& prefix, std::string& suffix, 
+                               std::string& component);
+ 
   static std::vector<BackgroundProcess> _backgroundProcesses;
   static std::vector<FinalCommand> _finalCommands;
 
