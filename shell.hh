@@ -55,6 +55,8 @@ struct Shell {
 
 protected:
   static std::string wildcardToRegex(std::string wildcard);
+  static void recursivelyExpandWildcards(std::string prefix, 
+                                         std::string suffix);
 
   static std::vector<BackgroundProcess> _backgroundProcesses;
   static std::vector<FinalCommand> _finalCommands;
