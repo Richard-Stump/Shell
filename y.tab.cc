@@ -1314,7 +1314,7 @@ yyreduce:
 #line 102 "shell.y" /* yacc.c:1646  */
     {
     //printf("   Yacc: insert argument \"%s\"\n", $1->c_str());
-    Shell::expandWildcards( (yyvsp[0].cpp_string) );
+    Shell::expandWildcards( * (yyvsp[0].cpp_string) );
     //Command::_currentSimpleCommand->insertArgument( $1 );
   }
 #line 1321 "y.tab.cc" /* yacc.c:1646  */

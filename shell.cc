@@ -260,7 +260,7 @@ void Shell::expandWildcards(std::string& path)
   //return the path if there are no wildcards
   if(path.find('*') == std::string::npos && path.find('?') == std::string::npos)
   {
-    Command::_currentSimpleCommand->insertArgument(path);
+    Command::_currentSimpleCommand->insertArgument(&path);
   }
 
   std::string regexStr = wildcardToRegex(path);
