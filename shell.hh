@@ -38,6 +38,7 @@ struct Shell {
 
   static std::string expandTilde(std::string& string);
   static std::string expandEnvironmentVars(std::string& string);
+  static std::string expandWildcards(std::string& path);
 
   static void executeSubshell(std::string* command, std::string* output, 
                               bool replaceNewlines = true);
@@ -53,6 +54,8 @@ struct Shell {
   static int _lastBackPid;
 
 protected:
+  static std::string wildcardToRegex(std::string wildcard);
+
   static std::vector<BackgroundProcess> _backgroundProcesses;
   static std::vector<FinalCommand> _finalCommands;
 

@@ -13,6 +13,7 @@
 #include <regex.h>
 
 #include "shell.hh"
+#include "y.tab.hh"
 
 int yyparse(void);
 
@@ -253,6 +254,21 @@ std::string Shell::expandTilde(std::string& string)
 
   return home + subPath;
 }
+
+std::string Shell::expandWildcards(std::string& path)
+{
+  //return the path if there are no wildcards
+  if(path.find('*') == std::string::npos || path.find('?') == std::string::npos)
+    return path;
+
+  
+}
+
+std::string Shell::wildcardToRegex(std::string wildcard)
+{
+
+}
+
 void Shell::addBackgroundProcess(int pid, bool last) {
   _backgroundProcesses.push_back( {pid, last} );
 }
@@ -350,16 +366,17 @@ int main(int argc, const char** argv) {
 
   Shell::prompt();
   yyparse();
+
 }
 
-int Shell::argc;
+int Shell::argc = 0;
 const char** Shell::argv;
-std::string Shell::lastArg;
-int Shell::_lastBackPid;
+std::string Shell::lastArg = "";
+int Shell::_lastBackPid = -1;
 
 Command Shell::_currentCommand;
 std::vector<BackgroundProcess> Shell::_backgroundProcesses;
 std::vector<FinalCommand> Shell::_finalCommands;
 
-int Shell::_lastRet;
-int Shell::_lastBackRet;
+int Shell::_lastRet = -1;
+int Shell::_lastBackRet = -1;
