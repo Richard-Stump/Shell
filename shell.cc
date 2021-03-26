@@ -291,9 +291,15 @@ void Shell::expandWildcards(std::string& path)
 
   for(int i = 0; i < nameCount; i++) { 
     if(regexec(&regex, nameList[i]->d_name, 0, nullptr, 0) == 0) {
-      std::string* arg = new std::string(nameList[i]->d_name);
 
-      Command::_currentSimpleCommand->insertArgument(arg);
+      if(nameList[i]->d_name[0] == '.' && path[0] == '.') {
+        std::string* arg = new std::string(nameList[i]->d_name);
+        Command::_currentSimpleCommand->insertArgument(arg);
+      }
+      else if(nameList[i]->d_name[0] != '.') {
+        std::string* arg = new std::string(nameList[i]->d_name);
+        Command::_currentSimpleCommand->insertArgument(arg);
+      }
       //rintf(stderr, "%s\n", nameList[nameCount]->d_name);
     }
 
