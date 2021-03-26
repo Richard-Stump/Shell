@@ -283,7 +283,7 @@ void Shell::expandWildcards(std::string& path)
   }
 
   struct dirent** nameList;
-  int nameCount = scandir(path.c_str(), &nameList, NULL, alphasort);
+  int nameCount = scandir(".", &nameList, NULL, alphasort);
   if(nameCount == -1) {
     perror("Scandir error");
     ::exit(-1);
