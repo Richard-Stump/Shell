@@ -255,18 +255,18 @@ std::string Shell::expandTilde(std::string& string)
   return home + subPath;
 }
 
-std::string Shell::expandWildcards(std::string& path)
+void Shell::expandWildcards(std::string& path)
 {
   //return the path if there are no wildcards
   if(path.find('*') == std::string::npos && path.find('?') == std::string::npos)
-    return path;
+  {
+    Command::_currentSimpleCommand->insertArgument(path);
+  }
 
   std::string regexStr = wildcardToRegex(path);
 
   fprintf(stderr, "\"%s\"\n", path.c_str());
   fprintf(stderr, "\"%s\"\n", regexStr.c_str());
-
-  return "";
 }
 
 std::string Shell::wildcardToRegex(std::string wildcard)

@@ -38,7 +38,7 @@ struct Shell {
 
   static std::string expandTilde(std::string& string);
   static std::string expandEnvironmentVars(std::string& string);
-  static std::string expandWildcards(std::string& path);
+  static void expandWildcards(std::string& path);
 
   static void executeSubshell(std::string* command, std::string* output, 
                               bool replaceNewlines = true);
