@@ -261,6 +261,25 @@ static void printIndent(int indent) {
     fprintf(stderr, " ");
 }
 
+void Shell::(std::string& prefix, std::string& suffix, std::string& component)
+{
+  size_t slashIndex = suffix.find('/');
+  if(slashIndex == std::string::npos) {
+    component = suffix;
+    suffix = "";
+  }
+  else {
+    component = suffix.substr(0, slashIndex);
+    suffix = suffix.substr(slashIndex + 1);
+  }
+
+  if(prefix.empty())
+    newPrefix += '.';
+
+  prefix += '/';
+  prefix += component;
+}
+
 void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix) 
 {
   static int indent = 0; const int in_plus = 2;
@@ -272,7 +291,7 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
 
   if(suffix.empty()) {
     printIndent(indent);
-    fprintf(stderr, "Suffix Inserted\n");
+    fprintf(stderr, "Prefix Inserted\n");
 
     std::string* arg = new std::string(prefix);
     Command::_currentSimpleCommand->insertArgument(arg);
@@ -281,25 +300,14 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
     return;
   }
 
-  size_t slashIndex = suffix.find('/');
-  std::string component, newSuffix, newPrefix;
-  if(slashIndex == std::string::npos) {
-    component = suffix;
-    newSuffix = "";
-  }
-  else {
-    component = suffix.substr(0, slashIndex);
-    newSuffix = suffix.substr(slashIndex + 1);
-  }
-
-  if(prefix.empty())
-    newPrefix += '.';
-
-  newPrefix += prefix + '/' + component;
+  std::string component;
+  nextPathComponent(prefix, suffix, component);
 
   printIndent(indent); fprintf(stderr, "component: \"%s\"\n", component.c_str());
-  printIndent(indent); fprintf(stderr, "newPrefix: \"%s\"\n", newPrefix.c_str());
-  printIndent(indent); fprintf(stderr, "newSuffix: \"%s\"\n", newSuffix.c_str());
+  printIndent(indent); fprintf(stderr, "newPrefix: \"%s\"\n", prefix.c_str());
+  printIndent(indent); fprintf(stderr, "newSuffix: \"%s\"\n", suffix.c_str());
+
+  std::string regexStr = wildcardtoRegex(component);
 
   indent -= in_plus;
 }
