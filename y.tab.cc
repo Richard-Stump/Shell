@@ -477,8 +477,8 @@ static const yytype_uint8 yytranslate[] =
 static const yytype_uint8 yyrline[] =
 {
        0,    53,    53,    57,    58,    62,    69,    73,    77,    80,
-      85,    86,    90,    97,    98,   102,   113,   120,   127,   137,
-     138,   142,   152,   162,   172,   182,   194,   207
+      85,    86,    90,    97,    98,   102,   114,   121,   128,   138,
+     139,   143,   153,   163,   173,   183,   195,   208
 };
 #endif
 
@@ -1314,13 +1314,14 @@ yyreduce:
 #line 102 "shell.y" /* yacc.c:1646  */
     {
     //printf("   Yacc: insert argument \"%s\"\n", $1->c_str());
-    Command::_currentSimpleCommand->insertArgument( (yyvsp[0].cpp_string) );\
+    Shell::expandWildcards( (yyvsp[0].cpp_string) );
+    //Command::_currentSimpleCommand->insertArgument( $1 );
   }
-#line 1320 "y.tab.cc" /* yacc.c:1646  */
+#line 1321 "y.tab.cc" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 113 "shell.y" /* yacc.c:1646  */
+#line 114 "shell.y" /* yacc.c:1646  */
     {
     //printf("   Yacc: insert command \"%s\"\n", $1->c_str());
     Command::_currentSimpleCommand = new SimpleCommand();
@@ -1328,11 +1329,11 @@ yyreduce:
     Command::_currentSimpleCommand->_isBuiltin = false;
     Command::_currentSimpleCommand->_runAsParent = false;
   }
-#line 1332 "y.tab.cc" /* yacc.c:1646  */
+#line 1333 "y.tab.cc" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 120 "shell.y" /* yacc.c:1646  */
+#line 121 "shell.y" /* yacc.c:1646  */
     {
     //printf("   Yacc: insert bulitin parent \"%s\"\n", $1->c_str());
     Command::_currentSimpleCommand = new SimpleCommand();
@@ -1340,11 +1341,11 @@ yyreduce:
     Command::_currentSimpleCommand->_isBuiltin = true;
     Command::_currentSimpleCommand->_runAsParent = true;
   }
-#line 1344 "y.tab.cc" /* yacc.c:1646  */
+#line 1345 "y.tab.cc" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 127 "shell.y" /* yacc.c:1646  */
+#line 128 "shell.y" /* yacc.c:1646  */
     {
     //printf("   Yacc: insert bulitin child \"%s\"\n", $1->c_str());
     Command::_currentSimpleCommand = new SimpleCommand();
@@ -1352,11 +1353,11 @@ yyreduce:
     Command::_currentSimpleCommand->_isBuiltin = true;
     Command::_currentSimpleCommand->_runAsParent = false;
   }
-#line 1356 "y.tab.cc" /* yacc.c:1646  */
+#line 1357 "y.tab.cc" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 142 "shell.y" /* yacc.c:1646  */
+#line 143 "shell.y" /* yacc.c:1646  */
     {
     //Detect if the redirect has already been set. If so, throw an error
     if( Shell::_currentCommand._outFile ) {
@@ -1367,11 +1368,11 @@ yyreduce:
     Shell::_currentCommand._outFile = (yyvsp[0].cpp_string);
     Shell::_currentCommand._appendOut = false;
   }
-#line 1371 "y.tab.cc" /* yacc.c:1646  */
+#line 1372 "y.tab.cc" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 152 "shell.y" /* yacc.c:1646  */
+#line 153 "shell.y" /* yacc.c:1646  */
     {
     //Detect if the redirect has already been set. If so, throw an error
     if( Shell::_currentCommand._outFile ) {
@@ -1382,11 +1383,11 @@ yyreduce:
     Shell::_currentCommand._outFile = (yyvsp[0].cpp_string);
     Shell::_currentCommand._appendOut = true;
   }
-#line 1386 "y.tab.cc" /* yacc.c:1646  */
+#line 1387 "y.tab.cc" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 162 "shell.y" /* yacc.c:1646  */
+#line 163 "shell.y" /* yacc.c:1646  */
     {
     //Detect if the redirect has already been set. If so, throw an error
     if( Shell::_currentCommand._errFile ) {
@@ -1397,11 +1398,11 @@ yyreduce:
     Shell::_currentCommand._errFile = (yyvsp[0].cpp_string);
     Shell::_currentCommand._appendErr = false;
   }
-#line 1401 "y.tab.cc" /* yacc.c:1646  */
+#line 1402 "y.tab.cc" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 172 "shell.y" /* yacc.c:1646  */
+#line 173 "shell.y" /* yacc.c:1646  */
     {
     //Detect if the redirect has already been set. If so, throw an error
     if( Shell::_currentCommand._errFile ) {
@@ -1412,11 +1413,11 @@ yyreduce:
     Shell::_currentCommand._errFile = (yyvsp[0].cpp_string);
     Shell::_currentCommand._appendErr = true;
   }
-#line 1416 "y.tab.cc" /* yacc.c:1646  */
+#line 1417 "y.tab.cc" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 182 "shell.y" /* yacc.c:1646  */
+#line 183 "shell.y" /* yacc.c:1646  */
     {
     //Detect if the redirect has already been set. If so, throw an error
     if( Shell::_currentCommand._outFile || Shell::_currentCommand._errFile ) {
@@ -1429,11 +1430,11 @@ yyreduce:
     Shell::_currentCommand._errFile = (yyvsp[0].cpp_string);
     Shell::_currentCommand._appendErr = false;
   }
-#line 1433 "y.tab.cc" /* yacc.c:1646  */
+#line 1434 "y.tab.cc" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 194 "shell.y" /* yacc.c:1646  */
+#line 195 "shell.y" /* yacc.c:1646  */
     {
     //Detect if the redirect has already been set. If so, throw an error
     if( Shell::_currentCommand._outFile || Shell::_currentCommand._errFile ) {
@@ -1447,11 +1448,11 @@ yyreduce:
     Shell::_currentCommand._appendErr = true;
 
   }
-#line 1451 "y.tab.cc" /* yacc.c:1646  */
+#line 1452 "y.tab.cc" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 207 "shell.y" /* yacc.c:1646  */
+#line 208 "shell.y" /* yacc.c:1646  */
     {
     if( Shell::_currentCommand._inFile) {
       yyerror("Ambiguous input redirect\n");
@@ -1460,11 +1461,11 @@ yyreduce:
 
     Shell::_currentCommand._inFile = (yyvsp[0].cpp_string);
   }
-#line 1464 "y.tab.cc" /* yacc.c:1646  */
+#line 1465 "y.tab.cc" /* yacc.c:1646  */
     break;
 
 
-#line 1468 "y.tab.cc" /* yacc.c:1646  */
+#line 1469 "y.tab.cc" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1692,7 +1693,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 217 "shell.y" /* yacc.c:1906  */
+#line 218 "shell.y" /* yacc.c:1906  */
 
 
 void
