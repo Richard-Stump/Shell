@@ -261,7 +261,8 @@ static void printIndent(int indent) {
     fprintf(stderr, " ");
 }
 
-void Shell::(std::string& prefix, std::string& suffix, std::string& component)
+void Shell::nextPathComponent(std::string& prefix, std::string& suffix, 
+                              std::string& component)
 {
   size_t slashIndex = suffix.find('/');
   if(slashIndex == std::string::npos) {
