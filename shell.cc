@@ -291,7 +291,7 @@ void Shell::expandWildcards(std::string& path)
 
   while(nameCount--) {
     fprintf(stderr, "%s\n", nameList[n]->d_name);
-    free(nameList[n]);
+    free(nameList[nameCount]);
   }
 
 }
