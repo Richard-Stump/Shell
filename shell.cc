@@ -290,7 +290,7 @@ void Shell::expandWildcards(std::string& path)
   }
 
   while(nameCount--) {
-    fprintf(stderr, "%s\n", nameList[n]->d_name);
+    fprintf(stderr, "%s\n", nameList[nameCount]->d_name);
     free(nameList[nameCount]);
   }
 
