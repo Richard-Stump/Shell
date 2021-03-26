@@ -275,7 +275,7 @@ void Shell::nextPathComponent(std::string& prefix, std::string& suffix,
   }
 
   if(prefix.empty())
-    newPrefix += '.';
+    prefix += '.';
 
   prefix += '/';
   prefix += component;
