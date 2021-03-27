@@ -273,11 +273,6 @@ void Shell::nextPathComponent(std::string& prefix, std::string& suffix,
     component = suffix.substr(0, slashIndex);
     suffix = suffix.substr(slashIndex + 1);
   }
-
-  if(prefix.empty())
-    prefix += '.';
-
-  prefix += '/';
 }
 
 void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix) 
@@ -328,8 +323,14 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
     ::exit(-1);
   }
 
+  std::string dir;
+  if(prefix.empty())
+    dir = '.';
+  else
+    dir = prefix;
+
   struct dirent** nameList;
-  int nameCount = scandir(".", &nameList, NULL, alphasort);
+  int nameCount = scandir(prefix.c_str(), &nameList, NULL, alphasort);
   if(nameCount == -1) {
     perror("Scandir error");
     ::exit(-1);
@@ -337,7 +338,7 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
 
   for(int i = 0; i < nameCount; i++) { 
     if(regexec(&regex, nameList[i]->d_name, 0, nullptr, 0) == 0) {
-      recursivelyExpandWildcards(prefix + nameList[i]->d_name, suffix);
+      recursivelyExpandWildcards(prefix + '/' nameList[i]->d_name, suffix);
     }
 
     free(nameList[i]);
