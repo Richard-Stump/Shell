@@ -308,7 +308,7 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
 
   //check if the user is trying to look at the root directory
   if(prefix.empty() && suffix[0] == '/') {
-    prefix = "/";
+    prefix = '/';
     suffix = suffix.substr(1);
   }
 
@@ -318,8 +318,10 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
   printIndent(indent); fprintf(stderr, "New Suffix: \"%s\"\n", suffix.c_str());
 
   if(!Shell::pathHasWildcard(component)) {
+    std::string newPrefix = prefix + component;
+    printIndent(indent); fprintf(stderr, "New Prefix: \"%s\"\n", newPrefix.c_str());
       printIndent(indent); fprintf(stderr, "recurse 1\n");
-    recursivelyExpandWildcards(prefix + component, suffix);
+    recursivelyExpandWildcards(newPrefix, suffix);
     indent -= in_plus;
     return;
   }
@@ -360,11 +362,13 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
     if(regexec(&regex, name, 0, nullptr, 0) == 0) {
       printIndent(indent); fprintf(stderr, "recurse 2\n");
 
+      std::string newPrefix = prefix + name;
+      printIndent(indent); fprintf(stderr, "New Prefix: \"%s\"\n", newPrefix.c_str());
       if(name[0] == '.' && component[0] == '.') {
-        recursivelyExpandWildcards(prefix + name, suffix);
+        recursivelyExpandWildcards(newPrefix, suffix);
       }
       else if(name[0] != '.') {
-        recursivelyExpandWildcards(prefix + name, suffix);
+        recursivelyExpandWildcards(newPrefix, suffix);
       }
 /*
       if(nameList[i]->d_name[0] == '.' && path[0] == '.') {
