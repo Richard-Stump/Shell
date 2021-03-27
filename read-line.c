@@ -55,12 +55,6 @@ void write_ch(char ch) {
   cursor_pos++;
 }
 
-void write_ch(char ch) {
-  write(1, &ch, 1);
-  
-  line_buffer[cursor_pos] = ch;
-}
-
 void write_str (const char* ch, size_t n)
 {
   write(1, ch, n);
