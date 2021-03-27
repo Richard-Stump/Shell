@@ -274,7 +274,8 @@ std::string Shell::extractNextComponent(std::string& prefix, std::string& suffix
   else {
     component = suffix.substr(0, slashIndex);
     suffix = suffix.substr(slashIndex + 1);
-    prefix += '/';
+    if(slashIndex == 0)
+      prefix += '/';
   }
 
   return component;
