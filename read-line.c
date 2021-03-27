@@ -83,6 +83,8 @@ void move_cursor_by(int count) {
 
 
 void backspace(void) {
+  if(cursor_pos == 0) return;
+
   char buff[MAX_BUFFER_LINE];
   
   char* start = line_buffer + cursor_pos;
