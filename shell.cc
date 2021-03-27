@@ -286,7 +286,7 @@ bool Shell::pathHasWildcard(std::string& path) {
           path.find('?') == std::string::npos);
 }
 
-void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix) 
+bool Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix) 
 {
   const char* extraChar = prefix.empty() ? "" : "/";
 
@@ -305,7 +305,7 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
     Command::_currentSimpleCommand->insertArgument(arg);
 
     indent -= in_plus;
-    return;
+    return true;
   }
 
   //check if the user is trying to look at the root directory
@@ -323,9 +323,8 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
     std::string newPrefix = prefix + extraChar + component;
     //printIndent(indent); fprintf(stderr, "New Prefix: \"%s\"\n", newPrefix.c_str());
       //printIndent(indent); fprintf(stderr, "recurse 1\n");
-    recursivelyExpandWildcards(newPrefix, suffix);
     indent -= in_plus;
-    return;
+    return recursivelyExpandWildcards(newPrefix, suffix);;
   }
 
   std::string regexStr = wildcardToRegex(component);
@@ -341,7 +340,7 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
     
     fprintf(stderr, "Bad wildcard regex\n%d: %s\n", code, errbuff);
     indent -= in_plus;
-    return;
+    return false;
   }
 
   std::string dir;
@@ -354,8 +353,10 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
   int nameCount = scandir(dir.c_str(), &nameList, NULL, alphasort);
   if(nameCount == -1) {
     indent -= in_plus;
-    return;
+    return false;
   }
+
+  bool foundMatch = false;
 
   for(int i = 0; i < nameCount; i++) { 
     const char* name = nameList[i]->d_name;
@@ -366,15 +367,17 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
       std::string newPrefix = prefix + extraChar +  name;
       //printIndent(indent); fprintf(stderr, "New Prefix: \"%s\"\n", newPrefix.c_str());
       if(name[0] == '.' && component[0] == '.') {
-        recursivelyExpandWildcards(newPrefix, suffix);
+        foundMatch |= recursivelyExpandWildcards(newPrefix, suffix);
       }
       else if(name[0] != '.') {
-        recursivelyExpandWildcards(newPrefix, suffix);
+        foundMatch |= recursivelyExpandWildcards(newPrefix, suffix);
       }
     }
 
     free(nameList[i]);
   }
+
+  return foundMatch;
 
   indent -= in_plus;
 }
@@ -389,7 +392,9 @@ void Shell::expandWildcards(std::string& path)
     return;
   }
 
-  Shell::recursivelyExpandWildcards("", path);
+  if!(Shell::recursivelyExpandWildcards("", path)) {
+    Command::_currentSimpleCommand->insertArgument(&path);
+  }
   return;
 
   std::string regexStr = wildcardToRegex(path);
