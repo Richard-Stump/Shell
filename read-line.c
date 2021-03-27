@@ -48,50 +48,26 @@ void write_ch(char ch) {
   write(1, & ch, 1);
   line_buffer[cursor_pos] = ch;
 
-  if(cursor_pos == line_length) {
+  if(cursor_pos == line_length)
     line_length++;
-  }
-
+  
   cursor_pos++;
 }
 
-void write_str (const char* ch, size_t n)
-{
-  write(1, ch, n);
-}
-
-void go_back(void) {
-  write_ch(8); //backspace char
-}
-
-void go_forward(void) {
-  write_ch(line_buffer[cursor_pos]);
+void echo_ch(char ch) {
+  write(1, &ch, 1);
 }
 
 void cursor_left(void) {
-  if(cursor_pos > 0) {
-    go_back();
-    cursor_pos--;
-  }
+  echo_ch(8);
+  cursor_pos--;
 }
 
 void cursor_right(void) {
-  if(cursor_pos < line_length) {
-    write_ch(line_buffer[cursor_pos]);
-    cursor_pos++;
-  }
+  echo_ch(line_buffer[cursor_pos]);
+  cursor_pos++;
 }
 
-void move_cursor_by(int count) {
-  if(count < 0) {
-    for(int i = 0; i < count; i++) 
-      cursor_left();
-  }
-  else if (count > 0) {
-    for(int i = 0; i > count; i--)
-      cursor_right();
-  }
-}
 
 void backspace(void) {
   if(cursor_pos == 0) { 
