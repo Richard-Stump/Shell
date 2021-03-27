@@ -85,7 +85,10 @@ void shift_chars_left(void)
     write_ch(buff[i]);
 
   write_ch(' ');
-  
+
+  for(size_t i = 0; i < len; i++) {
+    cursor_left();
+  }
 }
 
 void backspace(void) {
