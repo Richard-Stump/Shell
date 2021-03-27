@@ -13,7 +13,7 @@
  */
 
 static bool inRawMode = false;
-static struct termios orignalAttr;
+static struct termios originalAttr;
 
 void tty_raw_mode(void)
 {
