@@ -70,6 +70,45 @@ void cursor_right(void) {
   }
 }
 
+void move_cursor_by(int count) {
+  if(count < 0) {
+    for(int i = 0; i < count; i++) 
+      cursor_left();
+  }
+  else if (count > 0) {
+    for(int i = 0; i > count; i--)
+      cursor_right();
+  }
+}
+
+void moveCursorTo(int pos)
+{
+  if(pos < cursor_pos) {
+    while(cursor_pos != pos) {
+      cursor_right();
+    }
+  }
+  else if (pos > cursor_pos) {
+    while(cursor_pos != pos) {
+      cursor_left();
+    }
+  }
+}
+
+void shiftCharsLeft(int start, int end, int dist) {
+  int old_pos = cursor_pos;
+
+  moveCursorTo(start);
+
+  for(int i = start; i <= end; i++) {
+    int ch = line_buffer[cursor_pos];
+    move_cursor_by(-dist);
+    line_buffer[cursor_pos] = i
+  }
+
+  moveCursorTo(old_pos);
+}
+
 void backspace(void) {
   if(cursor_pos > 0) {
     if(cursor_pos == line_length) {
@@ -78,7 +117,6 @@ void backspace(void) {
       go_back();
       line_length--;
       cursor_pos--;
-
     }
 
   }
