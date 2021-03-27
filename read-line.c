@@ -210,7 +210,6 @@ char * read_line() {
         // echo line
         write(1, line_buffer, line_length);
       }
-      else if (ch == 91 && ch2)
       else if(ch1 == 91 && ch2 == 68) {
         //go left one char
         cursor_left();
