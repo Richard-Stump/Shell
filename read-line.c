@@ -56,16 +56,6 @@ void go_forward(void) {
   write_ch(line_buffer[cursor_pos]);
 }
 
-void backspace(void) {
-  if(cursor_pos > 0) {
-    go_back();
-    write_ch(' ');
-    go_back();
-    line_length--;
-    cursor_pos--;
-  }
-}
-
 void cursor_left(void) {
   if(cursor_pos > 0) {
     go_back();
@@ -77,6 +67,20 @@ void cursor_right(void) {
   if(cursor_pos < line_length) {
     go_forward();
     cursor_pos++;
+  }
+}
+
+void backspace(void) {
+  if(cursor_pos > 0) {
+    if(cursor_pos == line_length) {
+      go_back();
+      write_ch(' ');
+      go_back();
+      line_length--;
+      cursor_pos--;
+
+    }
+
   }
 }
 
