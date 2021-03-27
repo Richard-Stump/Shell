@@ -60,7 +60,7 @@ char * read_line() {
     char ch;
     read(0, &ch, 1);
 
-    if (ch>=32) {
+    if (ch>=32 && ch != 127) {
       // It is a printable character. 
 
       // Do echo
