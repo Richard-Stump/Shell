@@ -133,7 +133,7 @@ char * read_line() {
     char ch;
     read(0, &ch, 1);
 
-    if (ch>=32 && ch != 127 && ch != 126) {
+    if (ch>=32 && ch != 127) {
       // It is a printable character. 
       write_ch(ch);
 
@@ -162,11 +162,11 @@ char * read_line() {
       line_buffer[0]=0;
       break;
     }
-    else if (ch == 8 || ch == 127 ) {
+    else if (ch == 8 || ch == 127) {
       // <backspace> was typed. Remove previous character read.
       backspace();
     }
-    else if (ch == 4 || ch == 126) {
+    else if (ch == 4) {
       delete();
     }
     else if (ch==27) {
