@@ -87,24 +87,23 @@ char * read_line() {
       line_buffer[0]=0;
       break;
     }
-    else if (ch == 8) {
+    else if (ch == 8 && line_length > 0) {
       // <backspace> was typed. Remove previous character read.
-      if(line_length > 0) {
-        // Go back one character
-        ch = 8;
-        write(1,&ch,1);
 
-        // Write a space to erase the last character read
-        ch = ' ';
-        write(1,&ch,1);
+      // Go back one character
+      ch = 8;
+      write(1,&ch,1);
 
-        // Go back one character
-        ch = 8;
-        write(1,&ch,1);
+      // Write a space to erase the last character read
+      ch = ' ';
+      write(1,&ch,1);
 
-        // Remove one character from buffer
-        line_length--;
-      }
+      // Go back one character
+      ch = 8;
+      write(1,&ch,1);
+
+      // Remove one character from buffer
+      line_length--;
     }
     else if (ch==27) {
       // Escape sequence. Read two chars more
@@ -154,7 +153,7 @@ char * read_line() {
 
   // Add eol and null char at the end of string
   line_buffer[line_length]=10;
-  line_length++;
+  //line_length++;
   line_buffer[line_length]=0;
 
   tty_reset();
