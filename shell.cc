@@ -289,16 +289,16 @@ bool Shell::pathHasWildcard(std::string& path) {
 void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix) 
 {
   static int indent = 0; const int in_plus = 2;
-  //printIndent(indent); fprintf(stderr, "recursivelyExpandWildcards:\n");
+  printIndent(indent); fprintf(stderr, "recursivelyExpandWildcards:\n");
   indent += in_plus;
 
-  //printIndent(indent); fprintf(stderr, "Prefix: \"%s\"\n", prefix.c_str());
-  //printIndent(indent); fprintf(stderr, "Suffix: \"%s\"\n", suffix.c_str());
+  printIndent(indent); fprintf(stderr, "Prefix: \"%s\"\n", prefix.c_str());
+  printIndent(indent); fprintf(stderr, "Suffix: \"%s\"\n", suffix.c_str());
 
   //If the suffix is empty, we cannot expand the argument any more
   //so it can be inserted
   if(suffix.empty()) {
-    //printIndent(indent); fprintf(stderr, "Inserting Prefix\n");
+    printIndent(indent); fprintf(stderr, "Inserting Prefix\n");
     std::string* arg = new std::string(prefix);
     Command::_currentSimpleCommand->insertArgument(arg);
 
@@ -314,11 +314,11 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
 
   std::string component = extractNextComponent(prefix, suffix);
 
-  //printIndent(indent); fprintf(stderr, "Component: \"%s\"\n", component.c_str());
-  //printIndent(indent); fprintf(stderr, "New Suffix: \"%s\"\n", suffix.c_str());
+  printIndent(indent); fprintf(stderr, "Component: \"%s\"\n", component.c_str());
+  printIndent(indent); fprintf(stderr, "New Suffix: \"%s\"\n", suffix.c_str());
 
   if(!Shell::pathHasWildcard(component)) {
-      //printIndent(indent); fprintf(stderr, "recurse 1\n");
+      printIndent(indent); fprintf(stderr, "recurse 1\n");
     recursivelyExpandWildcards(prefix + component, suffix);
     indent -= in_plus;
     return;
@@ -329,13 +329,13 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
   regex_t regex;
   int code = regcomp(&regex, regexStr.c_str(), REG_EXTENDED | REG_NOSUB);
   
-  // If there is an error compiling the regex
+   If there is an error compiling the regex
   if(code != 0) {
-    //get the compilation error string and put it into a buffer
+    get the compilation error string and put it into a buffer
     char errbuff[128]; errbuff[127] = '\0';
     regerror(code, &regex, errbuff, 127);
     
-    //fprintf(stderr, "Bad wildcard regex\n%d: %s\n", code, errbuff);
+    fprintf(stderr, "Bad wildcard regex\n%d: %s\n", code, errbuff);
     return;
   }
 
@@ -356,7 +356,7 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
     const char* name = nameList[i]->d_name;
 
     if(regexec(&regex, name, 0, nullptr, 0) == 0) {
-      //printIndent(indent); fprintf(stderr, "recurse 2\n");
+      printIndent(indent); fprintf(stderr, "recurse 2\n");
 
       if(name[0] == '.' && component[0] == '.') {
         recursivelyExpandWildcards(prefix + name, suffix);
