@@ -336,6 +336,7 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
     regerror(code, &regex, errbuff, 127);
     
     fprintf(stderr, "Bad wildcard regex\n%d: %s\n", code, errbuff);
+    indent -= in_plus;
     return;
   }
 
@@ -349,6 +350,7 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
   int nameCount = scandir(dir.c_str(), &nameList, NULL, alphasort);
   if(nameCount == -1) {
     perror("Scandir error");
+    indent -= in_plus;
     return;
   }
 
