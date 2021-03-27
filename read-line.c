@@ -179,8 +179,8 @@ char * read_line() {
       char ch2;
       read(0, &ch1, 1);
       read(0, &ch2, 1);
+      printf("ESC[%d,%d\n", ch1, ch2);  
       if(ch == 91 && ch2==51) {
-      printf("ESC[%d,%d\n", ch1, ch2);
         delete();
         char ch3;
         read(0, &ch3, 1);
