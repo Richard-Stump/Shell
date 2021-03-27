@@ -291,16 +291,16 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
   const char* extraChar = prefix.empty() ? "" : "/";
 
   static int indent = 0; const int in_plus = 2;
-  //printIndent(indent); fprintf(stderr, "recursivelyExpandWildcards:\n");
+  printIndent(indent); fprintf(stderr, "recursivelyExpandWildcards:\n");
   indent += in_plus;
 
-  //printIndent(indent); fprintf(stderr, "Prefix: \"%s\"\n", prefix.c_str());
-  //printIndent(indent); fprintf(stderr, "Suffix: \"%s\"\n", suffix.c_str());
+  printIndent(indent); fprintf(stderr, "Prefix: \"%s\"\n", prefix.c_str());
+  printIndent(indent); fprintf(stderr, "Suffix: \"%s\"\n", suffix.c_str());
 
   //If the suffix is empty, we cannot expand the argument any more
   //so it can be inserted
   if(suffix.empty()) {
-    //printIndent(indent); fprintf(stderr, "Inserting Prefix\n");
+    printIndent(indent); fprintf(stderr, "Inserting Prefix\n");
     std::string* arg = new std::string(prefix);
     Command::_currentSimpleCommand->insertArgument(arg);
 
@@ -316,8 +316,8 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
 
   std::string component = extractNextComponent(prefix, suffix);
 
-  //printIndent(indent); fprintf(stderr, "Component: \"%s\"\n", component.c_str());
-  //printIndent(indent); fprintf(stderr, "New Suffix: \"%s\"\n", suffix.c_str());
+  printIndent(indent); fprintf(stderr, "Component: \"%s\"\n", component.c_str());
+  printIndent(indent); fprintf(stderr, "New Suffix: \"%s\"\n", suffix.c_str());
 
   if(!Shell::pathHasWildcard(component)) {
     std::string newPrefix = prefix + extraChar + component;
@@ -362,26 +362,16 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
     const char* name = nameList[i]->d_name;
 
     if(regexec(&regex, name, 0, nullptr, 0) == 0) {
-      //printIndent(indent); fprintf(stderr, "recurse 2\n");
+      printIndent(indent); fprintf(stderr, "recurse 2\n");
 
       std::string newPrefix = prefix + extraChar +  name;
-      //printIndent(indent); fprintf(stderr, "New Prefix: \"%s\"\n", newPrefix.c_str());
+      printIndent(indent); fprintf(stderr, "New Prefix: \"%s\"\n", newPrefix.c_str());
       if(name[0] == '.' && component[0] == '.') {
         recursivelyExpandWildcards(newPrefix, suffix);
       }
       else if(name[0] != '.') {
         recursivelyExpandWildcards(newPrefix, suffix);
       }
-/*
-      if(nameList[i]->d_name[0] == '.' && path[0] == '.') {
-        std::string* arg = new std::string(nameList[i]->d_name);
-        Command::_currentSimpleCommand->insertArgument(arg);
-      }
-      else if(nameList[i]->d_name[0] != '.') {
-        std::string* arg = new std::string(nameList[i]->d_name);
-        Command::_currentSimpleCommand->insertArgument(arg);
-      }
-      */
     }
 
     free(nameList[i]);
@@ -402,7 +392,7 @@ void Shell::expandWildcards(std::string& path)
 
   Shell::recursivelyExpandWildcards("", path);
   return;
-  
+
   std::string regexStr = wildcardToRegex(path);
 
   //fprintf(stderr, "\"%s\"\n", path.c_str());
