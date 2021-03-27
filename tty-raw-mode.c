@@ -38,7 +38,7 @@ void tty_raw_mode(void)
 void tty_reset(void)
 {
 	if(inRawMode) {
-		tcsetattr(0,TCSANOW,&orignalAttr);
+		tcsetattr(0,TCSANOW,&originalAttr);
 		inRawMode = false;
 	}
 }
