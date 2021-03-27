@@ -273,7 +273,7 @@ std::string Shell::extractNextComponent(std::string& suffix)
   }
   else {
     component = suffix.substr(0, slashIndex);
-    suffix = suffix.substr(slashIndex);
+    suffix = suffix.substr(slashIndex + 1);
   }
 
   return component;
@@ -308,9 +308,7 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
   std::string component = extractNextComponent(suffix);
 
   printIndent(indent); fprintf(stderr, "Component: \"%s\"\n", component.c_str());
-  
-  //if the component is empty, we know that the user is trying to look at the
-  //home directory, which is the 
+  printIndent(indent); fprintf(stderr, "New Suffix: \"%s\"\n", suffix.c_str());
 
   indent -= in_plus;
 }
