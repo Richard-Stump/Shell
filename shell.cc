@@ -279,6 +279,11 @@ std::string Shell::extractNextComponent(std::string& suffix)
   return component;
 }
 
+bool Shell::pathHasWildcard(std::string& path) {
+  return (path.find('*') == std::string::npos && 
+          path.find('?') == std::string::npos);
+}
+
 void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix) 
 {
   static int indent = 0; const int in_plus = 2;
@@ -309,6 +314,56 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
 
   printIndent(indent); fprintf(stderr, "Component: \"%s\"\n", component.c_str());
   printIndent(indent); fprintf(stderr, "New Suffix: \"%s\"\n", suffix.c_str());
+
+  if(!Shell::pathHasWildcard(component)) {
+    recursivelyExpandWildcards(prefix + "/" + component, suffix);
+    indent -= in_plus;
+    return;
+  }
+
+  std::string regexStr = wildcardToRegex(component);
+
+  regex_t regex;
+  int code = regcomp(&regex, regexStr.c_str(), REG_EXTENDED | REG_NOSUB);
+  
+  // If there is an error compiling the regex
+  if(code != 0) {
+    //get the compilation error string and put it into a buffer
+    char errbuff[128]; errbuff[127] = '\0';
+    regerror(code, &regex, errbuff, 127);
+    
+    fprintf(stderr, "Bad wildcard regex\n%d: %s\n", code, errbuff);
+    return;
+  }
+
+  std::string dir;
+  if(prefix.empty())
+    dir = ".";
+  else
+    dir = prefix;
+
+  struct dirent** nameList;
+  int nameCount = scandir(dir.c_str(), &nameList, NULL, alphasort);
+  if(nameCount == -1) {
+    perror("Scandir error");
+    return;
+  }
+
+  for(int i = 0; i < nameCount; i++) { 
+    if(regexec(&regex, nameList[i]->d_name, 0, nullptr, 0) == 0) {
+
+      if(nameList[i]->d_name[0] == '.' && path[0] == '.') {
+        std::string* arg = new std::string(nameList[i]->d_name);
+        Command::_currentSimpleCommand->insertArgument(arg);
+      }
+      else if(nameList[i]->d_name[0] != '.') {
+        std::string* arg = new std::string(nameList[i]->d_name);
+        Command::_currentSimpleCommand->insertArgument(arg);
+      }
+    }
+
+    free(nameList[i]);
+  }
 
   indent -= in_plus;
 }

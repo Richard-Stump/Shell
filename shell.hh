@@ -58,6 +58,7 @@ protected:
   static void recursivelyExpandWildcards(std::string prefix, 
                                          std::string suffix);
   static std::string extractNextComponent(std::string& suffix);
+  static bool pathHasWildcard(std::string& path);
  
   static std::vector<BackgroundProcess> _backgroundProcesses;
   static std::vector<FinalCommand> _finalCommands;
