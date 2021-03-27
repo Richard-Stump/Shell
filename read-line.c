@@ -89,12 +89,13 @@ void backspace(void) {
   size_t len = line_length - cursor_pos;
 
   strncpy(buff, start, len);
+  buff[len] = ' ';
 
   go_back();
   write_ch(' ');
   go_back();
 
-  strncpy(start - 1, buff, len);
+  strncpy(start - 1, buff, len + 1);
 
   cursor_pos--;
   line_length--;
