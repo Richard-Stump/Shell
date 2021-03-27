@@ -303,6 +303,13 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
 
   std::string component;
   nextPathComponent(prefix, suffix, component);
+  
+  //return the path if there are no wildcards
+  if(component.find('*') == std::string::npos && component.find('?') == std::string::npos)
+  {
+    Command::_currentSimpleCommand->insertArgument(&su);
+    return;
+  }
 
   printIndent(indent); fprintf(stderr, "component: \"%s\"\n", component.c_str());
   printIndent(indent); fprintf(stderr, "newPrefix: \"%s\"\n", prefix.c_str());
