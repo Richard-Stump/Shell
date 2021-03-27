@@ -282,16 +282,16 @@ std::string Shell::extractNextComponent(std::string& suffix)
 void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix) 
 {
   static int indent = 0; const int in_plus = 2;
-  fprintf(stderr, "recursivelyExpandWildcards:\n");
+  printIndent(indent); fprintf(stderr, "recursivelyExpandWildcards:\n");
   indent += in_plus;
 
-  fprintf(stderr, "Prefix: \"%s\"\n", prefix.c_str());
-  fprintf(stderr, "Suffix: \"%s\"\n", suffix.c_str());
+  printIndent(indent); fprintf(stderr, "Prefix: \"%s\"\n", prefix.c_str());
+  printIndent(indent); fprintf(stderr, "Suffix: \"%s\"\n", suffix.c_str());
 
   //If the suffix is empty, we cannot expand the argument any more
   //so it can be inserted
   if(suffix.empty()) {
-    fprintf(stderr, "Inserting Prefix\n");
+    printIndent(indent); fprintf(stderr, "Inserting Prefix\n");
     std::string* arg = new std::string(prefix);
     Command::_currentSimpleCommand->insertArgument(arg);
 
@@ -301,7 +301,7 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
 
   std::string component = extractNextComponent(suffix);
 
-  fprintf(stderr, "Component: \"%s\"\n", component.c_str());
+  printIndent(indent); fprintf(stderr, "Component: \"%s\"\n", component.c_str());
   
   indent -= in_plus;
 }
