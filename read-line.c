@@ -49,8 +49,10 @@ void write_ch(char ch) {
 }
 
 void go_back(void) {
-  if(cursor_pos > 0)
+  if(cursor_pos > 0) {
     write_ch(8); //backspace char
+    cursor_pos--;
+  }
 }
 
 void go_forward(void) {
