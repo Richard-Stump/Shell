@@ -76,7 +76,7 @@ void cursor_left(void) {
 void cursor_right(void) {
   if(cursor_pos < line_length - 1) {
     go_forward;
-    cursor_right++;
+    cursor_pos++;
   }
 }
 
@@ -171,9 +171,12 @@ char * read_line() {
         // echo line
         write(1, line_buffer, line_length);
       }
-      if(ch1 == 91 && ch2 == 68) {
+      else if(ch1 == 91 && ch2 == 68) {
         //go left one char
         cursor_left();
+      }
+      else if (ch1 == 91 && ch2 == 67) {
+        cursor_right();
       }
       
     }
