@@ -102,24 +102,6 @@ void backspace(void) {
 
   }
 
-  char buff[MAX_BUFFER_LINE];
-  
-  char* start = line_buffer + cursor_pos;
-  size_t len = line_length - cursor_pos;
-
-  strncpy(buff, start, len);
-  buff[len] = ' ';
-
-  go_back();
-  write_ch(' ');
-  go_back();
-
-  strncpy(start - 1, buff, len + 1);
-  write_str(buff, len + 1);
-
-  cursor_pos--;
-  line_length--;
-
   /*
   if(cursor_pos > 0) {
     if(cursor_pos == line_length) {
