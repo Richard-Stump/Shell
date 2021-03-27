@@ -278,7 +278,6 @@ void Shell::nextPathComponent(std::string& prefix, std::string& suffix,
     prefix += '.';
 
   prefix += '/';
-  prefix += component;
 }
 
 void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix) 
@@ -307,7 +306,7 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
   //return the path if there are no wildcards
   if(component.find('*') == std::string::npos && component.find('?') == std::string::npos)
   {
-    Command::_currentSimpleCommand->insertArgument(&su);
+    recursivelyExpandWildcards(prefix + component, suffix);
     return;
   }
 
