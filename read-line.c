@@ -73,6 +73,13 @@ void cursor_left(void) {
   }
 }
 
+void cursor_right(void) {
+  if(cursor_pos < line_length - 1) {
+    go_forward;
+    cursor_right++;
+  }
+}
+
 /* 
  * Input a line with some basic editing.
  */
