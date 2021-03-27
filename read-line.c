@@ -72,6 +72,20 @@ void cursor_right(void) {
   }
 }
 
+void shift_chars_left(void)
+{
+  char buff[MAX_BUFFER_LINE];
+  char* start = line_buffer + cursor_pos;
+  size_t len = line_length - cursor_pos;
+
+  strncpy(buff, start, line_length);
+
+  cursor_left();
+  for(int i = 0; i < len; i++)
+    write_ch(buff[i]);
+
+  
+}
 
 void backspace(void) {
   if(cursor_pos == 0) return;
