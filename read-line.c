@@ -69,7 +69,7 @@ void backspace(void) {
 void cursor_left(void) {
   if(cursor_pos > 0) {
     go_back();
-    cursor_pos = 0;
+    cursor_pos--;
   }
 }
 
