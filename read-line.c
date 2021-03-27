@@ -81,12 +81,12 @@ void shift_chars_left(void)
   strncpy(buff, start, line_length);
 
   cursor_left();
-  for(int i = 0; i < len; i++)
+  for(size_t i = 0; i < len; i++)
     write_ch(buff[i]);
 
   write_ch(' ');
 
-  for(size_t i = 0; i < len; i++) {
+  for(size_t i = 0; i <= len; i++) {
     cursor_left();
   }
 }
