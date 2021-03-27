@@ -157,7 +157,8 @@ char * read_line() {
         write(1, line_buffer, line_length);
       }
       if(ch1 == 91 && ch2 == 68) {
-
+        //go left one char
+        go_back();
       }
       
     }
