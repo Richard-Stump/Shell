@@ -59,13 +59,17 @@ void echo_ch(char ch) {
 }
 
 void cursor_left(void) {
-  echo_ch(8);
-  cursor_pos--;
+  if(cursor_pos > 0) {
+    echo_ch(8);
+    cursor_pos--;
+  }
 }
 
 void cursor_right(void) {
-  echo_ch(line_buffer[cursor_pos]);
-  cursor_pos++;
+  if(cursor_pos < line_length) {
+    echo_ch(line_buffer[cursor_pos]);
+    cursor_pos++;
+  }
 }
 
 
