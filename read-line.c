@@ -88,6 +88,7 @@ void shift_chars_left(void)
 
   for(size_t i = 0; i <= len; i++) {
     cursor_left();
+    line_length--;
   }
 }
 
