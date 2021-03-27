@@ -649,7 +649,7 @@ int mygetc(FILE* f) {
   ch = *p;
   p++;
 
-  //return ch;
+  return ' ';// ch;
 }
 
 #line 656 "lex.yy.cc"
