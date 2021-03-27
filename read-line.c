@@ -44,7 +44,7 @@ void read_line_print_usage()
   write(1, usage, strlen(usage));
 }
 
-void write_ch(char c) {
+void write_ch(char ch) {
   write(1, &ch, 1);
 }
 
