@@ -45,6 +45,17 @@ void read_line_print_usage()
 }
 
 void write_ch(char ch) {
+  write(1, & ch, 1);
+  line_buffer[cursor_pos] = ch;
+
+  if(cursor_pos == line_length) {
+    line_length++;
+  }
+
+  cursor_pos++;
+}
+
+void write_ch(char ch) {
   write(1, &ch, 1);
   
   line_buffer[cursor_pos] = ch;
@@ -72,7 +83,7 @@ void cursor_left(void) {
 
 void cursor_right(void) {
   if(cursor_pos < line_length) {
-    go_forward();
+    write_ch(line_buffer[cursor_pos]);
     cursor_pos++;
   }
 }
