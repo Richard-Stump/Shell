@@ -89,7 +89,6 @@ char * read_line() {
     }
     else if (ch == 8 && line_length > 0) {
       // <backspace> was typed. Remove previous character read.
-      break;
 
       // Go back one character
       ch = 8;
@@ -104,7 +103,7 @@ char * read_line() {
       write(1,&ch,1);
 
       // Remove one character from buffer
-      line_length--;
+      line_length----;
     }
     else if (ch==27) {
       // Escape sequence. Read two chars more
