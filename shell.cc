@@ -307,7 +307,7 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
   }
 
   //check if the user is trying to look at the root directory
-  if(suffix[0] == '/') {
+  if(prefix.empty() && suffix[0] == '/') {
     prefix = "/";
     suffix = suffix.substr(1);
   }
