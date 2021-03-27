@@ -45,8 +45,8 @@ int mygetc(FILE* f) {
   return ch;
 }
 
-//#undef getc
-//#define getc(f) mygetc(f)
+#undef getc
+#define getc(f) mygetc(f)
 
 %}
 
