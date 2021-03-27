@@ -337,7 +337,7 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
 
   for(int i = 0; i < nameCount; i++) { 
     if(regexec(&regex, nameList[i]->d_name, 0, nullptr, 0) == 0) {
-      recursivelyExpandWildcards(prefix + '/' + nameList[i]->d_name, suffix);
+      recursivelyExpandWildcards(prefix + nameList[i]->d_name, suffix);
     }
 
     free(nameList[i]);
