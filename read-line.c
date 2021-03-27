@@ -17,6 +17,7 @@ extern void tty_reset(void);
 
 // Buffer where line is stored
 int line_length;
+int cursor_pos;
 char line_buffer[MAX_BUFFER_LINE];
 
 // Simple history array
@@ -43,6 +44,18 @@ void read_line_print_usage()
   write(1, usage, strlen(usage));
 }
 
+void go_back(void) {
+  ch = 8; //Go left character
+  write(1,&ch,1);
+}
+
+void go_forward(void) {
+  if(cursor_pos < line_length - 1) {
+    ch = line_buffer[cursor_pos++];
+    write(1, &ch, 1);
+  }
+}
+
 /* 
  * Input a line with some basic editing.
  */
@@ -52,6 +65,7 @@ char * read_line() {
   tty_raw_mode();
 
   line_length = 0;
+  cursor_pos = 0;
 
   // Read one line until enter is typed
   while (1) {
@@ -72,6 +86,7 @@ char * read_line() {
       // add char to buffer.
       line_buffer[line_length]=ch;
       line_length++;
+      cursor_pos++;
     }
     else if (ch==10) {
       // <Enter> was typed. Return line
@@ -87,20 +102,18 @@ char * read_line() {
       line_buffer[0]=0;
       break;
     }
-    else if ((ch == 8 || ch == 127 )&& line_length > 0) {
+    else if ((ch == 8 || ch == 127 ) && line_length > 0) {
       // <backspace> was typed. Remove previous character read.
 
       // Go back one character
-      ch = 8;
-      write(1,&ch,1);
+      go_back();
 
       // Write a space to erase the last character read
       ch = ' ';
       write(1,&ch,1);
 
       // Go back one character
-      ch = 8;
-      write(1,&ch,1);
+      go_back();
 
       // Remove one character from buffer
       line_length--;
@@ -145,6 +158,9 @@ char * read_line() {
 
         // echo line
         write(1, line_buffer, line_length);
+      }
+      if(ch1 == 91 && ch2 == 68) {
+
       }
       
     }
