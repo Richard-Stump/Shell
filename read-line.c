@@ -179,7 +179,15 @@ char * read_line() {
       char ch2;
       read(0, &ch1, 1);
       read(0, &ch2, 1);
-      if (ch1==91 && ch2==65) {
+      if(ch == 91 && ch2==51) {
+        char ch3;
+        read(0, &ch3, 1);
+
+        if(ch3 == 126) {
+          delete();
+        }
+      }
+      else if (ch1==91 && ch2==65) {
         // Up arrow. Print next line in history.
 
         // Erase old line
