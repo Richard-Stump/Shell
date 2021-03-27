@@ -87,7 +87,20 @@ void move_cursor_by(int count) {
 }
 
 void backspace(void) {
-  if(cursor_pos == 0) return;
+  if(cursor_pos == 0) { 
+    return;
+  }
+
+  if(cursor_pos == line_length) {
+    go_back();
+    write_ch(' ');
+    go_back();
+    line_length--;
+    cursor_pos--;
+  }
+  else {
+
+  }
 
   char buff[MAX_BUFFER_LINE];
   
