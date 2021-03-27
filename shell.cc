@@ -311,7 +311,7 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
     suffix = suffix.substr(1);
   }
 
-  std::string component = extractNextComponent(suffix);
+  std::string component = extractNextComponent(prefix, suffix);
 
   printIndent(indent); fprintf(stderr, "Component: \"%s\"\n", component.c_str());
   printIndent(indent); fprintf(stderr, "New Suffix: \"%s\"\n", suffix.c_str());
