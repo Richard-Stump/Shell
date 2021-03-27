@@ -23,6 +23,27 @@ void myunputc(int c) {
 }
 void yyerror(const char * s);
 
+extern "C" char* read_line();
+
+int mygetc(FILE* f) {
+  static char *p;
+  char ch;
+
+  if(!isatty(0)) {
+    return getc(f);
+  }
+
+  if(p == NULL || *p == 0) {
+    char* s = read_line();
+    p = s;
+  }
+
+  ch = *p;
+  p++;
+
+  return ch;
+}
+
 %}
 
 %option noyywrap
