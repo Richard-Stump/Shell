@@ -49,15 +49,11 @@ void write_ch(char ch) {
 }
 
 void go_back(void) {
-  if(cursor_pos > 0) {
-    write_ch(8); //backspace char
-    cursor_pos--;
-  }
+  write_ch(8); //backspace char
 }
 
 void go_forward(void) {
-  if(cursor_pos < line_length - 1)
-    write_ch(line_buffer[cursor_pos++]);
+  write_ch(line_buffer[cursor_pos + 1]);
 }
 
 void backspace(void) {
@@ -65,6 +61,12 @@ void backspace(void) {
   write_ch(' ');
   go_back();
   line_length--;
+  cursor_pos--;
+}
+
+void cursor_left(void) {
+  go_back();
+  cursor_pos--;
 }
 
 /* 
