@@ -116,7 +116,7 @@ void delete(void) {
 }
 
 void home(void) {
-  while(cursor_pos-- > 0) {
+  while(cursor_pos > 0) {
     cursor_left();
   }
 }
