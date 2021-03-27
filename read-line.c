@@ -87,7 +87,7 @@ char * read_line() {
       line_buffer[0]=0;
       break;
     }
-    else if (ch == 8 && line_length > 0) {
+    else if (ch == 8) {
       // <backspace> was typed. Remove previous character read.
 
       // Go back one character
@@ -153,7 +153,7 @@ char * read_line() {
 
   // Add eol and null char at the end of string
   line_buffer[line_length]=10;
-  //line_length++;
+  line_length++;
   line_buffer[line_length]=0;
 
   tty_reset();
