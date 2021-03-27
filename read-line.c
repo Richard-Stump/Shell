@@ -70,20 +70,7 @@ void cursor_right(void) {
 
 
 void backspace(void) {
-  if(cursor_pos == 0) { 
-    return;
-  }
-
-  if(cursor_pos == line_length) {
-    go_back();
-    write_ch(' ');
-    go_back();
-    line_length--;
-    cursor_pos--;
-  }
-  else {
-
-  }
+  
 
   /*
   if(cursor_pos > 0) {
