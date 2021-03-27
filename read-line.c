@@ -89,22 +89,22 @@ char * read_line() {
     }
     else if (ch == 8) {
       // <backspace> was typed. Remove previous character read.
-      if(line_length <= 0) break;
+      if(line_length > 0) {
+        // Go back one character
+        ch = 8;
+        write(1,&ch,1);
 
-      // Go back one character
-      ch = 8;
-      write(1,&ch,1);
+        // Write a space to erase the last character read
+        ch = ' ';
+        write(1,&ch,1);
 
-      // Write a space to erase the last character read
-      ch = ' ';
-      write(1,&ch,1);
+        // Go back one character
+        ch = 8;
+        write(1,&ch,1);
 
-      // Go back one character
-      ch = 8;
-      write(1,&ch,1);
-
-      // Remove one character from buffer
-      line_length--;
+        // Remove one character from buffer
+        line_length--;
+      }
     }
     else if (ch==27) {
       // Escape sequence. Read two chars more
