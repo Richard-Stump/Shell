@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <unistd.h>
-
+z
 #include "shell.hh"
 #include "y.tab.hh"
 
@@ -42,7 +42,7 @@ int mygetc(FILE* f) {
   ch = *p;
   p++;
 
-  return ch;
+  //return ch;
 }
 
 %}
