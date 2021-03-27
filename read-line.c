@@ -84,6 +84,7 @@ void shift_chars_left(void)
   for(int i = 0; i < len; i++)
     write_ch(buff[i]);
 
+  write_ch(' ');
   
 }
 
