@@ -353,7 +353,6 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
   struct dirent** nameList;
   int nameCount = scandir(dir.c_str(), &nameList, NULL, alphasort);
   if(nameCount == -1) {
-    perror("Scandir error");
     indent -= in_plus;
     return;
   }
