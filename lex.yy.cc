@@ -1140,7 +1140,7 @@ YY_RULE_SETUP
 {
   /* Assume that file names have only alpha chars */
   std::string tmp(yytext);
-  tmp = Shell::expandEnvironmentVars(&tmp);
+  tmp = Shell::expandEnvironmentVars(tmp);
 
   yylval.cpp_string = new std::string(tmp);
   return WORD;
