@@ -48,6 +48,11 @@ void write_ch(char ch) {
   write(1, &ch, 1);
 }
 
+void write_str (const char* ch, size_t n)
+{
+  write(1, ch, n);
+}
+
 void go_back(void) {
   write_ch(8); //backspace char
 }
@@ -81,7 +86,6 @@ void move_cursor_by(int count) {
   }
 }
 
-
 void backspace(void) {
   if(cursor_pos == 0) return;
 
@@ -98,6 +102,9 @@ void backspace(void) {
   go_back();
 
   strncpy(start - 1, buff, len + 1);
+  write_str(buff, len + 1);
+
+  write()
 
   cursor_pos--;
   line_length--;
