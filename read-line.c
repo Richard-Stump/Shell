@@ -74,8 +74,8 @@ void cursor_left(void) {
 }
 
 void cursor_right(void) {
-  if(cursor_pos < line_length - 1) {
-    go_forward;
+  if(cursor_pos < line_length) {
+    go_forward();
     cursor_pos++;
   }
 }
