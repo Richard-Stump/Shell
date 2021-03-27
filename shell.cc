@@ -362,7 +362,7 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
     if(regexec(&regex, name, 0, nullptr, 0) == 0) {
       printIndent(indent); fprintf(stderr, "recurse 2\n");
 
-      std::string newPrefix = prefix + name;
+      std::string newPrefix = prefix + "/" +  name;
       printIndent(indent); fprintf(stderr, "New Prefix: \"%s\"\n", newPrefix.c_str());
       if(name[0] == '.' && component[0] == '.') {
         recursivelyExpandWildcards(newPrefix, suffix);
