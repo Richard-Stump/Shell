@@ -121,6 +121,12 @@ void home(void) {
   }
 }
 
+void end(void) {
+  while(cursor_pos < line_length) {
+    cursor_right();
+  }
+}
+
 /* 
  * Input a line with some basic editing.
  */
@@ -177,6 +183,9 @@ char * read_line() {
     }
     else if (ch == 1) {
       home();
+    }
+    else if (ch == 5) {
+      end();
     }
     else if (ch==27) {
       // Escape sequence. Read two chars more
