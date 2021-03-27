@@ -350,8 +350,11 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
   }
 
   for(int i = 0; i < nameCount; i++) { 
-    if(regexec(&regex, nameList[i]->d_name, 0, nullptr, 0) == 0) {
+    const char* name = nameList[i]->d_name;
 
+    if(regexec(&regex, name, 0, nullptr, 0) == 0) {
+      recursivelyExpandWildcards(prefix + '/' + component, suffix);
+/*
       if(nameList[i]->d_name[0] == '.' && path[0] == '.') {
         std::string* arg = new std::string(nameList[i]->d_name);
         Command::_currentSimpleCommand->insertArgument(arg);
@@ -360,6 +363,7 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
         std::string* arg = new std::string(nameList[i]->d_name);
         Command::_currentSimpleCommand->insertArgument(arg);
       }
+      */
     }
 
     free(nameList[i]);
