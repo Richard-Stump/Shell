@@ -273,7 +273,7 @@ std::string Shell::extractNextComponent(std::string& suffix)
   }
   else {
     component = suffix.substr(0, slashIndex);
-    suffix = suffix.substr(slashIndex + 1);
+    suffix = suffix.substr(slashIndex);
   }
 
   return component;
@@ -316,7 +316,7 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
   printIndent(indent); fprintf(stderr, "New Suffix: \"%s\"\n", suffix.c_str());
 
   if(!Shell::pathHasWildcard(component)) {
-    recursivelyExpandWildcards(prefix + "/" + component, suffix);
+    recursivelyExpandWildcards(prefix + component, suffix);
     indent -= in_plus;
     return;
   }
@@ -353,7 +353,7 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
     const char* name = nameList[i]->d_name;
 
     if(regexec(&regex, name, 0, nullptr, 0) == 0) {
-      recursivelyExpandWildcards(prefix + '/' + component, suffix);
+      recursivelyExpandWildcards(prefix + component, suffix);
 /*
       if(nameList[i]->d_name[0] == '.' && path[0] == '.') {
         std::string* arg = new std::string(nameList[i]->d_name);
