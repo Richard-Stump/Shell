@@ -299,10 +299,19 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
     return;
   }
 
+  //check if the user is trying to look at the root directory
+  if(suffix[0] == '/') {
+    prefix = "/";
+    suffix = suffix.substr(1);
+  }
+
   std::string component = extractNextComponent(suffix);
 
   printIndent(indent); fprintf(stderr, "Component: \"%s\"\n", component.c_str());
   
+  //if the component is empty, we know that the user is trying to look at the
+  //home directory, which is the 
+
   indent -= in_plus;
 }
 
