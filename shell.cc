@@ -276,7 +276,7 @@ std::string Shell::extractNextComponent(std::string& suffix)
     suffix = suffix.substr(slashIndex);
   }
 
-  return component
+  return component;
 }
 
 void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix) 
