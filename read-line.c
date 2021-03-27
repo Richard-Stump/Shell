@@ -106,18 +106,13 @@ void backspace(void) {
   else if (cursor_pos > 0) {
     shift_chars_left();
   }
+}
 
-  /*
-  if(cursor_pos > 0) {
-    if(cursor_pos == line_length) {
-      go_back();
-      write_ch(' ');
-      go_back();
-      line_length--;
-      cursor_pos--;
-    }
+void delete(void) {
+  if(cursor_pos != line_length) {
+    cursor_right();
+    backspace();
   }
-  */
 }
 
 /* 
@@ -171,6 +166,9 @@ char * read_line() {
       // <backspace> was typed. Remove previous character read.
       backspace();
     }
+    else if (ch == 4) {
+      delete();
+    }
     else if (ch==27) {
       // Escape sequence. Read two chars more
       //
@@ -212,6 +210,7 @@ char * read_line() {
         // echo line
         write(1, line_buffer, line_length);
       }
+      else if (ch == 91 && ch2)
       else if(ch1 == 91 && ch2 == 68) {
         //go left one char
         cursor_left();
