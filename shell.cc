@@ -280,7 +280,7 @@ std::string Shell::extractNextComponent(std::string& suffix)
 }
 
 bool Shell::pathHasWildcard(std::string& path) {
-  return (path.find('*') == std::string::npos && 
+  return (path.find('*') == std::string::npos || 
           path.find('?') == std::string::npos);
 }
 
@@ -353,7 +353,7 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
     const char* name = nameList[i]->d_name;
 
     if(regexec(&regex, name, 0, nullptr, 0) == 0) {
-      recursivelyExpandWildcards(prefix + component, suffix);
+      recursivelyExpandWildcards(prefix + "/" + d_name, suffix);
 /*
       if(nameList[i]->d_name[0] == '.' && path[0] == '.') {
         std::string* arg = new std::string(nameList[i]->d_name);
