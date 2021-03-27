@@ -53,7 +53,7 @@ void go_back(void) {
 }
 
 void go_forward(void) {
-  write_ch(line_buffer[cursor_pos + 1]);
+  write_ch(line_buffer[cursor_pos]);
 }
 
 void backspace(void) {
