@@ -175,6 +175,7 @@ $\(.*\) { /* Match the subshell */
 [^ \\<>|&\t\n][^ \\<>|&\t\n]* {
   /* Assume that file names have only alpha chars */
   std::string tmp(yytext);
+  tmp = Shell::expandEnvironmentVars(&argument);
 
   yylval.cpp_string = new std::string(tmp);
   return WORD;

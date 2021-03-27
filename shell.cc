@@ -326,7 +326,7 @@ bool Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
     indent -= in_plus;
     return recursivelyExpandWildcards(newPrefix, suffix);;
   }
-
+ 
   std::string regexStr = wildcardToRegex(component);
 
   regex_t regex;

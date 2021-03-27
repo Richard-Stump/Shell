@@ -27,7 +27,6 @@ SimpleCommand::~SimpleCommand() {
 void SimpleCommand::insertArgument( std::string * argument ) {
   // simply add the argument to the vector
   *argument = Shell::expandTilde(*argument);
-  *argument = Shell::expandEnvironmentVars(*argument);
 
   _arguments.push_back(argument);
 }
