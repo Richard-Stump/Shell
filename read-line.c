@@ -104,8 +104,6 @@ void backspace(void) {
   strncpy(start - 1, buff, len + 1);
   write_str(buff, len + 1);
 
-  write()
-
   cursor_pos--;
   line_length--;
 
