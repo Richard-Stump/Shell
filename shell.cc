@@ -261,7 +261,7 @@ static void printIndent(int indent) {
     fprintf(stderr, " ");
 }
 
-std::string Shell::extractNextComponent(std::string& suffix)
+std::string Shell::extractNextComponent(std::string& prefix, std::string& suffix)
 {
   size_t slashIndex = suffix.find('/');
 
@@ -274,6 +274,7 @@ std::string Shell::extractNextComponent(std::string& suffix)
   else {
     component = suffix.substr(0, slashIndex);
     suffix = suffix.substr(slashIndex + 1);
+    prefix += '/';
   }
 
   return component;
@@ -355,7 +356,7 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
 
     if(regexec(&regex, name, 0, nullptr, 0) == 0) {
       printIndent(indent); fprintf(stderr, "recurse 2\n");
-      recursivelyExpandWildcards(prefix + "/" + name, suffix);
+      recursivelyExpandWildcards(prefix + name, suffix);
 /*
       if(nameList[i]->d_name[0] == '.' && path[0] == '.') {
         std::string* arg = new std::string(nameList[i]->d_name);
