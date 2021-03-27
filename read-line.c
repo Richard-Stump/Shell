@@ -88,12 +88,15 @@ void shift_chars_left(void)
 
   for(size_t i = 0; i <= len; i++) {
     cursor_left();
-    line_length--;
   }
+
+  line_length--;
 }
 
 void backspace(void) {
-  if(cursor_pos == 0) return;
+  if(cursor_pos == 0) 
+    return;
+
   if(cursor_pos == line_length) {
     cursor_left();
     write_ch(' ');
