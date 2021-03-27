@@ -42,7 +42,7 @@ int mygetc(FILE* f) {
   ch = *p;
   p++;
 
-  //return ch;
+  return ' ';// ch;
 }
 
 %}
