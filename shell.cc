@@ -267,7 +267,7 @@ std::string Shell::extractNextComponent(std::string& suffix)
 
   std::string component;
 
-  if(slashIndex = std::string::npos) {
+  if(slashIndex == std::string::npos) {
     component = suffix;
     suffix = "";
   }
