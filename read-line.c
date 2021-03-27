@@ -45,13 +45,13 @@ void read_line_print_usage()
 }
 
 void go_back(void) {
-  ch = 8; //Go left character
+  char ch = 8; //Go left character
   write(1,&ch,1);
 }
 
 void go_forward(void) {
   if(cursor_pos < line_length - 1) {
-    ch = line_buffer[cursor_pos++];
+    char ch = line_buffer[cursor_pos++];
     write(1, &ch, 1);
   }
 }
