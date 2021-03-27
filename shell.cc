@@ -320,9 +320,9 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
   //printIndent(indent); fprintf(stderr, "New Suffix: \"%s\"\n", suffix.c_str());
 
   if(!Shell::pathHasWildcard(component)) {
-    std::string newPrefix = prefix + component;
-    //printIndent(indent); fprintf(stderr, "New Prefix: \"%s\"\n", newPrefix.c_str());
-      //printIndent(indent); fprintf(stderr, "recurse 1\n");
+    std::string newPrefix = prefix + extraChar + component;
+    printIndent(indent); fprintf(stderr, "New Prefix: \"%s\"\n", newPrefix.c_str());
+      printIndent(indent); fprintf(stderr, "recurse 1\n");
     recursivelyExpandWildcards(newPrefix, suffix);
     indent -= in_plus;
     return;
