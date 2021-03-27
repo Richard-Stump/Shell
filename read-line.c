@@ -115,6 +115,12 @@ void delete(void) {
   }
 }
 
+void home(void) {
+  while(cursor_pos-- > 0) {
+    cursor_left();
+  }
+}
+
 /* 
  * Input a line with some basic editing.
  */
@@ -168,6 +174,9 @@ char * read_line() {
     }
     else if (ch == 4) {
       delete();
+    }
+    else if (ch == 1) {
+      home();
     }
     else if (ch==27) {
       // Escape sequence. Read two chars more
