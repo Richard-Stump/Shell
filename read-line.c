@@ -170,7 +170,6 @@ char * read_line() {
       delete();
     }
     else if (ch==27) {
-    write(1, "escape!\n", 8);
       // Escape sequence. Read two chars more
       //
       // HINT: Use the program "keyboard-example" to
@@ -180,6 +179,7 @@ char * read_line() {
       char ch2;
       read(0, &ch1, 1);
       read(0, &ch2, 1);
+      printf("ESC[%c,%c\n", ch1, ch2);
       if(ch == 91 && ch2==51) {
         delete();
         char ch3;
