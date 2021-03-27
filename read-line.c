@@ -170,6 +170,7 @@ char * read_line() {
       delete();
     }
     else if (ch==27) {
+    write(1, "escape!\n", 8);
       // Escape sequence. Read two chars more
       //
       // HINT: Use the program "keyboard-example" to
