@@ -263,7 +263,7 @@ static void printIndent(int indent) {
 
 std::string Shell::extractNextComponent(std::string& suffix)
 {
-  int slashIndex = suffix.find('/');
+  size_t slashIndex = suffix.find('/');
 
   std::string component;
 
