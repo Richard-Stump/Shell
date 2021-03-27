@@ -46,6 +46,14 @@ void read_line_print_usage()
 
 void write_ch(char ch) {
   write(1, &ch, 1);
+  
+  line_buffer[cursor_pos] = ch;
+
+  if(cursor_pos == line_length) {
+    line_length++;
+  }
+
+  cursor_pos++;
 }
 
 void write_str (const char* ch, size_t n)
@@ -135,17 +143,18 @@ char * read_line() {
 
     if (ch>=32 && ch != 127) {
       // It is a printable character. 
+      write_ch(ch);
 
       // Do echo
-      write(1,&ch,1);
+      //write(1,&ch,1);
 
       // If max number of character reached return.
       if (line_length==MAX_BUFFER_LINE-2) break; 
 
       // add char to buffer.
-      line_buffer[line_length]=ch;
-      line_length++;
-      cursor_pos++;
+      //line_buffer[line_length]=ch;
+      //line_length++;
+      //cursor_pos++;
     }
     else if (ch==10) {
       // <Enter> was typed. Return line
