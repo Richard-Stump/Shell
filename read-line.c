@@ -202,6 +202,16 @@ char * read_line() {
         char ch3;
         read(0, &ch3, 1);
       }
+      else if (ch1 == 91 && ch2 == 49) {
+        home();
+        char ch3;
+        read(0, &ch3, 1);
+      }
+      else if (ch1 == 91 && ch2 == 52) {
+        end();
+        char ch3;
+        read(0, &ch3, 1);
+      }
       else if (ch1==91 && ch2==65) {
         // Up arrow. Print next line in history.
 
