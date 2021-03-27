@@ -44,16 +44,25 @@ void read_line_print_usage()
   write(1, usage, strlen(usage));
 }
 
+void write_ch(char c) {
+  write(1, &ch, 1);
+}
+
 void go_back(void) {
-  char ch = 8; //Go left character
-  write(1,&ch,1);
+  if(cursor_pos > 0)
+    write_ch(8); //backspace char
 }
 
 void go_forward(void) {
-  if(cursor_pos < line_length - 1) {
-    char ch = line_buffer[cursor_pos++];
-    write(1, &ch, 1);
-  }
+  if(cursor_pos < line_length - 1)
+    write_ch(line_buffer[cursor_pos++]);
+}
+
+void backspace(void) {
+  go_back();
+  write_ch(' ');
+  go_back();
+  line_length--;
 }
 
 /* 
@@ -104,19 +113,7 @@ char * read_line() {
     }
     else if ((ch == 8 || ch == 127 ) && line_length > 0) {
       // <backspace> was typed. Remove previous character read.
-      char ch;
-      // Go back one character
-      go_back();
-
-      // Write a space to erase the last character read
-      ch = ' ';
-      write(1,&ch,1);
-
-      // Go back one character
-      go_back();
-
-      // Remove one character from buffer
-      line_length--;
+      backspace();
     }
     else if (ch==27) {
       // Escape sequence. Read two chars more
