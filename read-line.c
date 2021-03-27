@@ -96,7 +96,7 @@ void backspace(void) {
     line_length--;
   } 
   else if (cursor_pos > 0) {
-
+    shift_chars_left();
   }
 
   /*
