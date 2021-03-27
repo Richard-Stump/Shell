@@ -273,7 +273,7 @@ std::string Shell::extractNextComponent(std::string& suffix)
   }
   else {
     component = suffix.substr(0, slashIndex);
-    suffix = suffix.substr(slashIndex);
+    suffix = suffix.substr(slashIndex + 1);
   }
 
   return component;
