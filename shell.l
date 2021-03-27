@@ -12,6 +12,7 @@
 #include <cstring>
 #include <stdio.h>
 #include <iostream>
+#include <unistd.h>
 
 #include "shell.hh"
 #include "y.tab.hh"
