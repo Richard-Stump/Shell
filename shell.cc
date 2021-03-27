@@ -358,7 +358,7 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
     if(regexec(&regex, name, 0, nullptr, 0) == 0) {
       printIndent(indent); fprintf(stderr, "recurse 2\n");
 
-      if(name[0] == '.' && component[0] == ".") {
+      if(name[0] == '.' && component[0] == '.') {
         recursivelyExpandWildcards(prefix + name, suffix);
       }
       else if(name[0] != '.') {
