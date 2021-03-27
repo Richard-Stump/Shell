@@ -166,7 +166,7 @@ char * read_line() {
       }
       if(ch1 == 91 && ch2 == 68) {
         //go left one char
-        go_back();
+        cursor_left();
       }
       
     }
