@@ -74,6 +74,7 @@ void cursor_right(void) {
 
 
 void backspace(void) {
+  if(cursor_pos == 0) return;
   if(cursor_pos == line_length) {
     cursor_left();
     write_ch(' ');
