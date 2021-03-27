@@ -392,7 +392,7 @@ void Shell::expandWildcards(std::string& path)
     return;
   }
 
-  if!(Shell::recursivelyExpandWildcards("", path)) {
+  if(!Shell::recursivelyExpandWildcards("", path)) {
     Command::_currentSimpleCommand->insertArgument(&path);
   }
   return;
