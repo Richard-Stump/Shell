@@ -89,6 +89,7 @@ char * read_line() {
     }
     else if (ch == 8) {
       // <backspace> was typed. Remove previous character read.
+      if(line_length < 0) break;;
 
       // Go back one character
       ch = 8;
