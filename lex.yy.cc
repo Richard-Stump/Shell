@@ -1140,6 +1140,7 @@ YY_RULE_SETUP
 {
   /* Assume that file names have only alpha chars */
   std::string tmp(yytext);
+  tmp = Shell::expandEnvironmentVars(&argument);
 
   yylval.cpp_string = new std::string(tmp);
   return WORD;
@@ -1147,10 +1148,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 182 "shell.l"
+#line 183 "shell.l"
 ECHO;
 	YY_BREAK
-#line 1154 "lex.yy.cc"
+#line 1155 "lex.yy.cc"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2165,4 +2166,4 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 182 "shell.l"
+#line 183 "shell.l"
