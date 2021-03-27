@@ -81,35 +81,25 @@ void move_cursor_by(int count) {
   }
 }
 
-void moveCursorTo(int pos)
-{
-  if(pos < cursor_pos) {
-    while(cursor_pos != pos) {
-      cursor_right();
-    }
-  }
-  else if (pos > cursor_pos) {
-    while(cursor_pos != pos) {
-      cursor_left();
-    }
-  }
-}
-
-void shiftCharsLeft(int start, int end, int dist) {
-  int old_pos = cursor_pos;
-
-  moveCursorTo(start);
-
-  for(int i = start; i <= end; i++) {
-    int ch = line_buffer[cursor_pos];
-    move_cursor_by(-dist);
-    line_buffer[cursor_pos] = i
-  }
-
-  moveCursorTo(old_pos);
-}
 
 void backspace(void) {
+  char buff[MAX_BUFFER_LINE];
+  
+  char* start = line_buffer + cursor_pos;
+  size_t len = line_length - cursor_pos;
+
+  strncpy(buff, start, len);
+
+  go_back();
+  write_ch(' ');
+  go_back();
+
+  strncpy(start - 1, buff, len);
+
+  cursor_pos--;
+  line_length--;
+
+  /*
   if(cursor_pos > 0) {
     if(cursor_pos == line_length) {
       go_back();
@@ -118,8 +108,8 @@ void backspace(void) {
       line_length--;
       cursor_pos--;
     }
-
   }
+  */
 }
 
 /* 
