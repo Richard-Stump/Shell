@@ -263,8 +263,6 @@ static void printIndent(int indent) {
 
 std::string Shell::extractNextComponent(std::string& prefix, std::string& suffix)
 {
-  char* extraChar = prefix.empty() ? "" : "/";
-
   std::string component;
 
   if(slashIndex == std::string::npos) {
@@ -288,7 +286,7 @@ bool Shell::pathHasWildcard(std::string& path) {
 
 void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix) 
 {
-  bool addExtraSlash = !prefix.empty();
+  const char* extraChar = prefix.empty() ? "" : "/";
 
   static int indent = 0; const int in_plus = 2;
   printIndent(indent); fprintf(stderr, "recursivelyExpandWildcards:\n");
