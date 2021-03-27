@@ -357,7 +357,13 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
 
     if(regexec(&regex, name, 0, nullptr, 0) == 0) {
       printIndent(indent); fprintf(stderr, "recurse 2\n");
-      recursivelyExpandWildcards(prefix + name, suffix);
+
+      if(name[0] == '.' && component[0] == ".") {
+        recursivelyExpandWildcards(prefix + name, suffix);
+      }
+      else if(name[0] != '.') {
+        recursivelyExpandWildcards(prefix + name, suffix);
+      }
 /*
       if(nameList[i]->d_name[0] == '.' && path[0] == '.') {
         std::string* arg = new std::string(nameList[i]->d_name);
