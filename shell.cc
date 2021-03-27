@@ -331,7 +331,7 @@ void Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
   
   //If there is an error compiling the regex
   if(code != 0) {
-    get the compilation error string and put it into a buffer
+    //get the compilation error string and put it into a buffer
     char errbuff[128]; errbuff[127] = '\0';
     regerror(code, &regex, errbuff, 127);
     
