@@ -566,7 +566,6 @@ int main(int argc, const char** argv) {
 
   Shell::prompt();
   yyparse();
-
 }
 
 int Shell::argc = 0;

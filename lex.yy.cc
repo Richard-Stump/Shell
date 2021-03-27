@@ -652,8 +652,8 @@ int mygetc(FILE* f) {
   return ch;
 }
 
-//#undef getc
-//#define getc(f) mygetc(f)
+#undef getc
+#define getc(f) mygetc(f)
 
 #line 659 "lex.yy.cc"
 /* State for including source files */

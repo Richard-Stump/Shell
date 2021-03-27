@@ -13,6 +13,7 @@
 #define MAX_BUFFER_LINE 2048
 
 extern void tty_raw_mode(void);
+extern void tty_reset(void);
 
 // Buffer where line is stored
 int line_length;
@@ -115,35 +116,35 @@ char * read_line() {
       read(0, &ch1, 1);
       read(0, &ch2, 1);
       if (ch1==91 && ch2==65) {
-	// Up arrow. Print next line in history.
+        // Up arrow. Print next line in history.
 
-	// Erase old line
-	// Print backspaces
-	int i = 0;
-	for (i =0; i < line_length; i++) {
-	  ch = 8;
-	  write(1,&ch,1);
-	}
+        // Erase old line
+        // Print backspaces
+        int i = 0;
+        for (i =0; i < line_length; i++) {
+          ch = 8;
+          write(1,&ch,1);
+        }
 
-	// Print spaces on top
-	for (i =0; i < line_length; i++) {
-	  ch = ' ';
-	  write(1,&ch,1);
-	}
+        // Print spaces on top
+        for (i =0; i < line_length; i++) {
+          ch = ' ';
+          write(1,&ch,1);
+        }
 
-	// Print backspaces
-	for (i =0; i < line_length; i++) {
-	  ch = 8;
-	  write(1,&ch,1);
-	}	
+        // Print backspaces
+        for (i =0; i < line_length; i++) {
+          ch = 8;
+          write(1,&ch,1);
+        }	
 
-	// Copy line from history
-	strcpy(line_buffer, history[history_index]);
-	line_length = strlen(line_buffer);
-	history_index=(history_index+1)%history_length;
+        // Copy line from history
+        strcpy(line_buffer, history[history_index]);
+        line_length = strlen(line_buffer);
+        history_index=(history_index+1)%history_length;
 
-	// echo line
-	write(1, line_buffer, line_length);
+        // echo line
+        write(1, line_buffer, line_length);
       }
       
     }
@@ -154,6 +155,8 @@ char * read_line() {
   line_buffer[line_length]=10;
   line_length++;
   line_buffer[line_length]=0;
+
+  tty_reset();
 
   return line_buffer;
 }
