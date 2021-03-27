@@ -57,16 +57,20 @@ void go_forward(void) {
 }
 
 void backspace(void) {
-  go_back();
-  write_ch(' ');
-  go_back();
-  line_length--;
-  cursor_pos--;
+  if(cursor_pos > 0) {
+    go_back();
+    write_ch(' ');
+    go_back();
+    line_length--;
+    cursor_pos--;
+  }
 }
 
 void cursor_left(void) {
-  go_back();
-  cursor_pos--;
+  if(cursor_pos > 0) {
+    go_back();
+    cursor_pos--;
+  }
 }
 
 /* 
