@@ -74,7 +74,7 @@ int SimpleCommand::execute(int fdIn, int fdOut, int fdErr)
     }
   }
   else if (pid < 0) {
-    perror("fork error\n");
+    perror("fork error");
     _exit(1);
   }
   else {
@@ -90,7 +90,7 @@ void SimpleCommand::executeNormal()
 
   execvp(argv[0], argv);
 
-  perror("execvp error\n");
+  perror("execvp error");
   _exit(1);
 }
 
