@@ -75,8 +75,8 @@ void d_print_history_list(void)
   printf("History List\n  ");
   line_t* rover = cur_line;
   while(rover != NULL) {
-    for(int i = 0; i < rover->line_length; i++) {
-      printf("%c", rover->line[i]);
+    for(int i = 0; i < rover->length; i++) {
+      printf("%c", rover->text[i]);
     }
 
     rover = rover->next;
