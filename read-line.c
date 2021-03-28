@@ -122,7 +122,7 @@ void backup_cur_line(void) {
 }
 
 void restore_backup(void) {
-  strncpy(cur_line.text, backup.text, cur_line.length);
+  strncpy(cur_line.text, backup.text, backup.length);
   cur_line.length = backup.length;
   backup.length = 0;
 }
