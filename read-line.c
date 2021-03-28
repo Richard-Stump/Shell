@@ -73,16 +73,20 @@ void init_history(void) {
   history_initialized = true;
 }
 
-void new_history_line(void) {
+void push_cur_history_line(void) {
   line_t* new_line = malloc(sizeof(line_t));
-  new_line->length = 0;
+  new_line->next = line_list_head;
   new_line->prev = NULL;
+  new_line->length = cur_line.length;
+
+  strncpy(new_line->text, cur_line.text, cur_line.length);
 
   if(line_list_head == NULL) {
-
+    line_list_head = new_line
   }
   else {
-
+    line_list_head->prev = new_line;
+    line_list_head = new_line;
   }
 }
 
@@ -118,11 +122,8 @@ void read_line_print_usage()
 
 void write_ch(char ch) {
   write(1, & ch, 1);
-  //line_buffer[cursor_pos] = ch;
   cur_line.text[cursor_pos] = ch;
 
-  //if(cursor_pos == line_length)
-  //  line_length++;
   
   if(cursor_pos == cur_line.length)
     cur_line.length++;
@@ -142,38 +143,12 @@ void cursor_left(void) {
 }
 
 void cursor_right(void) {
-  //if(cursor_pos < line_length) {
-  //  echo_ch(line_buffer[cursor_pos]);
-  //  cursor_pos++;
-  //}
   if(cursor_pos < cur_line.length) {
     echo_ch(cur_line.text[cursor_pos]);
     cursor_pos++;
   }
 }
 
-/*
-void shift_chars_left(void)
-{
-  char buff[MAX_BUFFER_LINE];
-  char* start = line_buffer + cursor_pos;
-  size_t len = line_length - cursor_pos;
-
-  strncpy(buff, start, line_length);
-
-  cursor_left();
-  for(size_t i = 0; i < len; i++)
-    write_ch(buff[i]);
-
-  write_ch(' ');
-
-  for(size_t i = 0; i <= len; i++) {
-    cursor_left();
-  }
-
-  line_length--;
-}
-*/
 void shift_chars_left(void) {
   char buff[MAX_BUFFER_LINE];
   char* start = cur_line.text + cursor_pos;
@@ -192,22 +167,6 @@ void shift_chars_left(void) {
 
   line_length--;
 }
-/*
-void backspace(void) {
-  if(cursor_pos == 0) 
-    return;
-
-  if(cursor_pos == line_length) {
-    cursor_left();
-    write_ch(' ');
-    cursor_left();
-    line_length--;
-  } 
-  else if (cursor_pos > 0) {
-    shift_chars_left();
-  }
-}
-*/
 
 void backspace(void) {
   if(cursor_pos == 0) return;
@@ -222,14 +181,6 @@ void backspace(void) {
     shift_chars_left();
   }
 }
-/*
-void delete(void) {
-  if(cursor_pos != line_length) {
-    cursor_right();
-    backspace();
-  }
-}
-*/
 
 void delete(void) {
   if(cursor_pos != cur_line.length) {
@@ -260,7 +211,7 @@ char * read_line() {
   // Set terminal in raw mode
   tty_raw_mode();
 
-  line_length = 0;
+  cur_line.length = 0;
   cursor_pos = 0;
 
   // Read one line until enter is typed
@@ -387,6 +338,8 @@ char * read_line() {
   line_length++;
   line_buffer[line_length]=0;
   */
+
+  push_cur_history_line();
 
   cur_line.text[line_length] = 10;
   cur_line.length++;
