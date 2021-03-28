@@ -56,6 +56,7 @@ void lex_main(void)
     yyparse();
     yyrestart(stdin);
   }
+  yyparse();
 }
 
 %}

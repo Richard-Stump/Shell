@@ -661,7 +661,7 @@ void lex_main(void)
   if(src) {
     yy_scan_string("source .shellrc\n");
     yyparse();
-    yyrestart(yyin);
+    yyrestart(stdin);
   }
 }
 
