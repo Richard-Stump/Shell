@@ -63,6 +63,7 @@ line_t* cur_list_el = NULL;     //The current element the user is looking at
 line_t cur_line;                //The current line that is being edited
                                 //cur_list_el gets copied into this so that
                                 //history is not overwritten
+line_t backup;
 bool history_initialized = false;
 
 void init_history(void) {
@@ -111,8 +112,21 @@ void copy_line_to_current(line_t* src) {
   }
 }
 
+void backup_cur_line(void) {
+  strncpy(backup.text, cur_line.text, cur_line.length);
+  backup.length = cur_line.text;
+}
+
+void restore_backup(void) {
+  strncpy(cur_line.text, backup.text, cur_line.length);
+  cur_line.length = backup.length;
+  backup.length = 0;
+}
+
 void select_next_history_entry(void) {
   if(cur_list_el == NULL) {
+    backup_cur_line();
+
     cur_list_el = line_list_head;
   }
   else if(cur_list_el->next != NULL) {
@@ -134,7 +148,7 @@ void select_prev_history_entry(void) {
   }
 
   if(cur_list_el == NULL) {
-    return;
+    restore_backup();
   }
 
   copy_line_to_current(cur_list_el);
