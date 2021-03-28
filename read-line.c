@@ -245,7 +245,7 @@ char * read_line() {
       }
       else if (ch1==91 && ch2==65) {
         // Up arrow. Print next line in history.
-
+      /*
         // Erase old line
         // Print backspaces
         int i = 0;
@@ -273,6 +273,7 @@ char * read_line() {
 
         // echo line
         write(1, line_buffer, line_length);
+        */
       }
       else if(ch1 == 91 && ch2 == 68) {
         //go left one char
