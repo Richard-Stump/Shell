@@ -491,6 +491,8 @@ void Shell::executeSubshell(std::string* command, std::string* output,
 }
 
 void doSubstitution(std::string* command, std::string* output) {
+  *output = "";
+
   char templateName[] = "temp_fifoXXXXXX";
   char* tempName = mkdtemp((char*)templateName);
   if(tempName == NULL) {
@@ -531,7 +533,6 @@ void doSubstitution(std::string* command, std::string* output) {
     return;
   }
   else {
-    
     //write the given command and an exit statement to the child process
     write(fdPipe[1], command->c_str(), command->size());
     write(fdPipe[1], "\nquit\n", strlen("\nquit\n"));
@@ -539,7 +540,11 @@ void doSubstitution(std::string* command, std::string* output) {
     close(fdPipe[0]);
     close(fdPipe[1]);
     close(fdFifo); 
+
+    *output = tempName;
   }
+
+
 }
 
 void lex_main(void);
