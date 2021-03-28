@@ -148,7 +148,7 @@ void select_prev_history_entry(void) {
     return;
   }
   else if (cur_list_el->prev == NULL) {
-    restore_backup();
+    copy_line_to_current(&backup);
     cur_list_el = NULL;
   }
   else {
