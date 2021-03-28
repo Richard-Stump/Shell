@@ -37,7 +37,7 @@ void Shell::prompt() {
     if(promptValue.empty()) {
       char workingDir[PATH_MAX];
       getcwd(workingDir, PATH_MAX);
-      workingDir[PATH_MAX - 1] = NULL;
+      workingDir[PATH_MAX - 1] = '\0';
       promptValue = workingDir;
     }
 
