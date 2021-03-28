@@ -45,18 +45,18 @@ history_t* history_head = NULL;
 history_t* history_tail = NULL;
 
 void push_current_line() {
-  history_t* cur_history = malloc(sizeof(history_t));
-  strncpy(cur_history->line, line_buffer, line_length);
-  cur_history->next = history_head;
-  cur_history->prev = NULL;
+  history_t* new_history = malloc(sizeof(history_t));
+  strncpy(new_history->line, line_buffer, line_length);
+  new_history->next = history_head;
+  new_history->prev = NULL;
 
   if (history_head == NULL) {
-    history_head = cur_history;
-    history_tail = cur_history;
+    history_head = new_history;
+    history_tail = new_history;
   }
   else {
-    history_head->prev = cur_history;
-    history_head = cur_history;
+    history_head->prev = new_history;
+    history_head = new_history;
   }
 
   history_length++;
