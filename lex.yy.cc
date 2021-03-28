@@ -966,7 +966,7 @@ YY_RULE_SETUP
   /* throw an error if the file doesn't exist */
   if(!inFile) {
     yyerror("Could not open source file\n");
-    return NEWLINE;
+    return error;
   }
 
   yypush_buffer_state(yy_create_buffer(inFile, YY_BUF_SIZE));

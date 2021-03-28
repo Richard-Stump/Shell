@@ -66,12 +66,13 @@ source BEGIN(incl); /* string that signifies an include */
   /* throw an error if the file doesn't exist */
   if(!inFile) {
     yyerror("Could not open source file\n");
-    return error;
+  }
+  else {
+    yypush_buffer_state(yy_create_buffer(inFile, YY_BUF_SIZE));
+
+    BEGIN(INITIAL);
   }
 
-  yypush_buffer_state(yy_create_buffer(inFile, YY_BUF_SIZE));
-
-  BEGIN(INITIAL);
 }
 <<EOF>> {
   /* after the current source file is consumed, pop it from the stack */
