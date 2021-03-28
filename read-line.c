@@ -341,9 +341,9 @@ char * read_line() {
 
   push_cur_history_line();
 
-  cur_line.text[line_length] = 10;
+  cur_line.text[cur_line.length] = 10;
   cur_line.length++;
-  cur_line.text[line_length] = 0;
+  cur_line.text[cur_line.length] = 0;
 
   tty_reset();
 
