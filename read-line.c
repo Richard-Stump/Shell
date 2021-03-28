@@ -45,43 +45,35 @@ void echo_ch(char ch);
 //=============================================================
 //                   Line history
 // Command history is stored in a linked list. The head of the
-// list is the most recent command, and the tail is the first
-// command entered. 
+// list is the command that the user is currently inputting,
+// and the last one in the list is the first command the user
+// ever typed.
 //=============================================================
 
-typedef struct history_s {
-  struct history_s* next;
-  struct history_s* prev;
-  size_t            line_length;
-  char              line[MAX_BUFFER_LINE];
-} history_t;
+typedef struct line_s {
+  struct line_s*  next;
+  struct line_s*  prev;
+  size_t          length;
+  char            text[MAX_BUFFER_LINE];
+} line_t;
 
-history_t* history_head = NULL; //head of the history list
-history_t* history_tail = NULL; //tail of the history list
-history_t* cur_history = NULL;  //the current history_t being showed, or NULL
-                                //for the input of a new command
+line_t* cur_line;
+bool history_initialized = false;
 
-void push_current_line(void) {
-  history_t* new_history = malloc(sizeof(history_t));
-  strncpy(new_history->line, line_buffer, line_length);
-  new_history->line_length = line_length;
-  new_history->next = history_head;
-  new_history->prev = NULL;
 
-  if (history_head == NULL) {
-    history_head = new_history;
-    history_tail = new_history;
-  }
-  else {
-    history_head->prev = new_history;
-    history_head = new_history;
-  }
+void init_history(void) {
+  history_head = malloc(sizeof(line_t));
+  history_head->next = NULL;
+  history_head->prev = NULL;
+  history_head->length = 0;
+
+  bool history_initialized = true;
 }
 
 void d_print_history_list(void)
 {
   printf("History List\n  ");
-  history_t* rover = history_head;
+  line_t* rover = cur_line;
   while(rover != NULL) {
     for(int i = 0; i < rover->line_length; i++) {
       printf("%c", rover->line[i]);
@@ -90,41 +82,6 @@ void d_print_history_list(void)
     rover = rover->next;
     printf("\n  ");
   }
-}
-
-void show_next_history(void)
-{
-  size_t old_length;
-
-  if(cur_history == NULL) {
-    cur_history = history_head;
-    old_length = line_length;
-  }
-  else if(cur_history->next != NULL) {
-    old_length = cur_history->line_length;
-    cur_history = cur_history->next;
-  }
-  else {
-    return;
-  }
-
-  //go to the start of the line
-  for(int i = cursor_pos; i > 0; i--) {
-    cursor_left();
-  }
-  //write the text for the new command to show
-  for(int i = 0; i < cur_history->line_length; i++) {
-    echo_ch(cur_history->line[i]);
-  }
-  //write spaces for the rest of the line
-  for(int i = cur_history->line_length; i < old_length; i++) {
-    echo_ch(' ');
-  }
-  for(int i = cur_history->line_length; i < old_length; i++) {
-    echo_ch(8);
-  }
-
-  cursor_pos = cur_history->line_length;
 }
 
 //=============================================================
@@ -230,6 +187,8 @@ void end(void) {
  * Input a line with some basic editing.
  */
 char * read_line() {
+  if(!history_initialized)
+    init_history();
 
   // Set terminal in raw mode
   tty_raw_mode();
