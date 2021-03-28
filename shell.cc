@@ -34,15 +34,18 @@ void Shell::prompt() {
     std::string promptName = "PROMPT";
     std::string promptValue = getEnv(promptName);
 
+    //if the environment variable doesn't exist, print the current working
+    //directory
     if(promptValue.empty()) {
       char workingDir[PATH_MAX];
       getcwd(workingDir, PATH_MAX);
       workingDir[PATH_MAX - 1] = '\0';
-      promptValue = workingDir;
+      printf("\033[91m%s>\033[0m", workingDir);
+    }
+    else {
+      printf("\033[91m%s\033[0m", promptValue.c_str());
     }
 
-    //You can have any prompt color, so long as it's green
-    printf("\033[32m%s>\033[0m", promptValue.c_str());
     fflush(stdout);
   }
 }
