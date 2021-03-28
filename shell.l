@@ -54,7 +54,7 @@ void loadRcFile(void)
   if(src) {
     yypush_buffer_state(yy_create_buffer(src, YY_BUF_SIZE));
     yyparse();
-    yyrestart();
+    yyrestart(NULL);
   }
 }
 
