@@ -513,6 +513,11 @@ void Shell::doSubstitution(std::string* command, std::string* output) {
   }
 
   int fdFifo = open(tempName , 0700);
+  if(fdFifo < 0) {
+    perror("Could not open fifo");
+    return;
+  }
+
   int pid = fork();
 
   if(pid == 0) {
