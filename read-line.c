@@ -121,6 +121,7 @@ void backup_cur_line(void) {
 void select_next_history_entry(void) {
   //if the user is not viewing any history
   if(line_list_head == NULL) {
+    echo_ch(7); // bell
     return;
   }
   if(cur_list_el == NULL) {
@@ -131,6 +132,7 @@ void select_next_history_entry(void) {
     cur_list_el = cur_list_el->next;
   }
   else {
+    echo_ch(7); // bell
     return;
   }
 
@@ -142,6 +144,7 @@ void select_next_history_entry(void) {
  */
 void select_prev_history_entry(void) {
   if(cur_list_el == NULL) { //if the user is not looking at the history
+    echo_ch(7); // bell
     return;
   }
   else if (cur_list_el->prev == NULL) { //if the user is looking a the most 
