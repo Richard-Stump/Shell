@@ -93,8 +93,9 @@ void copy_line_to_current(line_t* src) {
   strncpy(cur_line.text, src->text, src->length);
   cur_line.length = src->length;
 
-  for(int i = 0; i < cur_line.length; i++) {
+  while(cursor_pos > 0) {
     echo_ch(8);
+    cursor_pos--;
   }
 
   for(int i = 0; i < cur_line.length; i++) {
