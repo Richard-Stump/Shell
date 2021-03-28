@@ -101,15 +101,14 @@ void show_next_history(void)
 
   if(cur_history == NULL) {
     cur_history = history_head;
-    cur_length = line_length;
   }
   else if(cur_history->next != NULL) {
-    cur_length = cur_history->line_length;
     cur_history = cur_history->next;
   }
   else {
     return;
   }
+  cur_length = cur_history->line_length;
 
   //clear the current line
   for(int i = cursor_pos; i > 0; i--) {
