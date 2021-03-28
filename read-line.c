@@ -56,7 +56,6 @@ typedef struct history_s {
   char              line[MAX_BUFFER_LINE];
 } history_t;
 
-size_t history_length = 0;
 history_t* history_head = NULL; //head of the history list
 history_t* history_tail = NULL; //tail of the history list
 history_t* cur_history = NULL;  //the current history_t being showed, or NULL
@@ -77,8 +76,6 @@ void push_current_line(void) {
     history_head->prev = new_history;
     history_head = new_history;
   }
-
-  history_length++;
 }
 
 void d_print_history_list(void)
@@ -97,29 +94,31 @@ void d_print_history_list(void)
 
 void show_next_history(void)
 {
-  size_t cur_length;
+  size_t old_length;
 
   if(cur_history == NULL) {
     cur_history = history_head;
+    old_length = line_length;
   }
   else if(cur_history->next != NULL) {
+    old_length = cur_history->line_length;
     cur_history = cur_history->next;
   }
   else {
     return;
   }
 
-  cur_length = cur_history->line_length;
-
-  //clear the current line
+  //go to the start of the line
   for(int i = cursor_pos; i > 0; i--) {
     cursor_left();
   }
-  for(int i = 0; i < cur_length; i++) {
+  //write the text for the new command to show
+  for(int i = 0; i < cur_history->line_length; i++) {
     echo_ch(cur_history->line[i]);
   }
-  for(int i = 0; i < cur_length; i++) {
-    echo_ch(8);
+  //write spaces for the rest of the line
+  for(int i = cur_history->line_length; i < old_length; i++) {
+    echo_ch(' ');
   }
 }
 
