@@ -93,7 +93,7 @@ void push_cur_history_line(void) {
 void d_print_history_list(void)
 {
   printf("History List\n  ");
-  line_t* rover = cur_line;
+  line_t* rover = line_list_head;
   while(rover != NULL) {
     for(int i = 0; i < rover->length; i++) {
       printf("%c", rover->text[i]);
