@@ -203,9 +203,6 @@ void insert_ch(char ch) {
     for(int i = start; i < old_len; i++) {
       write_ch(buff[i]);
     }
-    for(int i = start; i < old_len; i++) {
-      echo_ch(8);
-    }
   }
 }
 
