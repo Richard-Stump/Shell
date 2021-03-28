@@ -120,6 +120,9 @@ void backup_cur_line(void) {
  */
 void select_next_history_entry(void) {
   //if the user is not viewing any history
+  if(line_list_head == NULL) {
+    return;
+  }
   if(cur_list_el == NULL) {
     backup_cur_line();  
     cur_list_el = line_list_head;
@@ -134,8 +137,8 @@ void select_next_history_entry(void) {
   copy_line_to_current(cur_list_el);
 }
 
-/* Selects the next line in the history list. This line is copied to the editing
- * buffer and is displayed for the user.
+/* Selects the previous line in the history list. This line is copied to the 
+ * editing buffer and is displayed for the user.
  */
 void select_prev_history_entry(void) {
   if(cur_list_el == NULL) { //if the user is not looking at the history
