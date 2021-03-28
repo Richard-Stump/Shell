@@ -193,16 +193,17 @@ void insert_ch(char ch) {
   }
   else {
     int old_len = cur_line.length;
+    int start = cursor_pos;
 
     char buff[MAX_BUFFER_LINE];
     strncpy(buff, cur_line.text, cur_line.length);
 
     write_ch(ch);
 
-    for(int i = cursor_pos - 1; i < old_len; i++) {
+    for(int i = start; i < old_len; i++) {
       write_ch(buff[i]);
     }
-    for(int i = cursor_pos - 1; i < old_len; i++) {
+    for(int i = start; i < old_len; i++) {
       echo_ch(8);
     }
   }
