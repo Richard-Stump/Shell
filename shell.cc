@@ -488,7 +488,7 @@ void Shell::executeSubshell(std::string* command, std::string* output,
 }
 
 void getSubstitutionName(std::string* command) {
-  char tempName[] = "sub_tmpXXXXXX";
+  char tempName[14] = "sub_tmpXXXXXX";
   char* tempName = mkdtemp(tempName);
 }
 
