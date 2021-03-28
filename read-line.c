@@ -61,7 +61,6 @@ typedef struct line_s {
 line_t* cur_line;                 //Head of the history list
 bool history_initialized = false; //whether or not history has been initialized
 
-
 void init_history(void) {
   cur_line = malloc(sizeof(line_t));
   cur_line->next = NULL;
@@ -69,6 +68,20 @@ void init_history(void) {
   cur_line->length = 0;
 
   bool history_initialized = true;
+}
+
+void new_history_line(void) {
+  
+
+  if(cur_line == NULL) {
+    cur_line = malloc(sizeof(line_t));
+    cur_line->next = NULL;
+    cur_line->prev = NULL;
+    cur_line->length = 0;
+  }
+  else {
+
+  }
 }
 
 void d_print_history_list(void)
