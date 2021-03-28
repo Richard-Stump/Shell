@@ -89,9 +89,17 @@ void push_cur_history_line(void) {
   }
 }
 
-void copy_line_buffer(line_t* dst, line_t* src) {
-  dst->length = src->length;
-  strncpy(dst->text, src->text, src->length);
+void copy_line_to_current(line_t* src) {
+  strncpy(cur_line.text, src->text, src->length);
+  cur_line.length = src->length;
+
+  for(int i = 0; i < cur_line.length; i++) {
+    echo_ch(8);
+  }
+
+  for(int i = 0 i < cur_line.length; i++) {
+    echo_ch(cur_line.text[i]);
+  }
 }
 
 void select_next_history_entry(void) {
