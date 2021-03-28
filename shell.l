@@ -26,13 +26,6 @@ void yyerror(const char * s);
 
 extern "C" char* read_line();
 
-void loadShellrc(void) {
-  FILE* inFile = fopen(".shellrc", "r");
-  if(inFile) {
-    yypush_buffer_state(yy_create_buffer(inFile, YY_BUF_SIZE));
-  }
-}
-
 int mygetc(FILE* f) {
   static char *p;
   char ch;

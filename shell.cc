@@ -533,8 +533,6 @@ void Shell::executeSubshell(std::string* command, std::string* output,
   }
 }
 
-void loadShellrc(void);
-
 int main(int argc, const char** argv) {
   Shell::argc = argc;
   Shell::argv = argv;
@@ -560,10 +558,6 @@ int main(int argc, const char** argv) {
     perror("Could not set SIGCHILD handler");
     exit(2);
   }
-
-  loadShellrc();
-
-  Shell::prompt();
 
   yyparse();
 }
