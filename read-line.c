@@ -120,6 +120,11 @@ void show_next_history(void)
   for(int i = cur_history->line_length; i < old_length; i++) {
     echo_ch(' ');
   }
+  for(int i = cur_history->line_length; i < old_length; i++) {
+    echo_ch(8);
+  }
+
+  cursor_pos = cur_history->line_length;
 }
 
 //=============================================================
