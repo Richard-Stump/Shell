@@ -66,9 +66,9 @@ line_t cur_line;                //The current line that is being edited
 bool history_initialized = false;
 
 void init_history(void) {
-  cur_line->next = NULL;
-  cur_line->prev = NULL;
-  cur_line->length = 0;
+  cur_line.next = NULL;
+  cur_line.prev = NULL;
+  cur_line.length = 0;
   
   history_initialized = true;
 }
@@ -119,13 +119,13 @@ void read_line_print_usage()
 void write_ch(char ch) {
   write(1, & ch, 1);
   //line_buffer[cursor_pos] = ch;
-  cur_line->text[cursor_pos] = ch;
+  cur_line.text[cursor_pos] = ch;
 
   //if(cursor_pos == line_length)
   //  line_length++;
   
-  if(cursor_pos == cur_line->length)
-    cur_line->length++;
+  if(cursor_pos == cur_line.length)
+    cur_line.length++;
 
   cursor_pos++;
 }
@@ -146,8 +146,8 @@ void cursor_right(void) {
   //  echo_ch(line_buffer[cursor_pos]);
   //  cursor_pos++;
   //}
-  if(cursor_pos < cur_line->length) {
-    echo_ch(cur_line->text[cursor_pos]);
+  if(cursor_pos < cur_line.length) {
+    echo_ch(cur_line.text[cursor_pos]);
     cursor_pos++;
   }
 }
@@ -176,10 +176,10 @@ void shift_chars_left(void)
 */
 void shift_chars_left(void) {
   char buff[MAX_BUFFER_LINE];
-  char* start = cur_line->text + cursor_pos;
-  size_t len = cur_line->length - cursor_pos;
+  char* start = cur_line.text + cursor_pos;
+  size_t len = cur_line.length - cursor_pos;
 
-  strncpy(buff, start, cur_line->length);
+  strncpy(buff, start, cur_line.length);
 
   cursor_left();
   for(size_t i = 0; i < len; i++)
@@ -212,11 +212,11 @@ void backspace(void) {
 void backspace(void) {
   if(cursor_pos == 0) return;
 
-  if(cursor_pos == cur_line->length) {
+  if(cursor_pos == cur_line.length) {
     cursor_left();
     write_ch(' ');
     cursor_left();
-    cur_line->length--;
+    cur_line.length--;
   }
   else if (cursor_pos > 0) {
     shift_chars_left();
@@ -232,7 +232,7 @@ void delete(void) {
 */
 
 void delete(void) {
-  if(cursor_pos != cur_line->length) {
+  if(cursor_pos != cur_line.length) {
     cursor_right();
     backspace();
   }
@@ -245,7 +245,7 @@ void home(void) {
 }
 
 void end(void) {
-  while(cursor_pos < cur_line->length) {
+  while(cursor_pos < cur_line.length) {
     cursor_right();
   }
 }
@@ -278,7 +278,7 @@ char * read_line() {
       //write(1,&ch,1);
 
       // If max number of character reached return.
-      if (cur_line->length==MAX_BUFFER_LINE-2) break; 
+      if (cur_line.length==MAX_BUFFER_LINE-2) break; 
 
       // add char to buffer.
       //line_buffer[line_length]=ch;
@@ -296,7 +296,7 @@ char * read_line() {
     else if (ch == 31) {
       // ctrl-?
       read_line_print_usage();
-      cur_line->buffer[0]=0;
+      cur_line.buffer[0]=0;
       break;
     }
     else if (ch == 8 || ch == 127) {
@@ -388,12 +388,12 @@ char * read_line() {
   line_buffer[line_length]=0;
   */
 
-  cur_line->text[line_length] = 10;
-  cur_line->length++;
-  cur_line->text[line_length] = 0;
+  cur_line.text[line_length] = 10;
+  cur_line.length++;
+  cur_line.text[line_length] = 0;
 
   tty_reset();
 
-  return cur_line->text;
+  return cur_line.text;
 }
 
