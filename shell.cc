@@ -513,7 +513,7 @@ void Shell::doSubstitution(std::string* command, std::string* output) {
   }
 
 
-  int fdFifo = open(fifoPath , 0700);
+  int fdFifo = open(fifoPath , O_RDONLY);
   if(fdFifo < 0) {
     perror("Could not open fifo");
     return;
