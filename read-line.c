@@ -296,7 +296,7 @@ char * read_line() {
     else if (ch == 31) {
       // ctrl-?
       read_line_print_usage();
-      cur_line.buffer[0]=0;
+      cur_line.text[0]=0;
       break;
     }
     else if (ch == 8 || ch == 127) {
