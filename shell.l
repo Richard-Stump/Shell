@@ -52,9 +52,7 @@ void loadRcFile(void)
 {
   FILE* src = fopen(".shellrc", "r");
   if(src) {
-    yypush_buffer_state(yy_create_buffer(src, YY_BUF_SIZE));
-    yyparse();
-    yyrestart(NULL);
+    yy_scan_string("source .shellrc");
   }
 }
 
