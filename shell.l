@@ -53,11 +53,12 @@ void lex_main(void)
   FILE* src = fopen(".shellrc", "r");
   if(src) {
     yy_scan_string("source .shellrc\n");
-  Shell::promptEnabled = true;
     yyparse();
     yyrestart(stdin);
     fclose(src);
   }
+  Shell::promptEnabled = true;
+  Shell::prompt();
   yyparse();
 }
 
