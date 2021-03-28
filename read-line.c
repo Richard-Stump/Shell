@@ -315,8 +315,6 @@ char * read_line() {
 
   }
 
-  push_current_line();
-
   // Add eol and null char at the end of string
   line_buffer[line_length]=10;
   line_length++;
