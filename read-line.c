@@ -340,7 +340,7 @@ char * read_line() {
         // Up arrow. Print next line in history.
         select_next_history_entry();
       }
-      else if (ch1 = 91 && ch2 == 66) {
+      else if (ch1 == 91 && ch2 == 66) {
         //down arrow
         select_prev_history_entry();
       }
