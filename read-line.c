@@ -90,16 +90,14 @@ void push_cur_history_line(void) {
 }
 
 void copy_line_to_current(line_t* src) {
-  strncpy(cur_line.text, src->text, src->length);
   cur_line.length = src->length;
 
   while(cursor_pos > 0) {
-    echo_ch(8);
-    cursor_pos--;
+    cursor_left();
   }
 
-  for(int i = 0; i < cur_line.length; i++) {
-    echo_ch(cur_line.text[i]);
+  for(int i = 0; i < src->length; i++) {
+    write_ch(src->text[i]);
   }
 }
 
