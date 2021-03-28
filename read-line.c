@@ -129,7 +129,7 @@ void select_prev_history_entry(void) {
   if(cur_list_el == NULL) {
     return;
   }
-  else if (cur_list_el->prev == NULL) {
+  else {
     cur_list_el = cur_list_el->prev;
   }
 
