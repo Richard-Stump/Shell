@@ -58,15 +58,15 @@ typedef struct line_s {
   char            text[MAX_BUFFER_LINE];
 } line_t;
 
-line_t* cur_line;
-bool history_initialized = false;
+line_t* cur_line;                 //Head of the history list
+bool history_initialized = false; //whether or not history has been initialized
 
 
 void init_history(void) {
-  history_head = malloc(sizeof(line_t));
-  history_head->next = NULL;
-  history_head->prev = NULL;
-  history_head->length = 0;
+  cur_line = malloc(sizeof(line_t));
+  cur_line->next = NULL;
+  cur_line->prev = NULL;
+  cur_line->length = 0;
 
   bool history_initialized = true;
 }
