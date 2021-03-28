@@ -560,6 +560,9 @@ int main(int argc, const char** argv) {
   }
 
   Shell::prompt();
+
+  
+
   yyparse();
 }
 
