@@ -114,7 +114,7 @@ void copy_line_to_current(line_t* src) {
 
 void backup_cur_line(void) {
   strncpy(backup.text, cur_line.text, cur_line.length);
-  backup.length = cur_line.text;
+  backup.length = cur_line.length;
 }
 
 void restore_backup(void) {
