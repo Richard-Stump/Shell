@@ -101,8 +101,12 @@ source BEGIN(incl); /* string that signifies an include */
   std::string str(yytext);
   str = str.substr(2, str.length() - 2 - 1);
 
-  
+  std::string fileName;
 
+  Shell::doSubstitution(str, &fileName);
+
+  yylval.cpp_string = fileName;
+  return WORD;
 }
 
 $\(.*\) { /* Match the subshell */
