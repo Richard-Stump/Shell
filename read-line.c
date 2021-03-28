@@ -54,7 +54,7 @@ void echo_ch(char ch);
 typedef struct line_s {
   struct line_s*  next;
   struct line_s*  prev;
-  size_t          length;
+  int             length;
   char            text[MAX_BUFFER_LINE];
 } line_t;
 
@@ -82,7 +82,7 @@ void push_cur_history_line(void) {
   strncpy(new_line->text, cur_line.text, cur_line.length);
 
   if(line_list_head == NULL) {
-    line_list_head = new_line
+    line_list_head = new_line;
   }
   else {
     line_list_head->prev = new_line;
