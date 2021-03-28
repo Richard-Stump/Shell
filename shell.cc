@@ -8,6 +8,7 @@
 #include <signal.h>
 #include <sys/wait.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <linux/limits.h>
 #include <pwd.h>
 #include <regex.h>
