@@ -371,6 +371,8 @@ bool Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
     free(nameList[i]);
   }
 
+  free(nameList);
+
   regfree(&regex);
   return foundMatch;
 }
