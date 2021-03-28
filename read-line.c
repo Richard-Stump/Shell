@@ -13,29 +13,12 @@
 
 #define MAX_BUFFER_LINE 2048
 
+//forward declarations from tty-raw-mode.c
 extern void tty_raw_mode(void);
 extern void tty_reset(void);
 
-// Buffer where line is stored
-int line_length;
+// Position of the cursor in the buffer
 int cursor_pos;
-char line_buffer[MAX_BUFFER_LINE];
-
-// Simple history array
-// This history does not change. 
-// Yours have to be updated.
-/*
-int history_index = 0;
-char * history [] = {
-  "ls -al | grep x", 
-  "ps -e",
-  "cat read-line-example.c",
-  "vi hello.c",
-  "make",
-  "ls -al | grep xxx | grep yyy"
-};
-int history_length = sizeof(history)/sizeof(char *);
-*/
 
 //forward declarations
 void cursor_right(void);
@@ -46,11 +29,13 @@ void write_ch(char ch);
 //=============================================================
 //                   Line history
 // Command history is stored in a linked list. The head of the
-// list is the command that the user is currently inputting,
-// and the last one in the list is the first command the user
-// ever typed.
+// list is the most recent line entered. The tail is the first
+// line entered. When history items are selected, they are
+// copied into the current line buffer so that the history
+// doesn't get thrashed when the user edits a history line.
 //=============================================================
 
+// linked list node for the history_list
 typedef struct line_s {
   struct line_s*  next;
   struct line_s*  prev;
@@ -66,6 +51,7 @@ line_t cur_line;                //The current line that is being edited
 line_t backup;
 bool history_initialized = false;
 
+//initializes the current line buffer and backup buffer
 void init_history(void) {
   cur_line.next = NULL;
   cur_line.prev = NULL;
@@ -95,19 +81,26 @@ void push_cur_history_line(void) {
   }
 }
 
+/* copies the src line into the current editing buffer, and writes the output
+ * to the terminal for the user to see.
+ */
 void copy_line_to_current(line_t* src) {
-  int old_len = cur_line.length;
+  int old_len = cur_line.length; //save the old length
 
   cur_line.length = src->length;
 
+  //go to the beginning of the line
   while(cursor_pos > 0) {
     cursor_left();
   }
 
+  //write the new line to the terminal and buffer
   for(int i = 0; i < src->length; i++) {
     write_ch(src->text[i]);
   }
 
+  //if the old line is longer than the new one, overwrite those characters
+  //with spaces, and return the cursor to the end of the line.
   for(int i = src->length; i < old_len; i++) {
     echo_ch(' ');
   }
@@ -116,24 +109,22 @@ void copy_line_to_current(line_t* src) {
   }
 }
 
+/* creates a backup of the current line the user is editing */
 void backup_cur_line(void) {
   strncpy(backup.text, cur_line.text, cur_line.length);
   backup.length = cur_line.length;
 }
 
-void restore_backup(void) {
-  strncpy(cur_line.text, backup.text, backup.length);
-  cur_line.length = backup.length;
-  backup.length = 0;
-}
-
+/* selects the next line in the history list. This new line is copied to the
+ * editing buffer, and the new line is displayed
+ */
 void select_next_history_entry(void) {
+  //if the user is not viewing any history
   if(cur_list_el == NULL) {
-    backup_cur_line();
-
+    backup_cur_line();  
     cur_list_el = line_list_head;
   }
-  else if(cur_list_el->next != NULL) {
+  else if(cur_list_el->next != NULL) { //if there is more history
     cur_list_el = cur_list_el->next;
   }
   else {
@@ -143,33 +134,22 @@ void select_next_history_entry(void) {
   copy_line_to_current(cur_list_el);
 }
 
+/* Selects the next line in the history list. This line is copied to the editing
+ * buffer and is displayed for the user.
+ */
 void select_prev_history_entry(void) {
-  if(cur_list_el == NULL) {
+  if(cur_list_el == NULL) { //if the user is not looking at the history
     return;
   }
-  else if (cur_list_el->prev == NULL) {
-    copy_line_to_current(&backup);
-    cur_list_el = NULL;
+  else if (cur_list_el->prev == NULL) { //if the user is looking a the most 
+    copy_line_to_current(&backup);      //recent item, restore the backup
+    cur_list_el = NULL; 
   }
-  else {
-    cur_list_el = cur_list_el->prev;
+  else {                                //Select the next newest command
+    cur_list_el = cur_list_el->prev;  
     copy_line_to_current(cur_list_el);
   }
 
-}
-
-void d_print_history_list(void)
-{
-  printf("History List\n  ");
-  line_t* rover = line_list_head;
-  while(rover != NULL) {
-    for(int i = 0; i < rover->length; i++) {
-      printf("%c", rover->text[i]);
-    }
-
-    rover = rover->next;
-    printf("\n  ");
-  }
 }
 
 //=============================================================
@@ -193,21 +173,42 @@ void read_line_print_usage()
   write(1, usage, strlen(usage));
 }
 
+/* write a character to the terminal and the current line's buffer */
 void write_ch(char ch) {
   write(1, & ch, 1);
   cur_line.text[cursor_pos] = ch;
 
-  
   if(cursor_pos == cur_line.length)
     cur_line.length++;
 
   cursor_pos++;
 }
 
+/* insert a charcter between the characters to the left and the right of the
+ * cursor position
+ */
+void insert_ch(char ch) {
+  if(cursor_pos == cur_line.length) {
+    write_ch(ch);
+  }
+  else {
+    char buff[MAX_BUFFER_LINE];
+    strncpy(buff, cur_line.text, cur_line.length);
+
+    write_ch(ch);
+
+    for(int i = cursor_pos - 1; i < cur_line.length; i++) {
+      write_ch(buff[i]);
+    }
+  }
+}
+
+/* write a character just to the terminal */
 void echo_ch(char ch) {
   write(1, &ch, 1);
 }
 
+/* move the cursor to the left one character, if possible */
 void cursor_left(void) {
   if(cursor_pos > 0) {
     echo_ch(8);
@@ -215,6 +216,7 @@ void cursor_left(void) {
   }
 }
 
+/* move the cursor to the right one character, if possible */
 void cursor_right(void) {
   if(cursor_pos < cur_line.length) {
     echo_ch(cur_line.text[cursor_pos]);
@@ -222,28 +224,38 @@ void cursor_right(void) {
   }
 }
 
+/* shifts the characters after the cursor one character to the left */
 void shift_chars_left(void) {
   char buff[MAX_BUFFER_LINE];
   char* start = cur_line.text + cursor_pos;
   size_t len = cur_line.length - cursor_pos;
 
+  //backup the buffer
   strncpy(buff, start, cur_line.length);
 
+  //rewrite the buffer backup one character to the left
   cursor_left();
   for(size_t i = 0; i < len; i++)
     write_ch(buff[i]);
 
+  //overwrite the last character in old line
   write_ch(' ');
 
+  //return the cursor the previous position
   for(size_t i = 0; i <= len; i++)
     cursor_left();
 
   cur_line.length--;
 }
 
+/* deletes the character before the cursor. */
 void backspace(void) {
+  //it is not possible to backspace the first character in the line
   if(cursor_pos == 0) return;
 
+  //if the cursor is at the end of the line, overwrite the last character with
+  //a space and decrement the cursor. Else, shift the characters after the
+  //left by one character
   if(cursor_pos == cur_line.length) {
     cursor_left();
     write_ch(' ');
@@ -255,6 +267,7 @@ void backspace(void) {
   }
 }
 
+/* deletes the character to the right of the cursor, if possible */
 void delete(void) {
   if(cursor_pos != cur_line.length) {
     cursor_right();
@@ -262,21 +275,26 @@ void delete(void) {
   }
 }
 
+/* returns the cursor to the beginning of the line */
 void home(void) {
   while(cursor_pos > 0) {
     cursor_left();
   }
 }
 
+/* returns the cursor to the end of the line */
 void end(void) {
   while(cursor_pos < cur_line.length) {
     cursor_right();
   }
 }
 
-/* 
- * Input a line with some basic editing.
- */
+//=============================================================
+//                Line Editor Main Loop
+// Loops until the user presses enter, or reach the maximum 
+// line length. Special characters are read for the line
+// editor functions.
+//=============================================================
 char * read_line() {
   if(!history_initialized)
     init_history();
@@ -298,23 +316,14 @@ char * read_line() {
 
     if (ch>=32 && ch != 127) {
       // It is a printable character. 
-      write_ch(ch);
-
-      // Do echo
-      //write(1,&ch,1);
+      //write_ch(ch);
+      insert_ch(ch);
 
       // If max number of character reached return.
       if (cur_line.length==MAX_BUFFER_LINE-2) break; 
-
-      // add char to buffer.
-      //line_buffer[line_length]=ch;
-      //line_length++;
-      //cursor_pos++;
     }
     else if (ch==10) {
-      // <Enter> was typed. Return line
-      
-      // Print newline
+      // <Enter> was typed. Return line and print a newline
       write(1,&ch,1);
 
       break;
@@ -325,74 +334,62 @@ char * read_line() {
       cur_line.text[0]=0;
       break;
     }
-    else if (ch == 8 || ch == 127) {
+    else if (ch == 8 || ch == 127) { // ctrl-H or backspace key
       // <backspace> was typed. Remove previous character read.
       backspace();
     }
-    else if (ch == 4) {
+    else if (ch == 4) { // ctrl-D was pressed
       delete();
     }
-    else if (ch == 1) {
+    else if (ch == 1) { // ctrl-A was pressed
       home();
     }
-    else if (ch == 5) {
+    else if (ch == 5) { // ctrl-E was pressed
       end();
     }
     else if (ch==27) {
       // Escape sequence. Read two chars more
-      //
-      // HINT: Use the program "keyboard-example" to
-      // see the ascii code for the different chars typed.
-      //
       char ch1; 
       char ch2;
       read(0, &ch1, 1);
       read(0, &ch2, 1);
-      if(ch1 == 91 && ch2==51) {
+
+      if(ch1 == 91 && ch2==51) { //delete key was pressed
         delete();
-        char ch3;
+        char ch3;         //eat the tilde that follows this key
         read(0, &ch3, 1);
       }
-      else if (ch1 == 91 && ch2 == 49) {
+      else if (ch1 == 91 && ch2 == 49) { //home key was pressed
         home();
-        char ch3;
+        char ch3;         //eat the tilde
         read(0, &ch3, 1);
       }
-      else if (ch1 == 91 && ch2 == 52) {
+      else if (ch1 == 91 && ch2 == 52) { //end key was pressed
         end();
-        char ch3;
+        char ch3;         //eat the tilde
         read(0, &ch3, 1);
       }
-      else if (ch1==91 && ch2==65) {
-        // Up arrow. Print next line in history.
+      else if (ch1==91 && ch2==65) { //up arrow
         select_next_history_entry();
       }
-      else if (ch1 == 91 && ch2 == 66) {
-        //down arrow
+      else if (ch1 == 91 && ch2 == 66) { //down arrow
         select_prev_history_entry();
       }
-      else if(ch1 == 91 && ch2 == 68) {
-        //go left one char
+      else if(ch1 == 91 && ch2 == 68) { //left arrow
         cursor_left();
       }
-      else if (ch1 == 91 && ch2 == 67) {
+      else if (ch1 == 91 && ch2 == 67) { // right arrow
         cursor_right();
       }
-      
     }
 
   }
-
-  // Add eol and null char at the end of string
-  /*
-  line_buffer[line_length]=10;
-  line_length++;
-  line_buffer[line_length]=0;
-  */
-
+  
+  //push the line into the history, unless it is empty
   if(cur_line.length > 0)
     push_cur_history_line();
 
+  // Add eol and null char at the end of string
   cur_line.text[cur_line.length] = 10;
   cur_line.length++;
   cur_line.text[cur_line.length] = 0;
