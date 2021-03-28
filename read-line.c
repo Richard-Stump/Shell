@@ -37,9 +37,22 @@ char * history [] = {
 int history_length = sizeof(history)/sizeof(char *);
 */
 
+//forward declarations
+void cursor_right(void);
+void cursor_left(void);
+void echo_ch(char ch);
+
+//=============================================================
+//                   Line history
+// Command history is stored in a linked list. The head of the
+// list is the most recent command, and the tail is the first
+// command entered. 
+//=============================================================
+
 typedef struct history_s {
   struct history_s* next;
   struct history_s* prev;
+  size_t            line_length;
   char              line[MAX_BUFFER_LINE];
 } history_t;
 
@@ -47,9 +60,10 @@ size_t history_length = 0;
 history_t* history_head = NULL;
 history_t* history_tail = NULL;
 
-void push_current_line() {
+void push_current_line(void) {
   history_t* new_history = malloc(sizeof(history_t));
   strncpy(new_history->line, line_buffer, line_length);
+  new_history->line_length = line_length;
   new_history->next = history_head;
   new_history->prev = NULL;
 
@@ -64,6 +78,42 @@ void push_current_line() {
 
   history_length++;
 }
+
+history_t* cur_history = NULL;
+
+void show_next_history(void)
+{
+  size_t cur_length;
+
+  if(cur_history == NULL) {
+    cur_history = history_head;
+    cur_length = line_length;
+  }
+  else if(cur_history->next != NULL) {
+    cur_length = cur_history->line_length;
+    cur_history = cur_history->next;
+  }
+  else {
+    return;
+  }
+
+  //clear the current line
+  for(int i = cursor_pos; i > 0; i--) {
+    cursor_left();
+  }
+  for(int i = 0; i < cur_length; i++) {
+    echo_ch(' ');
+  }
+  for(int i = 0; i < cur_length; i++) {
+    echo_ch(8);
+  }
+}
+
+//=============================================================
+//                Line Editor Functions
+// These functions handle the different commands for the line
+// editor such as backspace, del, etc. 
+//=============================================================
 
 void read_line_print_usage()
 {
@@ -245,6 +295,7 @@ char * read_line() {
       }
       else if (ch1==91 && ch2==65) {
         // Up arrow. Print next line in history.
+        show_next_history();
       /*
         // Erase old line
         // Print backspaces
