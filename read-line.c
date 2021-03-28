@@ -41,6 +41,7 @@ int history_length = sizeof(history)/sizeof(char *);
 void cursor_right(void);
 void cursor_left(void);
 void echo_ch(char ch);
+void write_ch(char ch);
 
 //=============================================================
 //                   Line history
