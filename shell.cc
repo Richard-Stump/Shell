@@ -524,7 +524,7 @@ void Shell::doSubstitution(std::string* command, std::string* output) {
     perror("pipe error");
     return;
   }
-
+  *output = fifoPath;
 }
 
 void lex_main(void);
