@@ -53,6 +53,8 @@ struct Shell {
   static std::string lastArg;
   static int _lastBackPid;
 
+  static bool promptEnabled;
+
 protected:
   static std::string wildcardToRegex(std::string wildcard);
   static bool recursivelyExpandWildcards(std::string prefix, 

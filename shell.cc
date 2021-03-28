@@ -30,7 +30,7 @@ std::vector<const char*> exitMessages = {
 
 //display a small prompt of the directory the user is in
 void Shell::prompt() {
-  if( isatty(0) ) {
+  if( isatty(0) && promptEnabled) {
     std::string promptName = "PROMPT";
     std::string promptValue = getEnv(promptName);
 
@@ -575,3 +575,5 @@ std::vector<FinalCommand> Shell::_finalCommands;
 
 int Shell::_lastRet = -1;
 int Shell::_lastBackRet = -1;
+
+bool Shell::promptEnabled = false;
