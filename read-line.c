@@ -133,7 +133,11 @@ void select_prev_history_entry(void) {
     cur_list_el = cur_list_el->prev;
   }
 
+  if(cur_list_el == NULL) {
+    return;
+  }
 
+  copy_line_to_current(cur_list_el);
 }
 
 void d_print_history_list(void)
