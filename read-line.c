@@ -116,7 +116,7 @@ void show_next_history(void)
     cursor_left();
   }
   for(int i = 0; i < cur_length; i++) {
-    echo_ch(cur_history[i]);
+    echo_ch(cur_history->line[i]);
   }
   for(int i = 0; i < cur_length; i++) {
     echo_ch(8);
