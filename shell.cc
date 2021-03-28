@@ -533,6 +533,8 @@ void Shell::executeSubshell(std::string* command, std::string* output,
   }
 }
 
+void loadRcFile(void);
+
 int main(int argc, const char** argv) {
   Shell::argc = argc;
   Shell::argv = argv;
@@ -559,6 +561,7 @@ int main(int argc, const char** argv) {
     exit(2);
   }
 
+  void loadRcFile(void);
   yyparse();
 }
 
