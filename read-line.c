@@ -34,6 +34,34 @@ char * history [] = {
 };
 int history_length = sizeof(history)/sizeof(char *);
 
+typedef struct history_s {
+  struct history_s* next;
+  struct history_s* prev;
+  char              line[MAX_BUFFER_LINE];
+} history_t;
+
+size_t history_length = 0;
+history_t* history_head = NULL;
+history_t* history_tail = NULL;
+
+void push_current_line() {
+  history_t* cur_history = malloc(sizeof(history_t));
+  strncpy(cur_history->line, line_buffer, line_length);
+  cur_history->next = history_head;
+  cur_history->prev = NULL;
+
+  if (history_head == NULL) {
+    history_head = cur_history;
+    history_tail = cur_history;
+  }
+  else {
+    history_head->prev = cur_history;
+    history_head = cur_history;
+  }
+
+  history_length++;
+}
+
 void read_line_print_usage()
 {
   char * usage = "\n"
@@ -254,6 +282,8 @@ char * read_line() {
     }
 
   }
+
+  push_current_line();
 
   // Add eol and null char at the end of string
   line_buffer[line_length]=10;
