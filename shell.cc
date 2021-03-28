@@ -119,7 +119,7 @@ std::string Shell::trimWhitespace(std::string& str)
   std::string output("");
 
   //trim the leading whitespace
-  for(int i = 0; i < str.length(); i++) {
+  for(int i = 0; i < (int)str.length(); i++) {
     if(str[i] != ' ' && str[i] != '\t') {
       output = str.substr(i, str.length() - i);
       break;
