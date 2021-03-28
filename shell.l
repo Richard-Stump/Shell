@@ -73,7 +73,6 @@ source BEGIN(incl); /* string that signifies an include */
 
     BEGIN(INITIAL);
   }
-
 }
 <<EOF>> {
   /* after the current source file is consumed, pop it from the stack */

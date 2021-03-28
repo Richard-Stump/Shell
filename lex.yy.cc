@@ -966,6 +966,7 @@ YY_RULE_SETUP
   /* throw an error if the file doesn't exist */
   if(!inFile) {
     yyerror("Could not open source file\n");
+    BEGIN(INITIAL);
   }
   else {
     yypush_buffer_state(yy_create_buffer(inFile, YY_BUF_SIZE));
@@ -977,7 +978,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(incl):
-#line 77 "shell.l"
+#line 78 "shell.l"
 {
   /* after the current source file is consumed, pop it from the stack */
   yypop_buffer_state();
@@ -988,7 +989,7 @@ case YY_STATE_EOF(incl):
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 85 "shell.l"
+#line 86 "shell.l"
 { /* Match the subshell */
   //obtain the actual command from the matched string
   std::string str(yytext);
@@ -1006,7 +1007,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 100 "shell.l"
+#line 101 "shell.l"
 { /* Match the subshell 2, electric boogaloo*/
   //obtain the actual command from the matched string
   std::string str(yytext);
@@ -1024,7 +1025,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 115 "shell.l"
+#line 116 "shell.l"
 { /* commands to exit */
   Shell::exit();
 }
@@ -1032,91 +1033,91 @@ YY_RULE_SETUP
 case 7:
 /* rule 7 can match eol */
 YY_RULE_SETUP
-#line 119 "shell.l"
+#line 120 "shell.l"
 {
   return NEWLINE;
 }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 123 "shell.l"
+#line 124 "shell.l"
 {
   /* Discard spaces and tabs */
 }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 127 "shell.l"
+#line 128 "shell.l"
 {
   return GREAT;
 }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 131 "shell.l"
+#line 132 "shell.l"
 {
   return LESS;
 }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 135 "shell.l"
+#line 136 "shell.l"
 {
   return AMPGREAT;
 }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 139 "shell.l"
+#line 140 "shell.l"
 {
   return TWOGREAT;
 }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 143 "shell.l"
+#line 144 "shell.l"
 {
   return TWOGREATGREAT;
 }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 147 "shell.l"
+#line 148 "shell.l"
 {
   return AMPGREATGREAT;
 }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 151 "shell.l"
+#line 152 "shell.l"
 {
   return GREATGREAT;
 }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 155 "shell.l"
+#line 156 "shell.l"
 {
   return PIPE;
 }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 159 "shell.l"
+#line 160 "shell.l"
 {
   return AMPERSAND;
 }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 163 "shell.l"
+#line 164 "shell.l"
 {
   return AMPGREAT;
 }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 167 "shell.l"
+#line 168 "shell.l"
 { /* match any string that has an escape sequence in it */
   std::string arg(yytext);
 
@@ -1138,7 +1139,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 186 "shell.l"
+#line 187 "shell.l"
 {
   std::string arg(yytext);
   yylval.cpp_string = new std::string(arg.substr(1, arg.size() - 2));
@@ -1147,7 +1148,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 192 "shell.l"
+#line 193 "shell.l"
 {
   yylval.cpp_string = new std::string(yytext);
   return BUILTIN_PARENT;
@@ -1155,7 +1156,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 197 "shell.l"
+#line 198 "shell.l"
 {
   yylval.cpp_string = new std::string(yytext);
   return BUILTIN_CHILD;
@@ -1163,7 +1164,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 202 "shell.l"
+#line 203 "shell.l"
 {
   /* Assume that file names have only alpha chars */
   std::string tmp(yytext);
@@ -1175,10 +1176,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 210 "shell.l"
+#line 211 "shell.l"
 ECHO;
 	YY_BREAK
-#line 1182 "lex.yy.cc"
+#line 1183 "lex.yy.cc"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2193,4 +2194,4 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 210 "shell.l"
+#line 211 "shell.l"

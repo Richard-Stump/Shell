@@ -560,8 +560,11 @@ int main(int argc, const char** argv) {
   }
 
   Shell::prompt();
-
   
+  FILE* inFile = fopen(".shellrc", "r");
+  if(inFile) {
+    yypush_buffer_state(yy_create_buffer(inFile, YY_BUF_SIZE));
+  }
 
   yyparse();
 }
