@@ -512,12 +512,12 @@ void Shell::doSubstitution(std::string* command, std::string* output) {
     return;
   }
 
-  int fdFifo = open(fifoPath , O_RDWR);
+  int fdFifo = open(fifoPath , O_WRONLY);
   if(fdFifo < 0) {
     perror("Could not open fifo");
     return;
   }
-  
+
   int fdPipe[2];
   if(pipe(fdPipe) < 0) {
     perror("pipe error");
