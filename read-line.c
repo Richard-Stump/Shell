@@ -385,7 +385,8 @@ char * read_line() {
   line_buffer[line_length]=0;
   */
 
-  push_cur_history_line();
+  if(cur_line->length > 0)
+    push_cur_history_line();
 
   cur_line.text[cur_line.length] = 10;
   cur_line.length++;
