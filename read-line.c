@@ -153,6 +153,7 @@ void select_prev_history_entry(void) {
 
   if(cur_list_el == NULL) {
     restore_backup();
+    return;
   }
 
   copy_line_to_current(cur_list_el);
