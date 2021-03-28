@@ -58,26 +58,28 @@ typedef struct line_s {
   char            text[MAX_BUFFER_LINE];
 } line_t;
 
-line_t* cur_line;                 //Head of the history list
-bool history_initialized = false; //whether or not history has been initialized
+line_t* line_list_head = NULL;  //Head of the history list
+line_t* cur_list_el = NULL;     //The current element the user is looking at
+line_t cur_line;                //The current line that is being edited
+                                //cur_list_el gets copied into this so that
+                                //history is not overwritten
+bool history_initialized = false;
 
 void init_history(void) {
-  cur_line = malloc(sizeof(line_t));
   cur_line->next = NULL;
   cur_line->prev = NULL;
   cur_line->length = 0;
-
-  bool history_initialized = true;
+  
+  history_initialized = true;
 }
 
 void new_history_line(void) {
-  
+  line_t* new_line = malloc(sizeof(line_t));
+  new_line->length = 0;
+  new_line->prev = NULL;
 
-  if(cur_line == NULL) {
-    cur_line = malloc(sizeof(line_t));
-    cur_line->next = NULL;
-    cur_line->prev = NULL;
-    cur_line->length = 0;
+  if(line_list_head == NULL) {
+
   }
   else {
 
@@ -116,11 +118,15 @@ void read_line_print_usage()
 
 void write_ch(char ch) {
   write(1, & ch, 1);
-  line_buffer[cursor_pos] = ch;
+  //line_buffer[cursor_pos] = ch;
+  cur_line->text[cursor_pos] = ch;
 
-  if(cursor_pos == line_length)
-    line_length++;
+  //if(cursor_pos == line_length)
+  //  line_length++;
   
+  if(cursor_pos == cur_line->length)
+    cur_line->length++;
+
   cursor_pos++;
 }
 
@@ -136,12 +142,17 @@ void cursor_left(void) {
 }
 
 void cursor_right(void) {
-  if(cursor_pos < line_length) {
-    echo_ch(line_buffer[cursor_pos]);
+  //if(cursor_pos < line_length) {
+  //  echo_ch(line_buffer[cursor_pos]);
+  //  cursor_pos++;
+  //}
+  if(cursor_pos < cur_line->length) {
+    echo_ch(cur_line->text[cursor_pos]);
     cursor_pos++;
   }
 }
 
+/*
 void shift_chars_left(void)
 {
   char buff[MAX_BUFFER_LINE];
@@ -162,7 +173,26 @@ void shift_chars_left(void)
 
   line_length--;
 }
+*/
+void shift_chars_left(void) {
+  char buff[MAX_BUFFER_LINE];
+  char* start = cur_line->text + cursor_pos;
+  size_t len = cur_line->length - cursor_pos;
 
+  strncpy(buff, start, cur_line->length);
+
+  cursor_left();
+  for(size_t i = 0; i < len; i++)
+    write_ch(buff[i]);
+
+  write_ch(' ');
+
+  for(size_t i = 0; i <= len; i++)
+    cursor_left();
+
+  line_length--;
+}
+/*
 void backspace(void) {
   if(cursor_pos == 0) 
     return;
@@ -177,9 +207,32 @@ void backspace(void) {
     shift_chars_left();
   }
 }
+*/
 
+void backspace(void) {
+  if(cursor_pos == 0) return;
+
+  if(cursor_pos == cur_line->length) {
+    cursor_left();
+    write_ch(' ');
+    cursor_left();
+    cur_line->length--;
+  }
+  else if (cursor_pos > 0) {
+    shift_chars_left();
+  }
+}
+/*
 void delete(void) {
   if(cursor_pos != line_length) {
+    cursor_right();
+    backspace();
+  }
+}
+*/
+
+void delete(void) {
+  if(cursor_pos != cur_line->length) {
     cursor_right();
     backspace();
   }
@@ -192,7 +245,7 @@ void home(void) {
 }
 
 void end(void) {
-  while(cursor_pos < line_length) {
+  while(cursor_pos < cur_line->length) {
     cursor_right();
   }
 }
@@ -225,7 +278,7 @@ char * read_line() {
       //write(1,&ch,1);
 
       // If max number of character reached return.
-      if (line_length==MAX_BUFFER_LINE-2) break; 
+      if (cur_line->length==MAX_BUFFER_LINE-2) break; 
 
       // add char to buffer.
       //line_buffer[line_length]=ch;
@@ -243,7 +296,7 @@ char * read_line() {
     else if (ch == 31) {
       // ctrl-?
       read_line_print_usage();
-      line_buffer[0]=0;
+      cur_line->buffer[0]=0;
       break;
     }
     else if (ch == 8 || ch == 127) {
@@ -329,12 +382,18 @@ char * read_line() {
   }
 
   // Add eol and null char at the end of string
+  /*
   line_buffer[line_length]=10;
   line_length++;
   line_buffer[line_length]=0;
+  */
+
+  cur_line->text[line_length] = 10;
+  cur_line->length++;
+  cur_line->text[line_length] = 0;
 
   tty_reset();
 
-  return line_buffer;
+  return cur_line->text;
 }
 
