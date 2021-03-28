@@ -103,7 +103,7 @@ source BEGIN(incl); /* string that signifies an include */
 
   std::string* fileName = new std::string("");
 
-  Shell::doSubstitution(str, fileName);
+  Shell::doSubstitution(&str, fileName);
 
   yylval.cpp_string = fileName;
   return WORD;
