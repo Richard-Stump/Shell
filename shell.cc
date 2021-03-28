@@ -520,7 +520,11 @@ void Shell::doSubstitution(std::string* command, std::string* output) {
   }
 
 
-  write(fdFifo, "asdf", 4);
+  if(write(fdFifo, "asdf\n", 5) != 5) {
+    perror("could not write");
+    return;
+  } 
+
   close(fdFifo);
   *output = fifoPath;
 }
