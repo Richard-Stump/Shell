@@ -113,7 +113,7 @@ void select_next_history_entry(void) {
     return;
   }
 
-  copy_line_buffer(&cur_line, cur_list_el);
+  copy_line_to_current(cur_list_el);
 }
 
 void d_print_history_list(void)
