@@ -182,8 +182,13 @@ void read_line_print_usage()
 {
   char * usage = "\n"
     " ctrl-?       Print usage\n"
-    " Backspace    Deletes last character\n"
-    " up arrow     See last command in the history\n";
+    " backspace    Deletes the character to the left of the cursor\n"
+    " delete       Deletes the character to the right of the cursor\n"
+    " up arrow     See previous command in the history\n"
+    " down arrow   See next command in the history\n"
+    " home         Go to the begining of the line\n"
+    " end          Go to the end of the line\n"
+    ;
 
   write(1, usage, strlen(usage));
 }
