@@ -125,6 +125,17 @@ void select_next_history_entry(void) {
   copy_line_to_current(cur_list_el);
 }
 
+void select_prev_history_entry(void) {
+  if(cur_list_el == NULL) {
+    return;
+  }
+  else if (cur_list_el->prev == NULL) {
+    cur_list_el = cur_list_el->prev;
+  }
+
+
+}
+
 void d_print_history_list(void)
 {
   printf("History List\n  ");
@@ -328,35 +339,10 @@ char * read_line() {
       else if (ch1==91 && ch2==65) {
         // Up arrow. Print next line in history.
         select_next_history_entry();
-      /*
-        // Erase old line
-        // Print backspaces
-        int i = 0;
-        for (i =0; i < line_length; i++) {
-          ch = 8;
-          write(1,&ch,1);
-        }
-
-        // Print spaces on top
-        for (i =0; i < line_length; i++) {
-          ch = ' ';
-          write(1,&ch,1);
-        }
-
-        // Print backspaces
-        for (i =0; i < line_length; i++) {
-          ch = 8;
-          write(1,&ch,1);
-        }	
-
-        // Copy line from history
-        strcpy(line_buffer, history[history_index]);
-        line_length = strlen(line_buffer);
-        history_index=(history_index+1)%history_length;
-
-        // echo line
-        write(1, line_buffer, line_length);
-        */
+      }
+      else if (ch1 = 91 && ch2 == 66) {
+        //down arrow
+        select_prev_history_entry();
       }
       else if(ch1 == 91 && ch2 == 68) {
         //go left one char
