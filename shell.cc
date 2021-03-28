@@ -510,7 +510,7 @@ void doSubstitution(std::string* command, std::string* output) {
     return;
   }
 
-  int fdFifo = open(tempName);
+  int fdFifo = open(tempName , 0700);
   int pid = fork();
 
   if(pid == 0) {
