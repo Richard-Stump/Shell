@@ -316,6 +316,7 @@ char * read_line() {
       }
       else if (ch1==91 && ch2==65) {
         // Up arrow. Print next line in history.
+        select_next_history_entry();
       /*
         // Erase old line
         // Print backspaces
