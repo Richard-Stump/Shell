@@ -517,11 +517,6 @@ void Shell::doSubstitution(std::string* command, std::string* output) {
     perror("Could not open fifo");
     return;
   }
-
-  if(write(fdFifo, "asdf\n", 5) != 5) {
-    perror("could not write");
-    return;
-  } 
   
   int fdPipe[2];
   if(pipe(fdPipe) < 0) {
