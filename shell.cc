@@ -334,7 +334,7 @@ bool Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
     char errbuff[128]; errbuff[127] = '\0';
     regerror(code, &regex, errbuff, 127);
 
-    regfree(regex);
+    regfree(&regex);
     
     fprintf(stderr, "Bad wildcard regex\n%d: %s\n", code, errbuff);
     return false;
@@ -349,7 +349,7 @@ bool Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
   struct dirent** nameList;
   int nameCount = scandir(dir.c_str(), &nameList, NULL, alphasort);
   if(nameCount == -1) {
-    regfree(regex);
+    regfree(&regex);
     return false;
   }
 
@@ -371,7 +371,7 @@ bool Shell::recursivelyExpandWildcards(std::string prefix, std::string suffix)
     free(nameList[i]);
   }
 
-  regfree(regex);
+  regfree(&regex);
   return foundMatch;
 }
 
