@@ -493,16 +493,20 @@ void Shell::executeSubshell(std::string* command, std::string* output,
 void Shell::doSubstitution(std::string* command, std::string* output) {
   *output = "";
 
-  char templateName[] = "temp_fifoXXXXXX";
+  char templateName[] = "tempXXXXXX";
   char* tempName = mkdtemp((char*)templateName);
   if(tempName == NULL) {
     perror("mkdtemp error");
     return;
   }
 
-  fprintf(stderr, "temp file: \"%s\"\n", tempName);
+  char fifoPath[32];
 
-  int ret = mkfifo(tempName, 0700);
+  fprintf(stderr, "temp dir: \"%s\"\n", tempName);
+  sprintf(fifoPath, "%s/fifo", tempName);
+  fprintf(stderr, "path: \"%s\"\n", fifoPath);
+
+  int ret = mkfifo(fifoPath, 0700);
   if(ret == -1) {
     perror("mkfifo error");
     return;
@@ -514,7 +518,7 @@ void Shell::doSubstitution(std::string* command, std::string* output) {
     return;
   }
 
-  int fdFifo = open(tempName , 0700);
+  int fdFifo = open(fifoPath , 0700);
   if(fdFifo < 0) {
     perror("Could not open fifo");
     return;
@@ -548,10 +552,8 @@ void Shell::doSubstitution(std::string* command, std::string* output) {
     close(fdPipe[1]);
     close(fdFifo); 
 
-    *output = tempName;
+    *output = fifoPath;
   }
-
-
 }
 
 void lex_main(void);
