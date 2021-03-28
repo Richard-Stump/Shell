@@ -20,9 +20,11 @@ int line_length;
 int cursor_pos;
 char line_buffer[MAX_BUFFER_LINE];
 
+
 // Simple history array
 // This history does not change. 
 // Yours have to be updated.
+/*
 int history_index = 0;
 char * history [] = {
   "ls -al | grep x", 
@@ -33,6 +35,7 @@ char * history [] = {
   "ls -al | grep xxx | grep yyy"
 };
 int history_length = sizeof(history)/sizeof(char *);
+*/
 
 typedef struct history_s {
   struct history_s* next;
