@@ -91,6 +91,8 @@ void push_cur_history_line(void) {
 }
 
 void copy_line_to_current(line_t* src) {
+  int old_len = cur_line.length;
+
   cur_line.length = src->length;
 
   while(cursor_pos > 0) {
@@ -99,6 +101,13 @@ void copy_line_to_current(line_t* src) {
 
   for(int i = 0; i < src->length; i++) {
     write_ch(src->text[i]);
+  }
+
+  for(int i = src->length; i < old_len; i++) {
+    echo_ch(' ');
+  }
+  for(int i = src->length; i < old_len; i++) {
+    echo_ch(8);
   }
 }
 
