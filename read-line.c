@@ -83,6 +83,7 @@ void push_current_line(void) {
 
 void d_print_history_list(void)
 {
+  printf("History List\n");
   history_t* rover = history_head;
   while(rover != NULL) {
     for(int i = 0; i < rover->line_length; i++) {
@@ -91,6 +92,7 @@ void d_print_history_list(void)
 
     rover = rover->next;
   }
+  printf("n");
 }
 
 void show_next_history(void)
