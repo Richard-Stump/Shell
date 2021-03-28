@@ -512,21 +512,50 @@ void Shell::doSubstitution(std::string* command, std::string* output) {
     return;
   }
 
-
   int fdFifo = open(fifoPath , O_RDWR);
   if(fdFifo < 0) {
     perror("Could not open fifo");
     return;
   }
 
-
   if(write(fdFifo, "asdf\n", 5) != 5) {
     perror("could not write");
     return;
   } 
+  
+  int fdPipe[2];
+  if(pipe(fdPipe) < 0) {
+    perror("pipe error");
+    return;
+  }
 
-  close(fdFifo);
-  *output = fifoPath;
+  int pid = fork();
+  if(pid == 0){
+    dup2(fdPipe[0], 0);
+    dup2(fdFifo, 1);
+
+    close(fdPipe[0]);
+    close(fdPipe[1]);
+    close(fdFifo);
+
+    execlp("/proc/self/exe", "/proc/self/exe", (char*)NULL);
+
+    perror("execlp error");
+    _exit(1);
+  }
+  else if(pid < 0) {
+    perror("fork error");
+    return;
+  }
+  else {
+    write(fdPipe[1], command->c_str(), command->size());
+    write(fdPipe[1], "\nquit\n", strlen("\nquit\n"));
+
+    close(fdPipe[0]);
+    close(fdPipe[1]);
+    close(fdFifo);
+    *output = fifoPath;
+  }
 }
 
 void lex_main(void);
