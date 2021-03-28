@@ -519,13 +519,9 @@ void Shell::doSubstitution(std::string* command, std::string* output) {
     return;
   }
 
-  int fdPipe[2];
-  if(pipe(fdPipe) == -1) {
-    perror("pipe error");
-    return;
-  }
 
   write(fdFifo, "asdf", 4);
+  close(fdFifo);
   *output = fifoPath;
 }
 
