@@ -96,6 +96,15 @@ source BEGIN(incl); /* string that signifies an include */
   }
 }
 
+\>\(.*\) { /* Match for process substitution */
+  //obtain the actual command from the matched string
+  std::string str(yytext);
+  str = str.substr(2, str.length() - 2 - 1);
+
+  
+
+}
+
 $\(.*\) { /* Match the subshell */
   //obtain the actual command from the matched string
   std::string str(yytext);

@@ -42,6 +42,8 @@ struct Shell {
 
   static void executeSubshell(std::string* command, std::string* output, 
                               bool replaceNewlines = true);
+  
+  static std::string doSubstitution(std::string* command);
 
   static void addBackgroundProcess(int pid, bool last);
   static void addFinalCommand(int pid, bool background);

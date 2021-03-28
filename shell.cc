@@ -391,52 +391,6 @@ void Shell::expandWildcards(std::string& path)
     Command::_currentSimpleCommand->insertArgument(&path);
   }
   return;
-
-  std::string regexStr = wildcardToRegex(path);
-
-  //fprintf(stderr, "\"%s\"\n", path.c_str());
-  //fprintf(stderr, "\"%s\"\n", regexStr.c_str());
-
-  regex_t regex;
-  int code = regcomp(&regex, regexStr.c_str(), REG_EXTENDED | REG_NOSUB);
-  
-  // If there is an error compiling the regex
-  if(code != 0) {
-    //get the compilation error string and put it into a buffer
-    char errbuff[128]; errbuff[127] = '\0';
-    regerror(code, &regex, errbuff, 127);
-    
-    fprintf(stderr, "Bad wildcard regex\n%d: %s\n", code, errbuff);
-    ::exit(-1);
-  }
-
-  struct dirent** nameList;
-  int nameCount = scandir(".", &nameList, NULL, alphasort);
-  if(nameCount == -1) {
-    perror("Scandir error");
-    ::exit(-1);
-  }
-
-  for(int i = 0; i < nameCount; i++) { 
-    if(regexec(&regex, nameList[i]->d_name, 0, nullptr, 0) == 0) {
-
-      if(nameList[i]->d_name[0] == '.' && path[0] == '.') {
-        std::string* arg = new std::string(nameList[i]->d_name);
-        Command::_currentSimpleCommand->insertArgument(arg);
-      }
-      else if(nameList[i]->d_name[0] != '.') {
-        std::string* arg = new std::string(nameList[i]->d_name);
-        Command::_currentSimpleCommand->insertArgument(arg);
-      }
-      //rintf(stderr, "%s\n", nameList[nameCount]->d_name);
-    }
-
-    free(nameList[i]);
-
-  }
-
-  while(nameCount--) {
-  }
 }
 
 std::string Shell::wildcardToRegex(std::string wildcard)
@@ -531,6 +485,11 @@ void Shell::executeSubshell(std::string* command, std::string* output,
     
     close(pipeOut[0]); //close the output from the child
   }
+}
+
+void getSubstitutionName(std::string* command) {
+  char tempName[] = "sub_tmpXXXXXX";
+  char* tempName = mkdtemp(tempName);
 }
 
 void lex_main(void);
