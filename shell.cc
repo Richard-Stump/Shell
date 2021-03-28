@@ -80,7 +80,7 @@ void Shell::sigChild(int, siginfo_t* info, void* ) {
     }
   }
 
-  const std::string errorName = "ON_ERROR";
+  std::string errorName = "ON_ERROR";
   std::string errorVal = getEnv(errorName);
 
   if(!errorVal.empty() && info->si_status != 0) {
