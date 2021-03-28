@@ -97,8 +97,6 @@ void d_print_history_list(void)
 
 void show_next_history(void)
 {
-  printf("asfaasfas\n");
-
   size_t cur_length;
 
   if(cur_history == NULL) {
