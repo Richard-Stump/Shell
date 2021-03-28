@@ -84,7 +84,7 @@ void Shell::sigChild(int, siginfo_t* info, void* ) {
   std::string errorVal = getEnv(errorName);
 
   if(!errorVal.empty() && info->si_status != 0) {
-    printf("%d exited with code %d\n", info->pid, info->si_status);
+    printf("%d exited with code %d\n", info->si_pid, info->si_status);
   }
 }
 
