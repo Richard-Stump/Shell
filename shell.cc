@@ -533,6 +533,8 @@ void Shell::executeSubshell(std::string* command, std::string* output,
   }
 }
 
+void loadShellrc(void);
+
 int main(int argc, const char** argv) {
   Shell::argc = argc;
   Shell::argv = argv;
@@ -559,12 +561,9 @@ int main(int argc, const char** argv) {
     exit(2);
   }
 
+  loadShellrc();
+
   Shell::prompt();
-  
-  FILE* inFile = fopen(".shellrc", "r");
-  if(inFile) {
-    yypush_buffer_state(yy_create_buffer(inFile, YY_BUF_SIZE));
-  }
 
   yyparse();
 }
