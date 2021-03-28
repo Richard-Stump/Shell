@@ -48,11 +48,13 @@ int mygetc(FILE* f) {
 #undef getc
 #define getc(f) mygetc(f)
 
-void loadRcFile(void)
+void lex_main(void)
 {
   FILE* src = fopen(".shellrc", "r");
   if(src) {
     yy_scan_string("source .shellrc\n");
+    yyparse();
+    yyrestart(NULL);
   }
 }
 

@@ -533,7 +533,7 @@ void Shell::executeSubshell(std::string* command, std::string* output,
   }
 }
 
-void loadRcFile(void);
+void lex_main(void);
 
 int main(int argc, const char** argv) {
   Shell::argc = argc;
@@ -561,8 +561,7 @@ int main(int argc, const char** argv) {
     exit(2);
   }
 
-  void loadRcFile(void);
-  yyparse();
+  lex_main();
 }
 
 int Shell::argc = 0;
