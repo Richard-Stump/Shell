@@ -48,6 +48,16 @@ int mygetc(FILE* f) {
 #undef getc
 #define getc(f) mygetc(f)
 
+void loadRcFile(void)
+{
+  FILE* src = fopen(".shellrc", "r");
+  if(src) {
+    yypush_buffer_state(yy_create_buffer(src, YY_BUF_SIZE));
+    yyparse();
+    yyrestart();
+  }
+}
+
 %}
 
 %option noyywrap
