@@ -234,6 +234,8 @@ char * read_line() {
   if(!history_initialized)
     init_history();
 
+  cur_list_el = NULL;
+
   // Set terminal in raw mode
   tty_raw_mode();
 
