@@ -457,10 +457,11 @@ void Shell::executeSubshell(std::string* command, std::string* output,
     execlp("/proc/self/exe", "/proc/self/exe", (char*)NULL);
 
     perror("execlp error");
+    _exit(1);
   }
   else if (pid < 0) {
     perror("fork error");
-    _exit(1);
+    return;
   }
   else {
     //write the given command and an exit statement to the child process
@@ -487,9 +488,56 @@ void Shell::executeSubshell(std::string* command, std::string* output,
   }
 }
 
-void getSubstitutionName(std::string* command) {
-  char tempName[] = "temp_fifoXXXXXX";
-  mkdtemp((char*)tempName);
+void doSubstitution(std::string* command, std::string* output) {
+  char templateName[] = "temp_fifoXXXXXX";
+  char* tempName = mkdtemp((char*)templateName);
+  if(tempName == NULL) {
+    perror("mkdtemp error");
+    return;
+  }
+
+  int ret = mkfifo(tempName, 0700);
+  if(ret == -1) {
+    perror("mkfifo error");
+    return;
+  }
+
+  int fdPipe[2];
+  if(pipe(fdPipe) == -1) {
+    perror("pipe error");
+    return;
+  }
+
+  int fdFifo = open(tempName);
+  int pid = fork();
+
+  if(pid == 0) {
+    dup2(fdPipe[0], 0);
+    dup2(fdFifo, 1);
+
+    close(fdPipe[0]);
+    close(fdPipe[1]);
+    close(fdFifo);
+
+    execlp("/proc/self/exe", "/proc/self/exe", (char*)NULL);
+
+    perror("execlp error");
+    _exit(1);
+  }
+  else if (pid < 0) {
+    perror("fork error");
+    return;
+  }
+  else {
+    
+    //write the given command and an exit statement to the child process
+    write(fdPipe[1], command->c_str(), command->size());
+    write(fdPipe[1], "\nquit\n", strlen("\nquit\n"));
+
+    close(fdPipe[0]);
+    close(fdPipe[1]);
+    close(fdFifo); 
+  }
 }
 
 void lex_main(void);
