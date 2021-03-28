@@ -500,6 +500,8 @@ void Shell::doSubstitution(std::string* command, std::string* output) {
     return;
   }
 
+  fprintf(stderr, "temp file: \"%s\"\n", tempName);
+
   int ret = mkfifo(tempName, 0700);
   if(ret == -1) {
     perror("mkfifo error");
