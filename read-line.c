@@ -92,7 +92,7 @@ void d_print_history_list(void)
 
     rover = rover->next;
   }
-  printf("n");
+  printf("\n");
 }
 
 void show_next_history(void)
