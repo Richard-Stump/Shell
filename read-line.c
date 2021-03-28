@@ -70,6 +70,10 @@ void init_history(void) {
   cur_line.next = NULL;
   cur_line.prev = NULL;
   cur_line.length = 0;
+
+  backup.next = NULL;
+  backup.prev = NULL;
+  backup.length = 0;
   
   history_initialized = true;
 }
