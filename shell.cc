@@ -40,10 +40,10 @@ void Shell::prompt() {
       char workingDir[PATH_MAX];
       getcwd(workingDir, PATH_MAX);
       workingDir[PATH_MAX - 1] = '\0';
-      printf("\033[91m%s>\033[0m", workingDir);
+      printf("\033[91m%s>\033[0m ", workingDir);
     }
     else {
-      printf("\033[91m%s\033[0m", promptValue.c_str());
+      printf("\033[91m%s\033[0m ", promptValue.c_str());
     }
 
     fflush(stdout);
