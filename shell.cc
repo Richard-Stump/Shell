@@ -524,6 +524,8 @@ void Shell::doSubstitution(std::string* command, std::string* output) {
     perror("pipe error");
     return;
   }
+
+  write(fdFifo, "asdf", 4);
   *output = fifoPath;
 }
 
