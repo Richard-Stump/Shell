@@ -57,8 +57,10 @@ typedef struct history_s {
 } history_t;
 
 size_t history_length = 0;
-history_t* history_head = NULL;
-history_t* history_tail = NULL;
+history_t* history_head = NULL; //head of the history list
+history_t* history_tail = NULL; //tail of the history list
+history_t* cur_history = NULL;  //the current history_t being showed, or NULL
+                                //for the input of a new command
 
 void push_current_line(void) {
   history_t* new_history = malloc(sizeof(history_t));
@@ -79,7 +81,17 @@ void push_current_line(void) {
   history_length++;
 }
 
-history_t* cur_history = NULL;
+void d_print_history_list(void)
+{
+  history_t* rover = history_head;
+  while(rover != NULL) {
+    for(int i = 0; i < rover->line_length; i++) {
+      printf("%c", rover->line[i]);
+    }
+
+    rover = rover->next;
+  }
+}
 
 void show_next_history(void)
 {
