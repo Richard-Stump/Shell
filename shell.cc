@@ -490,7 +490,7 @@ void Shell::executeSubshell(std::string* command, std::string* output,
   }
 }
 
-void doSubstitution(std::string* command, std::string* output) {
+void Shell::doSubstitution(std::string* command, std::string* output) {
   *output = "";
 
   char templateName[] = "temp_fifoXXXXXX";

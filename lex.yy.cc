@@ -1027,7 +1027,7 @@ YY_RULE_SETUP
 
   std::string* fileName = new std::string("");
 
-  Shell::doSubstitution(str, fileName);
+  Shell::doSubstitution(&str, fileName);
 
   yylval.cpp_string = fileName;
   return WORD;
