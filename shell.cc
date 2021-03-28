@@ -31,12 +31,18 @@ std::vector<const char*> exitMessages = {
 //display a small prompt of the directory the user is in
 void Shell::prompt() {
   if( isatty(0) ) {
-    //get the current working directory
-    char workingDir[PATH_MAX];
-    getcwd(workingDir, PATH_MAX);
+    std::string promptName = "PROMPT";
+    std::string promptValue = getEnv(promptName);
 
-    //display it in green, because why not?
-    printf("\033[32m%s>\033[0m", workingDir);
+    if(promptValue.empty()) {
+      char workingDir[PATH_MAX];
+      getcwd(workingDir, PATH_MAX);
+      workingDir[PATH_MAX - 1] = NULL;
+      promptValue = workingDir;
+    }
+
+    //You can have any prompt color, so long as it's green
+    printf("\033[32m%s>\033[0m", promptValue.c_str());
     fflush(stdout);
   }
 }
