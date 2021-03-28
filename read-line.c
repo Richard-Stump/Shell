@@ -21,7 +21,6 @@ int line_length;
 int cursor_pos;
 char line_buffer[MAX_BUFFER_LINE];
 
-
 // Simple history array
 // This history does not change. 
 // Yours have to be updated.
@@ -88,6 +87,25 @@ void push_cur_history_line(void) {
     line_list_head->prev = new_line;
     line_list_head = new_line;
   }
+}
+
+void copy_line_buffer(line_t* dst, line_t* src) {
+  dst->length = src->length;
+  strncpy(dst->text, src->text, src->length);
+}
+
+void select_next_history_entry(void) {
+  if(cur_list_el == NULL) {
+    cur_list_el = line_list_head;
+  }
+  else if(cur_list_el->next != NULL) {
+    cur_list_el = cur_list_el->next;
+  }
+  else {
+    return;
+  }
+
+  copy_line_buffer(&cur_line, cur_list_el);
 }
 
 void d_print_history_list(void)
