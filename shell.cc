@@ -525,36 +525,6 @@ void Shell::doSubstitution(std::string* command, std::string* output) {
     return;
   }
 
-  int pid = fork();
-
-  if(pid == 0) {
-    dup2(fdPipe[0], 0);
-    dup2(fdFifo, 1);
-
-    close(fdPipe[0]);
-    close(fdPipe[1]);
-    close(fdFifo);
-
-    execlp("/proc/self/exe", "/proc/self/exe", (char*)NULL);
-
-    perror("execlp error");
-    _exit(1);
-  }
-  else if (pid < 0) {
-    perror("fork error");
-    return;
-  }
-  else {
-    //write the given command and an exit statement to the child process
-    write(fdPipe[1], command->c_str(), command->size());
-    write(fdPipe[1], "\nquit\n", strlen("\nquit\n"));
-
-    close(fdPipe[0]);
-    close(fdPipe[1]);
-    close(fdFifo); 
-
-    *output = fifoPath;
-  }
 }
 
 void lex_main(void);
