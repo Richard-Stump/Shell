@@ -108,6 +108,7 @@ void show_next_history(void)
   else {
     return;
   }
+
   cur_length = cur_history->line_length;
 
   //clear the current line
@@ -115,7 +116,7 @@ void show_next_history(void)
     cursor_left();
   }
   for(int i = 0; i < cur_length; i++) {
-    echo_ch(' ');
+    echo_ch(cur_history[i]);
   }
   for(int i = 0; i < cur_length; i++) {
     echo_ch(8);
