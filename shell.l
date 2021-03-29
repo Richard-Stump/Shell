@@ -50,6 +50,7 @@ int mygetc(FILE* f) {
 
 void lex_main(void)
 {
+  Shell::promptEnabled = true;
   Shell::prompt();
   yyparse();
 }
