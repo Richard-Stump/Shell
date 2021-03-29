@@ -527,14 +527,15 @@ void Shell::doSubstitution(std::string* command, std::string* output) {
 
   int pid = fork();
   if(pid == 0){
-    dup2(fdPipe[0], 0);
-    dup2(fdFifo, 1);
   
     int fdFifo = open(fifoPath , O_WRONLY);
     if(fdFifo < 0) {
       perror("Could not open fifo");
       _exit(1);
     }
+    
+    dup2(fdPipe[0], 0);
+    dup2(fdFifo, 1);
 
     close(fdPipe[0]);
     close(fdPipe[1]);
