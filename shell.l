@@ -59,6 +59,7 @@ void lex_main(void)
   fclose(src);
   Shell::promptEnabled = true;
   Shell::prompt();
+  BEGIN(INITIAL);
   yyparse();
 }
 
@@ -81,6 +82,7 @@ source BEGIN(incl); /* string that signifies an include */
   if(!inFile) {
     yyerror("Could not open source file\n");
     BEGIN(INITIAL);
+    //fclose(inFile);
   }
   else {
     yypush_buffer_state(yy_create_buffer(inFile, YY_BUF_SIZE));
