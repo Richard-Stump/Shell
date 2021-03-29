@@ -81,7 +81,7 @@ source BEGIN(incl); /* string that signifies an include */
   if(!inFile) {
     yyerror("Could not open source file\n");
     BEGIN(INITIAL);
-    //fclose(inFile);
+    fclose(inFile);
   }
   else {
     yypush_buffer_state(yy_create_buffer(inFile, YY_BUF_SIZE));
