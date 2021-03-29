@@ -515,7 +515,7 @@ void Shell::doSubstitution(std::string* command, std::string* output) {
 
   fprintf(stderr, "open fifo\n");
 
-  int fdFifo = open(fifoPath , O_WRONLY);
+  int fdFifo = open(fifoPath , O_RDWR);
   if(fdFifo < 0) {
     perror("Could not open fifo");
     return;
