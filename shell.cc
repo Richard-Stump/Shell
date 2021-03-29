@@ -548,6 +548,7 @@ void Shell::doSubstitution(std::string* command, std::string* output) {
     return;
   }
   else {
+    fprintf(stderr, "child pid: %d\n", pid);
     write(fdPipe[1], command->c_str(), command->size());
     write(fdPipe[1], "\nquit\n", strlen("\nquit\n"));
 
