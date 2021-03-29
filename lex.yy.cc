@@ -1023,13 +1023,13 @@ YY_RULE_SETUP
   std::string str(yytext);
   str = str.substr(2, str.length() - 2 - 1);
 
-  fprintf(stderr, "substitute: \"%s\"\n", str.c_str());
+  //fprintf(stderr, "substitute: \"%s\"\n", str.c_str());
 
   std::string* fileName = new std::string("");
 
   Shell::doSubstitution(&str, fileName);
 
-  fprintf(stderr, "input file: \"%s\"\n", fileName->c_str());
+  //fprintf(stderr, "input file: \"%s\"\n", fileName->c_str());
 
   yylval.cpp_string = fileName;
   return WORD;
