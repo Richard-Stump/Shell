@@ -101,7 +101,7 @@ source BEGIN(incl); /* string that signifies an include */
   std::string str(yytext);
   str = str.substr(2, str.length() - 2 - 1);
 
-  //fprintf(stderr, "substitute: \"%s\"\n", str.c_str());
+  fprintf(stderr, "substitute: \"%s\"\n", str.c_str());
 
   std::string* fileName = new std::string("");
 
