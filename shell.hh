@@ -67,6 +67,7 @@ protected:
  
   static std::vector<BackgroundProcess> _backgroundProcesses;
   static std::vector<FinalCommand> _finalCommands;
+  static std::vector<std::string> _fifoFiles;
 
   static int _lastRet;
   static int _lastBackRet;
