@@ -527,6 +527,8 @@ void Shell::doSubstitution(std::string* command, std::string* output) {
   write(fdFifo, "1234\n", 5);
   close(fdFifo);
 
+  *output = fifoPath;
+
   return;
 
   int pid = fork();
