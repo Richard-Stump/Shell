@@ -107,7 +107,7 @@ source BEGIN(incl); /* string that signifies an include */
 
   Shell::doSubstitution(&str, fileName);
 
-  //fprintf(stderr, "input file: \"%s\"\n", fileName->c_str());
+  fprintf(stderr, "input file: \"%s\"\n", fileName->c_str());
 
   yylval.cpp_string = fileName;
   return WORD;
