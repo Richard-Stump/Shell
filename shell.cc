@@ -574,7 +574,7 @@ void Shell::clearFifoList()
   }
   
   if(!_fifoFiles.empty())
-    rmdir(_fifoFiles[0].substr(0, strlen("temp******"));
+    rmdir(_fifoFiles[0].substr(0, strlen("temp******")));
 
   Shell::_fifoFiles.clear();
 }
