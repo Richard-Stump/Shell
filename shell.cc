@@ -554,7 +554,7 @@ void Shell::doSubstitution(std::string* command, std::string* output) {
     close(fdPipe[0]);
     close(fdPipe[1]);
     close(fdFifo);
-
+    
     *output = fifoPath;
     Shell::addFifo(output);
   }
