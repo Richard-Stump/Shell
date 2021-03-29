@@ -1001,9 +1001,9 @@ YY_RULE_SETUP
     yypush_buffer_state(yy_create_buffer(inFile, YY_BUF_SIZE));
 
     BEGIN(INITIAL);
+    fclose(inFile);
   }
 
-  fclose(inFile);
 }
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
