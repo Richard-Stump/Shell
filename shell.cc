@@ -613,6 +613,7 @@ int Shell::_lastBackPid = -1;
 Command Shell::_currentCommand;
 std::vector<BackgroundProcess> Shell::_backgroundProcesses;
 std::vector<FinalCommand> Shell::_finalCommands;
+std::vector<std::string> Shell::_fifoFiles;
 
 int Shell::_lastRet = -1;
 int Shell::_lastBackRet = -1;
