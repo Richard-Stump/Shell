@@ -59,7 +59,6 @@ void lex_main(void)
   fclose(src);
   Shell::promptEnabled = true;
   Shell::prompt();
-  BEGIN(INITIAL);
   yyparse();
 }
 
