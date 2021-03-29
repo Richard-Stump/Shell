@@ -554,7 +554,7 @@ void Shell::doSubstitution(std::string* command, std::string* output) {
     close(fdPipe[0]);
     close(fdPipe[1]);
     close(fdFifo);
-    
+
     *output = fifoPath;
     Shell::addFifo(output);
   }
@@ -569,6 +569,7 @@ void Shell::clearFifoList()
 {
   for(std::string& i : _fifoFiles) {
     unlink(i.c_str());
+    rmdir(i.c_str());
   }
 
   Shell::_fifoFiles.clear();
