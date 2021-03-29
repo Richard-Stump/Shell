@@ -568,7 +568,7 @@ void Shell::addFifo(std::string* fifoPath)
 void Shell::clearFifoList()
 {
   for(std::string& i : _fifoFiles) {
-    unlink(_fifoFiles.c_str());
+    unlink(i.c_str());
   }
 
   Shell::_fifoFiles.clear();
