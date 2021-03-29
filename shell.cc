@@ -524,6 +524,11 @@ void Shell::doSubstitution(std::string* command, std::string* output) {
     return;
   }
 
+  write(fdFifo, "1234\n", 5);
+  close(fdFifo);
+
+  return;
+
   int pid = fork();
   if(pid == 0){
     dup2(fdPipe[0], 0);
@@ -549,8 +554,8 @@ void Shell::doSubstitution(std::string* command, std::string* output) {
     close(fdPipe[0]);
     close(fdPipe[1]);
     close(fdFifo);
-    //*output = fifoPath;
-    
+
+    *output = fifoPath;
   }
 }
 
