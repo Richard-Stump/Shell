@@ -515,7 +515,7 @@ void Shell::doSubstitution(std::string* command, std::string* output) {
 
   fprintf(stderr, "open fifo\n");
 
-  int fdFifo = open(fifoPath , O_RDWR);
+  int fdFifo = open(fifoPath , O_WRONLY);
   if(fdFifo < 0) {
     perror("Could not open fifo");
     return;
@@ -569,7 +569,6 @@ void Shell::clearFifoList()
 {
   for(std::string& i : _fifoFiles) {
     unlink(i.c_str());
-    rmdir(i.c_str());
   }
 
   Shell::_fifoFiles.clear();
