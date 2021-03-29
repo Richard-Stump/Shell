@@ -527,18 +527,7 @@ void Shell::doSubstitution(std::string* command, std::string* output) {
     return;
   }
 
-  fprintf(stderr, "writing\n");
-  write(fdFifo, "1234\n", 5);
-  close(fdFifo);
-
-  fprintf(stderr, "unlinking\n");
-  *output = fifoPath;
-  if(unlink(fifoPath) == -1) {
-    perror("unlink error");
-    return;
-  }
-
-  return;
+  fprintf(stderr, "forking\n");
 
   int pid = fork();
   if(pid == 0){
@@ -567,6 +556,7 @@ void Shell::doSubstitution(std::string* command, std::string* output) {
     close(fdFifo);
 
     *output = fifoPath;
+    unlink(fifoPath);
   }
 }
 
