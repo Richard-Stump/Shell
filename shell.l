@@ -85,9 +85,8 @@ source BEGIN(incl); /* string that signifies an include */
   }
   else {
     yypush_buffer_state(yy_create_buffer(inFile, YY_BUF_SIZE));
-
-    BEGIN(INITIAL);
     fclose(inFile);
+    BEGIN(INITIAL);
   }
 
 }
