@@ -502,20 +502,18 @@ void Shell::doSubstitution(std::string* command, std::string* output) {
 
   char fifoPath[32];
 
-  fprintf(stderr, "temp dir: \"%s\"\n", tempName);
+  //fprintf(stderr, "temp dir: \"%s\"\n", tempName);
   sprintf(fifoPath, "%s/fifo", tempName);
-  fprintf(stderr, "path: \"%s\"\n", fifoPath);
+  //fprintf(stderr, "path: \"%s\"\n", fifoPath);
 
-  fprintf(stderr, "make fifo\n");
+  //fprintf(stderr, "make fifo\n");
   int ret = mkfifo(fifoPath, 0700);
   if(ret == -1) {
     perror("mkfifo error");
     return;
   }
 
-  fprintf(stderr, "open fifo\n");
-
-  
+  //fprintf(stderr, "open fifo\n");
 
   int fdPipe[2];
   if(pipe(fdPipe) < 0) {
@@ -523,11 +521,10 @@ void Shell::doSubstitution(std::string* command, std::string* output) {
     return;
   }
 
-  fprintf(stderr, "forking\n");
+  //fprintf(stderr, "forking\n");
 
   int pid = fork();
   if(pid == 0){
-  
     int fdFifo = open(fifoPath , O_WRONLY);
     if(fdFifo < 0) {
       perror("Could not open fifo");
