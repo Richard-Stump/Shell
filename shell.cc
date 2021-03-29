@@ -573,7 +573,7 @@ void Shell::clearFifoList()
     unlink(i.c_str());
   }
   
-  rmdir(_fifoFiles[i].substr(0, strlen("temp******")));
+  rmdir(_fifoFiles[0].substr(0, strlen("temp******")));
 
   Shell::_fifoFiles.clear();
 }
