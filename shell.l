@@ -55,8 +55,8 @@ void lex_main(void)
     yy_scan_string("source .shellrc\n");
     yyparse();
     yyrestart(stdin);
+    fclose(src);
   }
-  fclose(src);
   Shell::promptEnabled = true;
   Shell::prompt();
   yyparse();
