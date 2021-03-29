@@ -533,7 +533,7 @@ void Shell::doSubstitution(std::string* command, std::string* output) {
       perror("Could not open fifo");
       _exit(1);
     }
-    
+
     dup2(fdPipe[0], 0);
     dup2(fdFifo, 1);
 
@@ -572,6 +572,8 @@ void Shell::clearFifoList()
   for(std::string& i : _fifoFiles) {
     unlink(i.c_str());
   }
+  
+  rmdir(_fifoFiles[i].substr(0, strlen("temp******")));
 
   Shell::_fifoFiles.clear();
 }
