@@ -186,6 +186,8 @@ void Command::execute() {
       Shell::_lastBackPid = pid;
     }
 
+    Shell::clearFifoList();
+
     //restore stdIO
     dup2(tmpIn, 0);
     dup2(tmpOut, 1);

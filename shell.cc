@@ -556,8 +556,22 @@ void Shell::doSubstitution(std::string* command, std::string* output) {
     close(fdFifo);
 
     *output = fifoPath;
-    unlink(fifoPath);
+    Shell::addFifo(output);
   }
+}
+
+static void addFifo(std::string* fifoPath)
+{
+  _fifoFiles.push_back(*fifoPath);
+}
+
+static void clearFifoList()
+{
+  for(std::string& i : _fifoFiles) {
+    unlink(_fifoFiles.c_str());
+  }
+
+  _fifoFiles.clear();
 }
 
 void lex_main(void);

@@ -48,6 +48,8 @@ struct Shell {
   static void addBackgroundProcess(int pid, bool last);
   static void addFinalCommand(int pid, bool background);
 
+  static void addFifo(std::string* fifoPath);
+
   static Command _currentCommand;
 
   static int argc;
