@@ -506,11 +506,14 @@ void Shell::doSubstitution(std::string* command, std::string* output) {
   sprintf(fifoPath, "%s/fifo", tempName);
   fprintf(stderr, "path: \"%s\"\n", fifoPath);
 
+  fprintf(stderr, "make fifo\n");
   int ret = mkfifo(fifoPath, 0700);
   if(ret == -1) {
     perror("mkfifo error");
     return;
   }
+
+  fprintf(stderr, "open fifo\n");
 
   int fdFifo = open(fifoPath , O_WRONLY);
   if(fdFifo < 0) {
