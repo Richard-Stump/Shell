@@ -55,8 +55,8 @@ void lex_main(void)
     yy_scan_string("source .shellrc\n");
     yyparse();
     yyrestart(stdin);
-    fclose(src);
   }
+  fclose(src);
   Shell::promptEnabled = true;
   Shell::prompt();
   yyparse();
@@ -87,6 +87,8 @@ source BEGIN(incl); /* string that signifies an include */
 
     BEGIN(INITIAL);
   }
+
+  fclose(inFile);
 }
 <<EOF>> {
   /* after the current source file is consumed, pop it from the stack */
