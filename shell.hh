@@ -49,6 +49,7 @@ struct Shell {
   static void addFinalCommand(int pid, bool background);
 
   static void addFifo(std::string* fifoPath);
+  static void clearFifoList();
 
   static Command _currentCommand;
 
