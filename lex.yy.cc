@@ -1029,7 +1029,7 @@ YY_RULE_SETUP
 
   Shell::doSubstitution(&str, fileName);
 
-  //fprintf(stderr, "input file: \"%s\"\n", fileName->c_str());
+  fprintf(stderr, "input file: \"%s\"\n", fileName->c_str());
 
   yylval.cpp_string = fileName;
   return WORD;

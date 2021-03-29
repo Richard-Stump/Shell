@@ -503,7 +503,7 @@ void Shell::doSubstitution(std::string* command, std::string* output) {
   char fifoPath[32];
 
   //fprintf(stderr, "temp dir: \"%s\"\n", tempName);
-  sprintf(fifoPath, "%s/fifo", tempName);
+  sprintf(fifoPath, "%s/fifo\0", tempName);
   //fprintf(stderr, "path: \"%s\"\n", fifoPath);
 
   //fprintf(stderr, "make fifo\n");
