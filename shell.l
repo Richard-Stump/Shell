@@ -85,13 +85,15 @@ source BEGIN(incl); /* string that signifies an include */
   }
   else {
     yypush_buffer_state(yy_create_buffer(inFile, YY_BUF_SIZE));
-    fclose(inFile);
     BEGIN(INITIAL);
   }
 
 }
 <<EOF>> {
   /* after the current source file is consumed, pop it from the stack */
+  if (yyin && yyin != stdin)  {
+    fclose(yyin);
+  }
   yypop_buffer_state();
   if(!YY_CURRENT_BUFFER) {
     yyterminate();
