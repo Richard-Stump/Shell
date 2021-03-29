@@ -78,7 +78,7 @@ int SimpleCommand::execute(int fdIn, int fdOut, int fdErr)
     _exit(1);
   }
   else {
-    fprintf(stderr, "c: child process: %d\n", pid);
+    //fprintf(stderr, "c: child process: %d\n", pid);
     return pid;
   }
   
