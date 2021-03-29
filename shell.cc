@@ -528,6 +528,10 @@ void Shell::doSubstitution(std::string* command, std::string* output) {
   close(fdFifo);
 
   *output = fifoPath;
+  if(unlink(fifoPath) == -1) {
+    perror("unlink error");
+    return;
+  }
 
   return;
 
