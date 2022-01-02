@@ -64,6 +64,7 @@ void lex_main(void)
 
 %}
 
+/* */
 %option noyywrap
 
 /* State for including source files */
@@ -100,6 +101,9 @@ source BEGIN(incl); /* string that signifies an include */
   }
 }
 
+  /* Match for process substitution with the following syntax:
+     <( COMMAND )
+  */
 \<\(.*\) { /* Match for process substitution */
   //obtain the actual command from the matched string
   std::string str(yytext);
@@ -224,11 +228,12 @@ $\(.*\) { /* Match the subshell */
   return WORD;
 }
 
-"setenv"|"unsetenv"|"cd" {
+  /* Built in commands that must be run as the main process */
+"setenv"|"unsetenv"|"cd" { /* Built In Commands */
   yylval.cpp_string = new std::string(yytext);
   return BUILTIN_PARENT;
 }
-
+  /* Built in commands that must be run as a child process */
 "printenv" {
   yylval.cpp_string = new std::string(yytext);
   return BUILTIN_CHILD;
